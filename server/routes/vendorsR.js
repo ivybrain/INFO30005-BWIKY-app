@@ -8,7 +8,11 @@ router.use(function (req, res, next) {
   next()
 })
 
-router.get('/', vendorsC.vendor_list);
+router.get('/', vendorsC.vendor_list)
+  .post('/', vendorsC.vendor_create);
+
 router.get('/:vendor_id(\\d+)', vendorsC.vendor_details);
+
+
 
 module.exports = router;

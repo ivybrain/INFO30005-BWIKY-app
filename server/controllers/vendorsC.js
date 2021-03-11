@@ -10,3 +10,10 @@ exports.vendor_details = function(req, res) {
       location_desc: "On the moon"};
   res.send(dummy_vendor);
 };
+
+
+exports.vendor_create = function(req, res) {
+  res.status(201);
+  res.send(req.body);
+
+};
