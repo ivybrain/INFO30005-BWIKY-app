@@ -8,5 +8,5 @@ const vendorsR = require('./routes/vendorsR.js');
 app.use('/vendors', vendorsR);
 
 app.listen(port, function () {
-  console.log('Ready')
+  console.log(`Ready, server running on ${port}`)
 })
