@@ -9,6 +9,6 @@ router.use(function (req, res, next) {
 })
 
 router.get('/', vendorsC.vendor_list);
-router.get('/:vendor_id', vendorsC.vendor_details);
+router.get('/:vendor_id(\\d+)', vendorsC.vendor_details);
 
 module.exports = router;
