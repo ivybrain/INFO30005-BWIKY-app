@@ -1,25 +1,15 @@
-import logo from '../logo.png'
-import './App.css'
+import * as React from 'react'
+import { Container } from '@material-ui/core'
 import Nav from './Nav'
+import NearestVans from './NearestVans/NearestVans'
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <Nav></Nav>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Container>
+        <NearestVans></NearestVans>
+      </Container>
     </div>
   )
 }
