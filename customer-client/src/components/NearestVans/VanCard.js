@@ -11,15 +11,6 @@ import Ratings from 'react-ratings-declarative'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  media: {
-    // height: '100%',
-    // width: '100%',
-  },
-  content: {
-    // display: 'flex',
-    // flexDirection: 'column',
-    // margin: 'auto',
-  },
   distanceText: {
     float: 'right',
   },
@@ -27,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
 
 const VanCard = (props) => {
   const styles = useStyles()
+
+  const distance = props.distance < 2 ? 'Within 2km' : props.distance + 'km'
 
   return (
     <Card className={styles.root}>
@@ -47,7 +40,7 @@ const VanCard = (props) => {
         </Grid>
 
         <Grid item xs={4}>
-          <CardContent className={styles.content}>
+          <CardContent>
             <Typography variant="h5" component="h2" className={styles.content}>
               {props.title}
             </Typography>
@@ -58,7 +51,7 @@ const VanCard = (props) => {
         </Grid>
 
         <Grid item xs={4}>
-          <CardContent className={styles.content}>
+          <CardContent>
             <Ratings
               rating={parseFloat(props.rating)}
               widgetDimensions="30px"
@@ -80,7 +73,7 @@ const VanCard = (props) => {
               component="p"
               className={styles.distanceText}
             >
-              Distance: {props.distance}km
+              {distance}
             </Typography>
           </CardContent>
         </Grid>
