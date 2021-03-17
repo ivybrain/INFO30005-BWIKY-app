@@ -1,5 +1,5 @@
-import logo from '../logo.png';
-import './App.css';
+import logo from '../logo.png'
+import './App.css'
 import Nav from './Nav'
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
         </a>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
