@@ -1,4 +1,6 @@
 
+const Vendor = require('../models/vendor').Vendor
+
 exports.vendor_list = function(req, res) {
 
   res.send("List of Vendors");
@@ -11,9 +13,20 @@ exports.vendor_details = function(req, res) {
   res.send(dummy_vendor);
 };
 
-
 exports.vendor_create = function(req, res) {
+  filter_incoming(req, res);
+  var new_vendor = Vendor.from(req.body.vendor);
   res.status(201);
-  res.send(req.body);
+  res.json(new_vendor);
 
 };
+
+exports.vendor_update = function(req, res) {
+
+};
+
+function filter_incoming(req, res) {
+  if (!req.body.hasOwnProperty('vendor')) {
+    res.sendStatus(400);
+  }
+}
