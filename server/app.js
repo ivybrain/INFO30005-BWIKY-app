@@ -11,5 +11,5 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use('/vendors', vendorsR);
 
 app.listen(port, function () {
-  console.log('Ready')
+  console.log(`Ready, server running on ${port}`)
 })
