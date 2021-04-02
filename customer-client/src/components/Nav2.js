@@ -63,8 +63,8 @@ const Nav2 = () => {
             justify="space-between"
             alignItems="center"
           >
-            <Grid item xs={2}></Grid>
-            <Grid item xs={5}>
+            <Grid item xs={1.5}></Grid>
+            <Grid item xs={5.5}>
               <Toolbar>
                 <IconButton edge="start" aria-label="menu">
                   <Logo></Logo>
@@ -90,17 +90,17 @@ const Nav2 = () => {
                 <Tab
                   label="Find a van"
                   {...a11yProps(0)}
-                  style={{ width: '100%' }}
+                  style={{ width: '80%' }}
                 />
                 <Tab
                   label="Log in / Sign Up"
                   {...a11yProps(1)}
-                  style={{ width: '100%' }}
+                  style={{ width: '80%' }}
                 />
                 <Tab
                   label="My Order"
                   {...a11yProps(2)}
-                  style={{ width: '100%' }}
+                  style={{ width: '80%' }}
                 />
               </Tabs>
             </Grid>
