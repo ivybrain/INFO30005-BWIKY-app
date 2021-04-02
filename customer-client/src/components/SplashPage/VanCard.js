@@ -10,7 +10,9 @@ import {
 import Ratings from 'react-ratings-declarative'
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    background: 'black',
+  },
   distanceText: {
     float: 'right',
   },
@@ -21,8 +23,10 @@ const VanCard = (props) => {
 
   const distance = props.distance < 2 ? 'Within 2km' : props.distance + 'km'
 
+  console.log(styles, 'styles')
+
   return (
-    <Card className={styles.root}>
+    <Card className={styles.root} classes={{}} style={{ marginTop: '40px' }}>
       <Grid
         container
         direction="row"
