@@ -47,7 +47,15 @@ const Nav2 = () => {
         <AppBar
           position="static"
           color="default"
-          style={{ boxShadow: '0px 0px 0px 0px', backgroundColor: '#fafafa' }}
+          style={{
+            boxShadow: '0px 0px 0px 0px',
+            backgroundColor: '#fafafa',
+            // position: 'absolute',
+            // top: '10px',
+            marginTop: '20px',
+            marginBottom: '10px',
+            width: '90%',
+          }}
         >
           <Grid
             container
@@ -55,16 +63,18 @@ const Nav2 = () => {
             justify="space-between"
             alignItems="center"
           >
-            <Grid item xs={1}></Grid>
-            <Grid item xs={7}>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={5}>
               <Toolbar>
                 <IconButton edge="start" aria-label="menu">
                   <Logo></Logo>
                 </IconButton>
-                <Typography variant="h6">SNACKS IN A VAN</Typography>
+                <Typography variant="h4" fontWeight="bold">
+                  SNACKS IN A VAN
+                </Typography>
               </Toolbar>
             </Grid>
-            <Grid item xs={4} style={{ height: '100%' }}>
+            <Grid item xs={5} style={{ height: '100%' }}>
               {/* <div style={{}}>Snacks</div> */}
               <Tabs
                 value={value}
@@ -75,11 +85,23 @@ const Nav2 = () => {
                 aria-label="navigation tabs"
                 //   flexContainer
                 className={classes.tabs}
-                style={{ height: '100%' }}
+                style={{ height: '100%', width: '100%' }}
               >
-                <Tab label="Find a van" {...a11yProps(0)} />
-                <Tab label="Log in / Sign Up" {...a11yProps(1)} />
-                <Tab label="My Order" {...a11yProps(2)} />
+                <Tab
+                  label="Find a van"
+                  {...a11yProps(0)}
+                  style={{ width: '100%' }}
+                />
+                <Tab
+                  label="Log in / Sign Up"
+                  {...a11yProps(1)}
+                  style={{ width: '100%' }}
+                />
+                <Tab
+                  label="My Order"
+                  {...a11yProps(2)}
+                  style={{ width: '100%' }}
+                />
               </Tabs>
             </Grid>
           </Grid>
