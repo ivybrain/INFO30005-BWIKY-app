@@ -1,7 +1,8 @@
 import { CssBaseline } from "@material-ui/core";
+import { Switch, Route } from "react-router-dom";
 import LoginScreen from "./components/LoginScreen";
 import Checkin from "./components/Checkin/Checkin";
-import { Switch, Route } from "react-router-dom";
+import Order from "./components/Order/Order";
 
 function App() {
   return (
@@ -9,9 +10,12 @@ function App() {
       <CssBaseline />
       <Switch>
         <Route exact path="/checkin" component={Checkin} />
-        <Route exact path="/login" component={LoginScreen} />
+        <Route
+          path="/order/:id"
+          render={(props) => <Order {...props}></Order>}
+        />
+        <Route exact path="/" component={LoginScreen} />
       </Switch>
-      <LoginScreen></LoginScreen>
     </div>
   );
 }
