@@ -2,14 +2,19 @@ const express = require('express');
 
 const router = express.Router()
 
+const ordersC = require('../controllers/ordersC');
+
 router.use(function (req, res, next) {
-  next()
+  next();
 })
 
 router.route('/')
-  .get(function (req, res) {res.send('order')});
+  .get(ordersC.order_list)
+  .post(ordersC.order_create);
 
-
-
+router.route('/:order_id(\\d+)')
+  .get(ordersC.order_details)
+  .patch(ordersC.order_update)
+  .delete(ordersC.order_delete);
 
 module.exports = router;
