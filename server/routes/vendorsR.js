@@ -13,12 +13,13 @@ router.route('/')
   .get(vendorsC.vendor_list)
   .post(vendorsC.vendor_create);
 
-router.route('/:vendor_id(\\d+)')
+router.route('/:vendor_id([0-9a-fA-F]+)')
   .get(vendorsC.vendor_details)
-  .patch(vendorsC.vendor_update);
+  .patch(vendorsC.vendor_update)
+  .delete(vendorsC.vendor_delete);
 
 
-router.use('/:vendor_id(\\d+)/orders', ordersR);
+router.use('/:vendor_id([0-9a-fA-F]+)/orders', ordersR);
 
 
 module.exports = router;
