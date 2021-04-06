@@ -1,21 +1,27 @@
 
-const Vendor = require('../models/vendor').Vendor
+require('../models/Vendor');
+const mongoose = require('mongoose');
+
+const Vendor = mongoose.model('Vendor')
 
 exports.vendor_list = function(req, res) {
-
-  res.send("List of Vendors");
+  var vendors = Vendor.find({}, function(err, docs) {
+    res.send(docs);
+  })
 };
 
 exports.vendor_details = function(req, res) {
-  var id = req.params['vendor_id']
-  var dummy_vendor = {id:id, van_name:"The Van that Can", location:[42, -42],
-      location_desc: "On the moon"};
-  res.send(dummy_vendor);
+  var vendor = Vendor.findById(req.params["vendor_id"], function(err, docs) {
+    res.send(docs);
+  })
+
 };
 
 exports.vendor_create = function(req, res) {
   filter_incoming(req, res);
-  var new_vendor = Vendor.from(req.body.vendor);
+  var new_vendor = new Vendor(req.body["vendor"]);
+
+  new_vendor.save();
   res.status(201);
   res.json(new_vendor);
 
@@ -24,6 +30,12 @@ exports.vendor_create = function(req, res) {
 exports.vendor_update = function(req, res) {
 
 };
+
+exports.vendor_delete = function(req, res) {
+  Vendor.findByIdAndDelete(req.params["vendor_id"], function(err, docs) {
+    res.send(docs);
+  });
+}
 
 function filter_incoming(req, res) {
   if (!req.body.hasOwnProperty('vendor')) {

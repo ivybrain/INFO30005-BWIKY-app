@@ -1,11 +1,14 @@
-class Vendor {
+const mongoose = require('mongoose');
 
-  static from(json) {
 
-    Object.assign(new Vendor(), json);
-    json.id = 42;
-    return json;
-  }
-};
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
-exports.Vendor = Vendor;
+const vendor = new Schema({
+  van_name: String,
+  // NOTE: Do secure auth stuff
+  password: String
+}, {timestampts: true});
+
+
+mongoose.model('Vendor', vendor);
