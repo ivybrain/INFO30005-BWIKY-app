@@ -11,18 +11,15 @@ exports.item_list = function(req, res) {
   var items = Item.find({}, function(err, docs) {
     res.send(docs);
   })
-
-  /*
-  // Clean database
-  Item.deleteMany({}, function(err, docs) {})
-  res.send("deleted");
-  */
 }
 
 
 // GET /items/:item_id
+// Return details of a specified item
 exports.item_details = function(req, res) {
-  res.send("Details of an item");
+  var item = Item.findById(req.params["item_id"], function(err, docs) {
+    res.send(docs);
+  })
 }
 
 
@@ -33,8 +30,11 @@ exports.item_update = function(req, res) {
 
 
 // DELETE /items/:item_id
+// Delete and return an item as specified by its id
 exports.item_delete = function(req, res) {
-  res.send("Deletes an item");
+  var item = Item.findByIdAndDelete(req.params["item_id"], function(err, docs) {
+    res.send(docs);
+  })
 }
 
 
@@ -42,7 +42,6 @@ exports.item_delete = function(req, res) {
 //Creates one or more items
 exports.item_create = function(req, res) {
   //filter_incoming(req, res);
-
   var item_array = []; // Initialise empty array for items
 
   // Iterate through items in array
@@ -54,6 +53,14 @@ exports.item_create = function(req, res) {
 
   res.status(201); // request successful
   res.json(item_array); // return all items as an array
+}
+
+
+// Supporting functions:
+function remove_all_items(req, res){
+  // Clean database
+  Item.deleteMany({}, function(err, docs) {})
+  res.send("All deleted");
 }
 
 
