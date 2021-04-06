@@ -12,7 +12,7 @@ router.route('/')
   .get(itemsC.item_list)
   .post(itemsC.item_create);
 
-router.route('/:item_id(\\d+)')
+router.route('/:item_id([0-9a-fA-F]+)')
   .get(itemsC.item_details)
   .patch(itemsC.item_update)
   .delete(itemsC.item_delete);
