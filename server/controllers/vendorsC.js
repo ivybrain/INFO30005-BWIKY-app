@@ -13,19 +13,8 @@ exports.vendor_details = async (req, res) => {
   res.json(vendor)
 }
 
-exports.vendor_create = (req, res) => {
-  outputs = []
-  for (i = 0; i < req.body.length; i++) {
-    const new_vendor = new Vendor(req.body[i])
-
-    if (new_vendor.validate()) {
-      outputs.push(new_vendor)
-    }
-  }
-
-  for (i = 0; i < outputs.length; i++) {
-    outputs[i].save()
-  }
+exports.vendor_create = async (req, res) => {
+  const outputs = await Vendor.create(req.body)
 
   res.status(201)
   res.json(outputs)
@@ -33,6 +22,7 @@ exports.vendor_create = (req, res) => {
 
 exports.vendor_update = async (req, res) => {
   const query = { _id: req.params['vendor_id'] }
+
   try {
     const updatedVendor = await Vendor.findOneAndUpdate(
       query,
@@ -46,8 +36,9 @@ exports.vendor_update = async (req, res) => {
   }
 }
 
-exports.vendor_delete = function (req, res) {
-  Vendor.findByIdAndDelete(req.params['vendor_id'], function (err, docs) {
-    res.send(docs)
-  })
+exports.vendor_delete = async (req, res) => {
+  const deletedVendor = await Vendor.findByIdAndDelete(req.params['vendor_id'])
+
+  res.status(200)
+  res.json(deletedVendor)
 }
