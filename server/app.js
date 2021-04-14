@@ -10,12 +10,14 @@ const app = express()
 
 const vendorsR = require('./routes/vendorsR.js')
 const itemsR = require('./routes/itemsR.js')
+const ordersR = require('./routes/ordersR.js')
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.use('/vendors', vendorsR)
 app.use('/items', itemsR)
+app.use('/', ordersR)
 
 app.listen(process.env.PORT, function () {
   mongoose.connect(process.env.DB_URL, {

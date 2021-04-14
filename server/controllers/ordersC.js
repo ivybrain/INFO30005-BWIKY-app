@@ -1,6 +1,12 @@
+require('../models/Order')
+const mongoose = require('mongoose')
+
+const Order = mongoose.model('Order')
+
 // GET /vendors/:vendor_id/orders/
-exports.order_list = function (req, res) {
-  res.send('List of orders for the current vendor')
+exports.order_list = async (req, res) => {
+  const orders = await Order.find({ vendor: req.params['vendor_id'] })
+  res.json(orders)
 }
 
 // GET /vendors/:vendor_id/orders/:order_id
@@ -12,17 +18,6 @@ exports.order_details = function (req, res) {
 exports.order_update = async (req, res) => {
   // const vendor_id = req.params['vendor_id']
   // const order_id = req.params['order_id']
-  // try {
-  //   const updatedVendor = await Vendor.findOneAndUpdate(
-  //     query,
-  //     { $set: req.body },
-  //     { new: true },
-  //   )
-  //   res.status(200)
-  //   res.json(updatedVendor)
-  // } catch (err) {
-  //   res.status(500)
-  // }
   res.send('PATCH not implemented')
 }
 
@@ -33,6 +28,12 @@ exports.order_delete = function (req, res) {
 }
 
 // POST /vendors/:vendor_id/orders/
-exports.order_create = function (req, res) {
-  res.send('Creates one or more orders')
+exports.order_create = async (req, res) => {
+  try {
+    const outputs = await Order.create(req.body)
+    res.status(201)
+    res.json(outputs)
+  } catch (err) {
+    return res.status(409).send(err)
+  }
 }

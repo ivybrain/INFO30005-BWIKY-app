@@ -1,0 +1,18 @@
+{
+  "customer": "cust_id",
+  "vendor": "vendor_id",
+  "modified": "2021-04-14T15:49:53.947Z",
+  "fulfilled": "2021-04-14T15:50:09.598Z",
+  "picked_up": "2021-04-14T15:50:29.039Z",
+  "rating": 4,
+  "items": [
+    {
+      "item": "item_id",
+      "quantity": 3
+    },
+    {
+      "item": "item_id",
+      "quantity": 2
+    }
+  ]
+}
