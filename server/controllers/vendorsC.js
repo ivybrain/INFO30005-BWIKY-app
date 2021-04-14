@@ -47,6 +47,6 @@ exports.vendor_delete = async (req, res) => {
 }
 
 exports.vendor_delete_all = async (req, res) => {
-  const deletedVendors = await Vendor.deleteMany({})
+  await Vendor.deleteMany({})
   res.status(200).send()
 }

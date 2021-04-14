@@ -31,21 +31,23 @@ exports.item_delete = async (req, res) => {
   res.json(deletedItem)
 }
 
+// DELETE /items
+// Delete all items
+exports.item_delete_all = async (req, res) => {
+  await Item.deleteMany({})
+  res.status(200).send()
+}
+
 // POST /items
-//Creates one or more items
-exports.item_create = function (req, res) {
-  //filter_incoming(req, res);
-  var item_array = [] // Initialise empty array for items
-
-  // Iterate through items in array
-  for (i = 0; i < req.body.length; i++) {
-    var new_item = new Item(req.body[i])
-    new_item.save()
-    item_array.push(new_item) // Append each new item to end of array
+// Creates one or more items
+exports.item_create = async (req, res) => {
+  try {
+    const outputs = await Item.create(req.body)
+    res.status(201)
+    res.json(outputs)
+  } catch (err) {
+    return res.status(409).send()
   }
-
-  res.status(201) // request successful
-  res.json(item_array) // return all items as an array
 }
 
 // Supporting functions:
