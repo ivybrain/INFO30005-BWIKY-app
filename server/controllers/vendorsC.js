@@ -14,10 +14,13 @@ exports.vendor_details = async (req, res) => {
 }
 
 exports.vendor_create = async (req, res) => {
-  const outputs = await Vendor.create(req.body)
-
-  res.status(201)
-  res.json(outputs)
+  try {
+    const outputs = await Vendor.create(req.body)
+    res.status(201)
+    res.json(outputs)
+  } catch (err) {
+    return res.status(409).send()
+  }
 }
 
 exports.vendor_update = async (req, res) => {
