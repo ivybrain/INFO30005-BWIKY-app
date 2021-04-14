@@ -31,13 +31,19 @@ exports.vendor_create = (req, res) => {
   res.json(outputs)
 }
 
-exports.vendor_update = (req, res) => {
-  // const query = { _id: params['vendor_id'] }
-  // Vendor.findOneAndUpdate(query, req.body, function (err, doc) {
-  //   if (err) return res.send(500, { error: err })
-  //   return res.send('Succesfully saved.')
-  // })
-  res.send('all good')
+exports.vendor_update = async (req, res) => {
+  const query = { _id: req.params['vendor_id'] }
+  try {
+    const updatedVendor = await Vendor.findOneAndUpdate(
+      query,
+      { $set: req.body },
+      { new: true },
+    )
+    res.status(200)
+    res.json(updatedVendor)
+  } catch (err) {
+    res.status(500)
+  }
 }
 
 exports.vendor_delete = function (req, res) {
