@@ -6,7 +6,6 @@ const Header = () => {
     <Grid
       container
       direction="row"
-      justify="left"
       style={{
         marginLeft: "10%",
         marginRight: "auto",
@@ -14,7 +13,7 @@ const Header = () => {
       }}
     >
       <Grid item xs={1}></Grid>
-      <Grid container direction="row" xs={8} spacing={2} justify="left">
+      <Grid container direction="row" spacing={2}>
         <Grid item xs={1}>
           <Logo></Logo>
         </Grid>

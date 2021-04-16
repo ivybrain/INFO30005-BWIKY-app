@@ -6,13 +6,14 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import Header from "../Header";
 
 const Checkin = () => {
   return (
-    <>
+    <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
       <Header />
-      <Container>
+      <Container style={{ overflowX: "hidden", overflowY: "hidden" }}>
         <Grid
           container
           direction="column"
@@ -70,11 +71,11 @@ const Checkin = () => {
             color="primary"
             style={{ margin: "auto" }}
           >
-            Check In
+            <Link to="/orders">Check In</Link>
           </Button>
         </Grid>
       </Container>
-    </>
+    </div>
   );
 };
 

@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   Checkbox,
+  Grid,
 } from "@material-ui/core";
 import Header from "../Header";
 
@@ -29,38 +30,80 @@ const Order = (props) => {
   ];
 
   return (
-    <>
+    <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
       <Header />
       <Container>
-        <Paper>
+        <Paper style={{ height: "85vh" }}>
           <Typography variant="h3">Order #{props.match.params.id}</Typography>
 
-          <TableContainer style={{ width: "60%" }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell>{column}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            spacing={3}
+            style={{ height: "100%" }}
+          >
+            <Grid item xs={7}>
+              <Grid
+                container
+                direction="column"
+                justify="space-around"
+                alignItems="stretch"
+                style={{ height: "100%" }}
+              >
+                <Grid item xs>
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          {columns.map((column) => (
+                            <TableCell key={column}>{column}</TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
 
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.item}>
-                    <TableCell>{row.item}</TableCell>
-                    <TableCell>{row.quantity}</TableCell>
-                    <TableCell>
-                      <Checkbox checked={row.status} color="primary"></Checkbox>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                      <TableBody>
+                        {rows.map((row) => (
+                          <TableRow key={row.item}>
+                            <TableCell>{row.item}</TableCell>
+                            <TableCell>{row.quantity}</TableCell>
+                            <TableCell>
+                              <Checkbox
+                                checked={row.status}
+                                color="primary"
+                              ></Checkbox>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Grid>
+
+                <Grid item xs>
+                  <Typography variant="body1">
+                    Time before discount must be given:
+                  </Typography>
+                  <Typography variant="h5">10:42 minutes</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={4}>
+              <Typography variant="h6" style={{ marginTop: "1em" }}>
+                Customer info
+              </Typography>
+              <br />
+              <Typography variant="body1">Wendy Ang</Typography>
+              <br />
+              <Typography variant="body1">Order Placed:</Typography>
+              <br />
+              <Typography variant="body1">Order Completed:</Typography>
+            </Grid>
+          </Grid>
         </Paper>
       </Container>
-    </>
+    </div>
   );
 };
 
