@@ -1,9 +1,11 @@
 import { CssBaseline } from "@material-ui/core";
+
 import { Switch, Route } from "react-router-dom";
 import LoginScreen from "./components/LoginScreen";
 import Checkin from "./components/Checkin/Checkin";
 import Order from "./components/Order/Order";
 import Orders from "./components/Orders/Orders";
+
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
         />
         <Route exact path="/" component={LoginScreen} />
       </Switch>
+
     </div>
   );
 }

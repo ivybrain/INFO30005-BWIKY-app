@@ -76,6 +76,7 @@ const Checkin = () => {
         </Grid>
       </Container>
     </div>
+
   );
 };
 

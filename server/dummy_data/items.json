@@ -1,0 +1,50 @@
+[
+  {
+    "item_price": 4.0,
+    "item_name": "Cappuccino",
+    "item_description": "An Italian coffee drink that is prepared with equal parts double espresso, steamed milk, and steamed milk foam on top.",
+    "item_image": ""
+  },
+  {
+    "item_price": 4.5,
+    "item_name": "Latte",
+    "item_description": "A coffee drink made with 1/3 espresso and 2/3 steamed milk.",
+    "item_image": ""
+  },
+  {
+    "item_price": 4.5,
+    "item_name": "Flat White",
+    "item_description": "An espresso-based drink that contains steamed milk.",
+    "item_image": ""
+  },
+  {
+    "item_price": 4.5,
+    "item_name": "Long Black",
+    "item_description": "A double-shot of espresso and hot water.",
+    "item_image": ""
+  },
+  {
+    "item_price": 2.0,
+    "item_name": "Plain Biscuit",
+    "item_description": "A plain biscuit with wheat flour.",
+    "item_image": ""
+  },
+  {
+    "item_price": 3.0,
+    "item_name": "Fancy Biscuit",
+    "item_description": "A biscuit made with wheat flour, jam, coconut shreds, and chocolate chip.",
+    "item_image": ""
+  },
+  {
+    "item_price": 4.0,
+    "item_name": "Small Cake",
+    "item_description": "One small strawberry vanilla cake.",
+    "item_image": ""
+  },
+  {
+    "item_price": 6.0,
+    "item_name": "Large Cake",
+    "item_description": "One large strawberry vanilla cake.",
+    "item_image": ""
+  }
+]
