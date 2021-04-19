@@ -1,16 +1,4 @@
-import {
-  Paper,
-  Container,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableContainer,
-  TableHead,
-  Checkbox,
-  Grid,
-} from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import Header from "../Header";
 import CompletedOrder from "./CompletedOrder";
 import OrderPreviewLarge from "./OrderPreviewLarge";

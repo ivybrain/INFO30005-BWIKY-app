@@ -6,7 +6,6 @@ import Checkin from "./components/Checkin/Checkin";
 import Order from "./components/Order/Order";
 import Orders from "./components/Orders/Orders";
 
-
 function App() {
   return (
     <div>
@@ -20,7 +19,6 @@ function App() {
         />
         <Route exact path="/" component={LoginScreen} />
       </Switch>
-
     </div>
   );
 }

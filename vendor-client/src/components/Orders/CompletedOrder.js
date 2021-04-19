@@ -1,9 +1,11 @@
-import { Paper, Typography } from "@material-ui/core";
+import { Container, Paper, Typography } from "@material-ui/core";
 
 const CompletedOrder = (props) => {
   return (
-    <Paper>
-      <Typography variant="h4">Order #{props.orderNumber}</Typography>
+    <Paper variant="outlined">
+      <Container>
+        <Typography variant="h4">Order #{props.orderNumber}</Typography>
+      </Container>
     </Paper>
   );
 };

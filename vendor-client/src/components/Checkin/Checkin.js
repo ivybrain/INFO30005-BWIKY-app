@@ -66,17 +66,17 @@ const Checkin = () => {
 
         <Grid item style={{ margin: "auto", width: "60%" }}>
           <Button
-            disableElevation
-            variant="contained"
-            color="primary"
-            style={{ margin: "auto" }}
+            component={Link}
+            to={"/orders"}
+            style={{ textDecoration: "none" }}
           >
-            <Link to="/orders">Check In</Link>
+            <Button variant="contained" disableElevation>
+              Check In
+            </Button>
           </Button>
         </Grid>
       </Container>
     </div>
-
   );
 };
 
