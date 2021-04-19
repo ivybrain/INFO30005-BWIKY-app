@@ -13,9 +13,12 @@ router
   .get(ordersC.order_list)
   .post(ordersC.order_create)
 
-// router
-//   .route('/:order_id([0-9a-fA-F]+)')
-//   .get(ordersC.order_details)
+router
+  .route('/vendors/:vendor_id([0-9a-fA-F]+)/orders/?fulfilled=false')
+  .get(ordersC.orders_unfulfilled)
+router
+   .route('/vendors/:vendor_id([0-9a-fA-F]+)/orders/:order_id([0-9a-fA-F]+)')
+   .get(ordersC.order_details)
 //   .patch(ordersC.order_update)
 //   .delete(ordersC.order_delete)
 
