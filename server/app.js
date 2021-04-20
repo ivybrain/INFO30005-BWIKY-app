@@ -23,6 +23,10 @@ app.listen(process.env.PORT, function () {
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
+  }, function (err) {
+    console.log(err);
+    console.log(`Ready, server running on ${process.env.PORT}`);
+
   })
-  console.log(`Ready, server running on ${process.env.PORT}`)
+
 })
