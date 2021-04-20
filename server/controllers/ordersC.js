@@ -67,10 +67,10 @@ exports.orders_unfulfilled = async (req, res) => {
 
   try{
     // Get unfulfilled orders from specified vendor
-    const orders = await Order.find({ vendor: req.params.vendorid, fulfilled: ""})
+    const orders = await Order.find({ vendor: req.params.vendorid, fulfilled: false})
 
     // Doesn't seem to be working??
-    
+
     res.status(201)
     res.json(orders)
 
