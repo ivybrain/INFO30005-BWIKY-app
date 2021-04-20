@@ -5,6 +5,7 @@ import LoginScreen from "./components/LoginScreen";
 import Checkin from "./components/Checkin/Checkin";
 import Order from "./components/Order/Order";
 import Orders from "./components/Orders/Orders";
+import OrderHistory from "./components/History/OrderHistory";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           path="/orders/:id"
           render={(props) => <Order {...props}></Order>}
         />
+        <Route exact path="/history" component={OrderHistory} />
         <Route exact path="/" component={LoginScreen} />
       </Switch>
     </div>
