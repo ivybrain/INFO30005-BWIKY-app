@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "start": "node app.js"
+  },
+
   "dependencies": {
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
