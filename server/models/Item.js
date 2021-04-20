@@ -8,10 +8,7 @@ const item = new Schema({
   item_price: Number,
   item_name: String,
   item_description: String,
-  item_image: {
-    type: Buffer, // Store image as Binary data
-    set: toBinary
-  }
+  
   });
 
 
