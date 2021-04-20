@@ -12,11 +12,12 @@ router
   .route('/vendors/:vendor_id([0-9a-fA-F]+)/orders')
   .get(ordersC.order_list)
   .post(ordersC.order_create)
+  .delete(ordersC.order_delete_all)
 
-// router
-//   .route('/:order_id([0-9a-fA-F]+)')
-//   .get(ordersC.order_details)
+router
+  .route('/vendors/:vendor_id([0-9a-fA-F]+)/orders/:order_id([0-9a-fA-F]+)')
+  .get(ordersC.order_details)
 //   .patch(ordersC.order_update)
-//   .delete(ordersC.order_delete)
+// .delete(ordersC.order_delete)
 
 module.exports = router
