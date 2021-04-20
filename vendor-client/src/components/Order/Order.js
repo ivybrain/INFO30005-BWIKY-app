@@ -51,7 +51,7 @@ const Order = (props) => {
                 alignItems="stretch"
                 style={{ height: "100%" }}
               >
-                <Grid item xs>
+                <Grid item xs={8}>
                   <TableContainer>
                     <Table>
                       <TableHead>
