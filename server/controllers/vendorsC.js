@@ -27,12 +27,12 @@ exports.vendor_create = async (req, res) => {
   } catch (err) {
     return res.status(409).send()
   }
+
 }
 
 // PATCH /vendors/:vendor_id
 exports.vendor_update = async (req, res) => {
   const query = { _id: req.params['vendor_id'] }
-
   try {
     const updatedVendor = await Vendor.findOneAndUpdate(
       query,

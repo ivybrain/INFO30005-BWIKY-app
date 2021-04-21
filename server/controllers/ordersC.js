@@ -1,7 +1,9 @@
-require('../models/Order')
-const mongoose = require('mongoose')
+require('../models/Vendor');
+require('../models/Order');
+const mongoose = require('mongoose');
 
-const Order = mongoose.model('Order')
+const Vendor = mongoose.model('Vendor');
+const Order = mongoose.model('Order');
 
 // GET /vendors/:vendor_id/orders/
 // Get list of orders
@@ -29,54 +31,26 @@ exports.order_list = async (req, res) => {
 }
 
 // GET /vendors/:vendor_id/orders/:order_id
-// Gets specific order
-exports.order_details = async (req, res) => {
-  //res.send('Gets specific order')
-  try {
-    const orders = await Order.find({ vendor: req.params['vendor_id'] })
+exports.order_details = async(req, res) => {
+  var order = await Vendor.findById(req.params["order_id"]);
 
-    var found = orders.find(function (order, index) {
-      if (order._id == req.params['order_id']) return true
-    })
+  res.json(order)
 
-    if (found == null) {
-      res.send('Order not found.\n')
-    } else {
-      res.status(201)
-      res.json(found)
-    }
-  } catch (err) {
-    return res.status(409).send(err)
-  }
+
 }
 
 // PATCH /vendors/:vendor_id/orders/:order_id
-exports.order_update = async (req, res) => {
-  // const vendor_id = req.params['vendor_id']
-  // const order_id = req.params['order_id']
-  res.send('PATCH not implemented')
+exports.order_update = async(req, res) => {
+  res.send("Updates an order");
 }
 
 // DELETE /vendors/:vendor_id/orders/:order_id
 // NOTE: Implement as soft delete
-exports.order_delete = function (req, res) {
-  res.send('Deletes an order')
-}
-
-// DELETE /vendors/:vendor_id/orders
-// NOTE: Implement as soft delete
-exports.order_delete_all = async (req, res) => {
-  await Order.deleteMany({ vendor: req.params.vendor_id })
-  res.status(200).send()
+exports.order_delete = async(req, res) => {
+  res.send("Deletes an order");
 }
 
 // POST /vendors/:vendor_id/orders/
-exports.order_create = async (req, res) => {
-  try {
-    const outputs = await Order.create(req.body)
-    res.status(201)
-    res.json(outputs)
-  } catch (err) {
-    return res.status(409).send(err)
-  }
+exports.order_create = async(req, res) => {
+  res.send("Creates one or more orders");
 }

@@ -1,7 +1,9 @@
-require('../models/Item')
-const mongoose = require('mongoose')
+
+require('../models/Item');
+const mongoose = require('mongoose');
 
 const Item = mongoose.model('Item')
+
 
 // GET /items
 // return list of items
@@ -10,6 +12,7 @@ exports.item_list = async (req, res) => {
   res.json(items.map(x => x.toObject()).map(x => add_image(req, x)));
 }
 
+
 // GET /items/:item_id
 // Return details of a specified item
 exports.item_details = async (req, res) => {
@@ -17,44 +20,45 @@ exports.item_details = async (req, res) => {
   res.json(add_image(req, item.toObject()))
 }
 
+
 // PATCH /items/:item_id
-exports.item_update = function (req, res) {
-  res.send('Update an item')
+exports.item_update = function(req, res) {
+  res.send("Update an item");
 }
+
 
 // DELETE /items/:item_id
 // Delete and return an item as specified by its id
-exports.item_delete = async (req, res) => {
-  const deletedItem = await Item.findByIdAndDelete(req.params['item_id'])
-
-  res.status(200)
-  res.json(deletedItem)
+exports.item_delete = function(req, res) {
+  var item = Item.findByIdAndDelete(req.params["item_id"], function(err, docs) {
+    res.send(docs);
+  })
 }
 
-// DELETE /items
-// Delete all items
-exports.item_delete_all = async (req, res) => {
-  await Item.deleteMany({})
-  res.status(200).send()
-}
 
 // POST /items
-// Creates one or more items
-exports.item_create = async (req, res) => {
-  try {
-    const outputs = await Item.create(req.body)
-    res.status(201)
-    res.json(outputs)
-  } catch (err) {
-    return res.status(409).send()
+//Creates one or more items
+exports.item_create = function(req, res) {
+  //filter_incoming(req, res);
+  var item_array = []; // Initialise empty array for items
+
+  // Iterate through items in array
+  for (i = 0; i < req.body.length; i++){
+    var new_item = new Item(req.body[i]);
+    new_item.save();
+    item_array.push(new_item); // Append each new item to end of array
   }
+
+  res.status(201); // request successful
+  res.json(item_array); // return all items as an array
 }
 
+
 // Supporting functions:
-function remove_all_items(req, res) {
+function remove_all_items(req, res){
   // Clean database
-  Item.deleteMany({}, function (err, docs) {})
-  res.send('All deleted')
+  Item.deleteMany({}, function(err, docs) {})
+  res.send("All deleted");
 }
 
 function add_image(req, item) {

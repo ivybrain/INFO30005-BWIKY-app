@@ -48,14 +48,8 @@ const LoginScreen = () => {
             <TextField variant="outlined" label="Password"></TextField>
           </Grid>
           <Grid item style={{ margin: "auto" }}>
-            <Button
-              component={Link}
-              to={"/checkin"}
-              style={{ textDecoration: "none" }}
-            >
-              <Button variant="contained" disableElevation>
-                Log In
-              </Button>
+            <Button variant="contained">
+              <Link to="/checkin">Log In</Link>
             </Button>
           </Grid>
         </Grid>
