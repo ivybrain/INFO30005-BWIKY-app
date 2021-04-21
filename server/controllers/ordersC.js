@@ -21,21 +21,6 @@ exports.order_list = async (req, res) => {
   res.json(orders)
 }
 
-// GET /vendors/:vendor_id/orders/?fulfilled=false
-// Description: Shows list of all outstanding orders for a vendor
-exports.orders_unfulfilled = async (req, res) => {
-  try {
-    // Get unfulfilled orders from specified vendor
-
-    // Doesn't seem to be working??
-
-    res.status(201)
-    res.json(orders)
-  } catch (err) {
-    return res.status(409).send(err)
-  }
-}
-
 // GET /vendors/:vendor_id/orders/:order_id
 // Gets specific order
 exports.order_details = async (req, res) => {
