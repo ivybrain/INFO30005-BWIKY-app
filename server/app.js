@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 app.use('/vendors', vendorsR)
 app.use('/items', itemsR)
+app.use(express.static('public'))
 
 app.listen(process.env.PORT, function () {
   mongoose.connect(process.env.DB_URL, {

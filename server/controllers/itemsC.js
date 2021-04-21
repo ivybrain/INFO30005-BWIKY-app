@@ -7,19 +7,17 @@ const Item = mongoose.model('Item')
 
 // GET /items
 // return list of items
-exports.item_list = function(req, res) {
-  var items = Item.find({}, function(err, docs) {
-    res.send(docs);
-  })
+exports.item_list = async (req, res) => {
+  const items = await Item.find({})
+  res.json(items.map(x => x.toObject()).map(x => add_image(req, x)));
 }
 
 
 // GET /items/:item_id
 // Return details of a specified item
-exports.item_details = function(req, res) {
-  var item = Item.findById(req.params["item_id"], function(err, docs) {
-    res.send(docs);
-  })
+exports.item_details = async (req, res) => {
+  const item = await Item.findById(req.params['item_id'])
+  res.json(add_image(req, item.toObject()))
 }
 
 
@@ -63,9 +61,11 @@ function remove_all_items(req, res){
   res.send("All deleted");
 }
 
-
-function filter_incoming(req, res) {
-  if (!req.body.hasOwnProperty('item')) {
-    res.sendStatus(400);
+function add_image(req, item) {
+  if (!item || !item.hasOwnProperty("item_name")) {
+    return item;
   }
+  var image_url = req.get('host') + "/images/items/" + item["item_name"].toLowerCase().replace(" ", "_") + ".png";
+  item["item_image_url"] = image_url;
+  return item;
 }
