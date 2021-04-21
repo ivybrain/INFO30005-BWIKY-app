@@ -7,33 +7,25 @@ const Order = mongoose.model('Order')
 // Get list of orders
 exports.order_list = async (req, res) => {
   var orders
+
+  // GET /vendors/:vendor_id/orders/?fulfilled=false or true
+  // Get unfulfilled or fulfilled orders from specified vendor
   if (req.query.hasOwnProperty('fulfilled')) {
     const fulfilledBool = req.query['fulfilled'] === 'true'
+
     console.log(fulfilledBool)
+
     orders = await Order.find({
       vendor: req.params['vendor_id'],
       fulfilled: fulfilledBool,
     })
   } else {
+
+    // Otherwise, return all orders
     orders = await Order.find({ vendor: req.params['vendor_id'] })
   }
 
   res.json(orders)
-}
-
-// GET /vendors/:vendor_id/orders/?fulfilled=false
-// Description: Shows list of all outstanding orders for a vendor
-exports.orders_unfulfilled = async (req, res) => {
-  try {
-    // Get unfulfilled orders from specified vendor
-
-    // Doesn't seem to be working??
-
-    res.status(201)
-    res.json(orders)
-  } catch (err) {
-    return res.status(409).send(err)
-  }
 }
 
 // GET /vendors/:vendor_id/orders/:order_id
