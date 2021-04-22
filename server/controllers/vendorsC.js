@@ -3,18 +3,30 @@ const mongoose = require('mongoose')
 
 const Vendor = mongoose.model('Vendor')
 
+// Middleware to set req.vendor for any request at /vendor/:vendor_id/*
+exports.find_vendor = async (req, res, next) => {
+  const vendor = await Vendor.findById(req.params['vendor_id']);
+  if (!vendor) {
+    res.status(404);
+    res.send("Vendor not found");
+    return;
+
+  }
+  req.vendor = vendor;
+  return next();
+}
+
 // GET /vendors
 // return list of vendors
 exports.vendor_list = async (req, res) => {
   const vendors = await Vendor.find({})
-  res.json(vendors)
+  res.json(vendors);
 }
 
 // GET /vendors/:vendor_id
 // Return details of a specified vendor
 exports.vendor_details = async (req, res) => {
-  const vendor = await Vendor.findById(req.params['vendor_id'])
-  res.json(vendor)
+  res.json(req.vendor);
 }
 
 // POST /vendors
@@ -25,22 +37,23 @@ exports.vendor_create = async (req, res) => {
     res.status(201)
     res.json(outputs)
   } catch (err) {
-    return res.status(409).send()
+    res.status(409);
+    res.json(outputs);
   }
 
 }
 
 // PATCH /vendors/:vendor_id
 exports.vendor_update = async (req, res) => {
-  const query = { _id: req.params['vendor_id'] }
   try {
-    const updatedVendor = await Vendor.findOneAndUpdate(
-      query,
+    const updatedVendor = await Vendor.findByIdAndUpdate(
+      req.vendor,
       { $set: req.body },
       { new: true },
     )
-    res.status(200)
-    res.json(updatedVendor)
+    res.status(200);
+    res.json(updatedVendor);
+
   } catch (err) {
     res.status(500)
   }
@@ -48,7 +61,7 @@ exports.vendor_update = async (req, res) => {
 
 // DELETE /vendors/:vendor_id
 exports.vendor_delete = async (req, res) => {
-  const deletedVendor = await Vendor.findByIdAndDelete(req.params['vendor_id'])
+  const deletedVendor = await Vendor.findByIdAndDelete(req.vendor)
 
   res.status(200)
   res.json(deletedVendor)

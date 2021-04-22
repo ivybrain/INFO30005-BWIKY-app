@@ -5,6 +5,21 @@ const mongoose = require('mongoose');
 const Item = mongoose.model('Item')
 
 
+// Middleware to set req.item for any request at /item/:item_id/*
+exports.find_item = async (req, res, next) => {
+  const item = await Item.findById(req.params['item_id']);
+
+  if (!item) {
+    res.status(404);
+    res.send("Item not found");
+    return;
+
+  }
+
+  req.item = item;
+  return next();
+}
+
 // GET /items
 // return list of items
 exports.item_list = async (req, res) => {
@@ -16,8 +31,7 @@ exports.item_list = async (req, res) => {
 // GET /items/:item_id
 // Return details of a specified item
 exports.item_details = async (req, res) => {
-  const item = await Item.findById(req.params['item_id'])
-  res.json(add_image(req, item.toObject()))
+  res.json(add_image(req, req.item.toObject()))
 }
 
 
@@ -30,7 +44,7 @@ exports.item_update = function(req, res) {
 // DELETE /items/:item_id
 // Delete and return an item as specified by its id
 exports.item_delete = function(req, res) {
-  var item = Item.findByIdAndDelete(req.params["item_id"], function(err, docs) {
+  var item = Item.findByIdAndDelete(req.item, function(err, docs) {
     res.send(docs);
   })
 }
@@ -61,6 +75,8 @@ function remove_all_items(req, res){
   res.send("All deleted");
 }
 
+// Add image url to an item
+// Would be better as a custom getter for the model but that didn't work for me :(
 function add_image(req, item) {
   if (!item || !item.hasOwnProperty("item_name")) {
     return item;
