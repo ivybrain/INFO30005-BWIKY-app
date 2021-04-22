@@ -6,6 +6,12 @@ const Vendor = mongoose.model('Vendor')
 // Middleware to set req.vendor for any request at /vendor/:vendor_id/*
 exports.find_vendor = async (req, res, next) => {
   const vendor = await Vendor.findById(req.params['vendor_id']);
+  if (!vendor) {
+    res.status(404);
+    res.send("Vendor not found");
+    return;
+
+  }
   req.vendor = vendor;
   return next();
 }

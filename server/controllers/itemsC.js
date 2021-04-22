@@ -8,6 +8,14 @@ const Item = mongoose.model('Item')
 // Middleware to set req.item for any request at /item/:item_id/*
 exports.find_item = async (req, res, next) => {
   const item = await Item.findById(req.params['item_id']);
+
+  if (!item) {
+    res.status(404);
+    res.send("Item not found");
+    return;
+
+  }
+
   req.item = item;
   return next();
 }

@@ -5,6 +5,22 @@ const mongoose = require('mongoose')
 const Vendor = mongoose.model('Vendor')
 const Order = mongoose.model('Order')
 
+
+// Middleware to set req.order for any request at */order/:order_id/*
+exports.find_order = async (req, res, next) => {
+  const order = await Order.findById(req.params['order_id']);
+
+  if (!order) {
+    res.status(404);
+    res.send("Order not found");
+    return;
+
+  }
+
+  req.order = order;
+  return next();
+}
+
 // GET /vendors/:vendor_id/orders/
 // Get list of orders
 exports.order_list = async (req, res) => {

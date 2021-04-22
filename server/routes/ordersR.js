@@ -12,6 +12,7 @@ router.route('/')
   .get(ordersC.order_list)
   .post(ordersC.order_create);
 
+router.use('/:order_id([0-9a-fA-F]{24})', ordersC.find_order);
 router.route('/:order_id([0-9a-fA-F]{24})')
   .get(ordersC.order_details)
   .patch(ordersC.order_update)
