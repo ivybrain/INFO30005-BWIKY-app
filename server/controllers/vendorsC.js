@@ -5,12 +5,12 @@ const Vendor = mongoose.model('Vendor')
 
 // Middleware to set req.vendor for any request at /vendor/:vendor_id/*
 exports.find_vendor = async (req, res, next) => {
+
   const vendor = await Vendor.findById(req.params['vendor_id']);
   if (!vendor) {
     res.status(404);
     res.send("Vendor not found");
     return;
-
   }
   req.vendor = vendor;
   return next();
@@ -44,6 +44,7 @@ exports.vendor_create = async (req, res) => {
 }
 
 // PATCH /vendors/:vendor_id
+// Update vendor's status
 exports.vendor_update = async (req, res) => {
   try {
     const updatedVendor = await Vendor.findByIdAndUpdate(
@@ -60,6 +61,7 @@ exports.vendor_update = async (req, res) => {
 }
 
 // DELETE /vendors/:vendor_id
+// Delete a vendor
 exports.vendor_delete = async (req, res) => {
   const deletedVendor = await Vendor.findByIdAndDelete(req.vendor)
 
