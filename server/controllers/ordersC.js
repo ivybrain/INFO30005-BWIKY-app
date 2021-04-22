@@ -39,6 +39,8 @@ exports.order_details = async (req, res) => {
       if (order._id == req.params['order_id']) return true
     })
 
+    console.log(found)
+
     if (found == null) {
       res.send('Order not found.')
     } else {
@@ -89,6 +91,28 @@ exports.order_update = async (req, res) => {
     }
   } else if (req.body.hasOwnProperty('items')) {
     console.log('edit items')
+    // We should approach it like this I think:
+
+    /*
+    // get Alice to favourite a food
+    app.get('/AliceFavourite/:food', async (req, res) => {
+      // find Alice
+      let thisUser = await User.findOne( {nameGiven: 'Alice'})
+
+      // find food
+      let favouriteFood = await Food.findOne( {name: req.params.food})
+
+      // add food to Alice's Favourites list
+      favouriteRecord = new Favourite({foodId: favouriteFood._id})
+      thisUser.favourites.push(favouriteRecord)
+
+      // save Alice's updated record to database
+      await thisUser.save()
+      
+      // show the new Alice record
+      result = await User.findOne( {nameGiven: 'Alice'})
+      res.send(result)
+    }) */
   } else {
     res.status(400)
   }
