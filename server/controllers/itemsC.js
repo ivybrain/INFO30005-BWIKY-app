@@ -75,6 +75,8 @@ function remove_all_items(req, res){
   res.send("All deleted");
 }
 
+// Add image url to an item
+// Would be better as a custom getter for the model but that didn't work for me :(
 function add_image(req, item) {
   if (!item || !item.hasOwnProperty("item_name")) {
     return item;

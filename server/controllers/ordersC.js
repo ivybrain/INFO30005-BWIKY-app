@@ -65,7 +65,34 @@ exports.order_create = async (req, res) => {
 }
 
 // PATCH /vendors/:vendor_id/orders/:order_id
+// Can be used to mark as fulfilled, add more items, etc
 exports.order_update = async (req, res) => {
+  try {
+    if (req.body.fulfilled) {
+      req.body.fulfilled_time = new Date();
+    }
+    if (req.body.picked_up) {
+      req.body.picked_up_time = new Date();
+    }
+
+    if (req.body.items) {
+      req.body.modified = new Date();
+    }
+
+    const updated = await Order.findByIdAndUpdate(
+      req.order,
+      { $set: req.body },
+      { new: true },
+    )
+    res.status(200);
+    res.json(updated);
+
+  } catch (err) {
+    res.status(500)
+  }
+}
+
+exports.order_update_old = async (req, res) => {
   const query = { _id: req.params['order_id'] }
 
   if (req.body.hasOwnProperty('fulfilled')) {

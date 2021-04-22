@@ -45,7 +45,6 @@ exports.vendor_create = async (req, res) => {
 
 // PATCH /vendors/:vendor_id
 exports.vendor_update = async (req, res) => {
-  //const query = { _id: req.params['vendor_id'] }
   try {
     const updatedVendor = await Vendor.findByIdAndUpdate(
       req.vendor,
