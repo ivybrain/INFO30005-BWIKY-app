@@ -8,9 +8,10 @@ const Order = mongoose.model('Order')
 
 // Middleware to set req.order for any request at */order/:order_id/*
 exports.find_order = async (req, res, next) => {
+
   const order = await Order.findById(req.params['order_id']);
 
-  if (!order) {
+  if (!order || req.vendor.id != order.vendor) {
     res.status(404);
     res.send("Order not found");
     return;
@@ -61,13 +62,6 @@ exports.order_create = async (req, res) => {
   } catch (err) {
     return res.status(409).send(err)
   }
-}
-
-// DELETE /vendors/:vendor_id/orders
-// NOTE: Implement as soft delete
-exports.order_delete_all = async (req, res) => {
-  await Order.deleteMany({ vendor: req.params.vendor_id })
-  res.status(200).send()
 }
 
 // PATCH /vendors/:vendor_id/orders/:order_id
@@ -134,12 +128,13 @@ exports.order_update = async (req, res) => {
 // DELETE /vendors/:vendor_id/orders/:order_id
 // NOTE: Implement as soft delete
 exports.order_delete = async (req, res) => {
-  res.send('Deletes an order')
+  await Order.findByIdAndDelete(req.order);
+  res.sendStatus(200);
 }
 
 // DELETE /vendors/:vendor_id/orders
 // NOTE: Implement as soft delete
 exports.order_delete_all = async (req, res) => {
-  await Order.deleteMany({ vendor: req.params.vendor_id })
-  res.status(200).send()
+  await Order.deleteMany({ vendor: req.vendor})
+  res.status(200).send();
 }
