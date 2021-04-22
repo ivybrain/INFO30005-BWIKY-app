@@ -48,28 +48,8 @@ exports.order_list = async (req, res) => {
 
 // GET /vendors/:vendor_id/orders/:order_id
 exports.order_details = async (req, res) => {
-  //var order = await Vendor.findById(req.params["order_id"]);
 
-  try {
-    const orders = await Order.find({ vendor: req.vendor })
-
-    var found = orders.find(function (order, index) {
-      if (order._id == req.params['order_id']) return true
-    })
-
-    console.log(found)
-
-    if (found == null) {
-      res.send('Order not found.')
-    } else {
-      res.status(201)
-      res.json(found)
-    }
-  } catch (err) {
-    return res.status(409).send(err)
-  }
-
-  res.json(order)
+  res.json(req.order)
 }
 
 // POST /vendors/:vendor_id/orders/
