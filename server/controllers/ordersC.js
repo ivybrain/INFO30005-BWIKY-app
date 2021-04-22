@@ -8,7 +8,7 @@ const Order = mongoose.model('Order')
 // GET /vendors/:vendor_id/orders/
 // Get list of orders
 exports.order_list = async (req, res) => {
-  var orders
+  var orders;
 
   // GET /vendors/:vendor_id/orders/?fulfilled=false or true
   // Get unfulfilled or fulfilled orders from specified vendor
@@ -18,12 +18,13 @@ exports.order_list = async (req, res) => {
     console.log(fulfilledBool)
 
     orders = await Order.find({
-      vendor: req.params['vendor_id'],
+      vendor: req.vendor,
       fulfilled: fulfilledBool,
     })
   } else {
     // Otherwise, return all orders
-    orders = await Order.find({ vendor: req.params['vendor_id'] })
+    orders = await Order.find({ vendor: req.vendor })
+
   }
 
   res.json(orders)
@@ -32,8 +33,9 @@ exports.order_list = async (req, res) => {
 // GET /vendors/:vendor_id/orders/:order_id
 exports.order_details = async (req, res) => {
   //var order = await Vendor.findById(req.params["order_id"]);
+
   try {
-    const orders = await Order.find({ vendor: req.params['vendor_id'] })
+    const orders = await Order.find({ vendor: req.vendor })
 
     var found = orders.find(function (order, index) {
       if (order._id == req.params['order_id']) return true
@@ -108,7 +110,7 @@ exports.order_update = async (req, res) => {
 
       // save Alice's updated record to database
       await thisUser.save()
-      
+
       // show the new Alice record
       result = await User.findOne( {nameGiven: 'Alice'})
       res.send(result)
