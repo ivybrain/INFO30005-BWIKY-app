@@ -1,16 +1,20 @@
-import { Container, Paper, Typography, TextField } from '@material-ui/core'
+import {
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+} from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import NearestVans from '../SplashPage/NearestVans'
 import VanMap from '../SplashPage/VanMap'
 
 const SplashPage = (props) => {
-  const [location, setLocation] = useState(null)
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       // console.log('Latitude is :', position.coords.latitude)
       // console.log('Longitude is :', position.coords.longitude)
-      setLocation(position)
+      props.setLocation(position)
     })
   }, [])
 
@@ -75,7 +79,6 @@ const SplashPage = (props) => {
           style={{
             width: '100%',
             marginLeft: 'auto',
-
             paddingBottom: '50px',
           }}
         >
@@ -92,6 +95,7 @@ const SplashPage = (props) => {
               size: 'large',
             }}
           />
+          {/* <Button>Find my location!</Button> */}
         </form>
         <Typography
           variant="h5"
@@ -101,9 +105,9 @@ const SplashPage = (props) => {
           fontStyle="italic"
         >
           Location:{' '}
-          {location == null
+          {props.location == null
             ? 'no location'
-            : `${location.coords.latitude}, ${location.coords.longitude}`}
+            : `${props.location.coords.latitude}, ${props.location.coords.longitude}`}
         </Typography>
 
         <VanMap></VanMap>

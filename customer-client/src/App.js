@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { CssBaseline } from '@material-ui/core'
 // import Nav from './components/Nav'
 // import Nav2 from './components/Nav2'
@@ -9,6 +9,8 @@ import Login from './components/Pages/Login'
 import MyOrder from './components/Pages/MyOrder'
 
 const App = () => {
+  const [location, setLocation] = useState(null)
+
   return (
     <div className="App">
       <CssBaseline />
@@ -16,7 +18,13 @@ const App = () => {
       {/* <Nav2></Nav2> */}
       <Nav3></Nav3>
       <Switch>
-        <Route exact path="/" component={SplashPage} />
+        <Route
+          exact
+          path="/"
+          render={(props) => (
+            <SplashPage location={location} setLocation={setLocation} />
+          )}
+        />
         <Route exact path="/login" component={Login} />
         <Route exact path="/myorder" component={MyOrder} />
         {/*
