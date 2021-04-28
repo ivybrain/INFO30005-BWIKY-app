@@ -1,8 +1,19 @@
 import { Container, Paper, Typography, TextField } from '@material-ui/core'
+import { useEffect, useState } from 'react'
 import NearestVans from '../SplashPage/NearestVans'
 import VanMap from '../SplashPage/VanMap'
 
 const SplashPage = (props) => {
+  const [location, setLocation] = useState(null)
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      // console.log('Latitude is :', position.coords.latitude)
+      // console.log('Longitude is :', position.coords.longitude)
+      setLocation(position)
+    })
+  }, [])
+
   return (
     <div
       style={{
@@ -82,6 +93,18 @@ const SplashPage = (props) => {
             }}
           />
         </form>
+        <Typography
+          variant="h5"
+          style={{
+            color: 'white',
+          }}
+          fontStyle="italic"
+        >
+          Location:{' '}
+          {location == null
+            ? 'no location'
+            : `${location.coords.latitude}, ${location.coords.longitude}`}
+        </Typography>
 
         <VanMap></VanMap>
         <Paper elevation={0} style={{ marginTop: '40px' }}>
