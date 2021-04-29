@@ -2,20 +2,6 @@ import React from 'react'
 import { useState } from 'react'
 import ReactMapGL, { Source, Layer, Marker } from 'react-map-gl'
 import Logo from '../Logo/Logo'
-import { Typography, Card, CardContent, Grid } from '@material-ui/core'
-
-const markers = [
-  {
-    longitude: 144.96296,
-    latitude: -37.80435,
-    label: 'Tasty Trailer',
-  },
-  {
-    longitude: 144.96896,
-    latitude: -37.80835,
-    label: 'Breakfast on Wheels',
-  },
-]
 
 const userLocation = {
   type: 'FeatureCollection',
@@ -37,6 +23,8 @@ const userLocationStyle = {
 }
 
 const VanMap = (props) => {
+  const { vans } = props
+
   const [viewport, setViewport] = useState({
     width: '100%',
     height: 600,
@@ -84,15 +72,24 @@ const VanMap = (props) => {
           </Marker>
         ))} */}
 
-        {markers.map((marker) => (
-          <Marker
-            latitude={marker.latitude}
-            longitude={marker.longitude}
-            key={marker.label}
-          >
-            <Logo></Logo>
-          </Marker>
-        ))}
+        {vans !== null
+          ? vans
+              .filter((van) => van.hasOwnProperty('location'))
+              .map((van) => ({
+                latitude: parseFloat(van.location.lat),
+                longitude: parseFloat(van.location.long),
+                label: van.van_name,
+              }))
+              .map((marker) => (
+                <Marker
+                  latitude={marker.latitude}
+                  longitude={marker.longitude}
+                  key={marker.label}
+                >
+                  <Logo></Logo>
+                </Marker>
+              ))
+          : ''}
 
         <Source id="userLocation" type="geojson" data={userLocation}>
           <Layer {...userLocationStyle} />

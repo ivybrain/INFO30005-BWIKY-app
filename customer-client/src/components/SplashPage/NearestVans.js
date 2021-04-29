@@ -2,26 +2,20 @@ import React from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import VanCard from './VanCard'
 
-const vans = [
-  {
-    title: 'Tasty Trailer',
-    rating: 5,
-    distance: 1,
-    simpleLocation: 'on Grattan St outside Melbourne Uni',
-    longitude: 144.96296,
-    latitude: -37.80435,
-  },
-  {
-    title: 'Breakfast on Wheels',
-    rating: 2,
-    distance: 2.7,
-    simpleLocation: 'above the wheels',
-    longitude: 144.96896,
-    latitude: -37.80835,
-  },
-]
-
 const NearestVans = (props) => {
+  let { vans } = props
+  console.log(vans)
+  vans = vans
+    .filter((van) => van.hasOwnProperty('location'))
+    .map((van) => ({
+      ...van,
+      simpleLocation: 'above the wheels',
+      rating: 4,
+      distance:
+        Math.round(
+          Math.sqrt(van.location.lat ** 2 + van.location.long ** 2) * 10,
+        ) / 10,
+    }))
   return (
     <Grid container direction="column" justify="space-between" spacing={3}>
       <Grid item>
@@ -29,10 +23,12 @@ const NearestVans = (props) => {
           SNACKS near you
         </Typography>
 
-        {vans.map((van) => (
+        {vans.map((van, idx) => (
           <Grid item key={van.title}>
             <VanCard
-              title={van.title}
+              key={van.title}
+              number={idx}
+              title={van.van_name}
               rating={van.rating}
               distance={van.distance}
               simpleLocation={van.simpleLocation}

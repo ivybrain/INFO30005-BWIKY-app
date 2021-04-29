@@ -38,7 +38,7 @@ const VanCard = (props) => {
           <CardMedia
             component="img"
             className={styles.media}
-            image={'foodTrucks/foodTruck.jpg'}
+            image={`foodTrucks/foodTruck${props.number + 1}.jpg`}
             title="Food Truck"
           ></CardMedia>
         </Grid>

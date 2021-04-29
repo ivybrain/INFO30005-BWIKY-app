@@ -8,8 +8,38 @@ import {
 import { useEffect, useState } from 'react'
 import NearestVans from '../SplashPage/NearestVans'
 import VanMap from '../SplashPage/VanMap'
+import axios from 'axios'
+import { API_URL } from '../../constants'
+
+const VAN_LIMIT = 5
 
 const SplashPage = (props) => {
+  const { location } = props
+  // Get Vans
+  const [vans, setVans] = useState(null)
+
+  useEffect(() => {
+    if (location) {
+      const headers = { 'Access-Control-Allow-Origin': '*' }
+
+      // axios(`${API_URL}/vendors`, { headers })
+      axios(
+        `http://localhost:8080/vendors?lat=${location.coords.latitude}&long=${location.coords.longitude}&limit=${VAN_LIMIT}`,
+        {
+          headers,
+        },
+      )
+        .then((res) => {
+          console.log(res.data)
+          setVans(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  }, [location])
+
+  // Get Geolocation
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       // console.log('Latitude is :', position.coords.latitude)
@@ -105,14 +135,14 @@ const SplashPage = (props) => {
           fontStyle="italic"
         >
           Location:{' '}
-          {props.location == null
+          {location == null
             ? 'no location'
-            : `${props.location.coords.latitude}, ${props.location.coords.longitude}`}
+            : `${location.coords.latitude}, ${location.coords.longitude}`}
         </Typography>
 
-        <VanMap></VanMap>
+        <VanMap vans={vans}></VanMap>
         <Paper elevation={0} style={{ marginTop: '40px' }}>
-          <NearestVans></NearestVans>
+          {vans === null ? '' : <NearestVans vans={vans}></NearestVans>}
         </Paper>
       </Container>
     </div>
