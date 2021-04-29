@@ -1,10 +1,4 @@
-import {
-  Container,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-} from '@material-ui/core'
+import { Container, Paper, Typography, TextField } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import NearestVans from '../SplashPage/NearestVans'
 import VanMap from '../SplashPage/VanMap'
