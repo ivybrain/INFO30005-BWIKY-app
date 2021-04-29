@@ -1,11 +1,13 @@
-import { Container, Typography } from '@material-ui/core'
-
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@material-ui/core'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 
@@ -33,8 +35,8 @@ const MyOrder = (props) => {
           </TableHead>
 
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.item}>
+            {rows.map((row, idx) => (
+              <TableRow key={idx}>
                 <TableCell>{row.item_name}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 {/* <TableCell>{row.price}</TableCell> */}

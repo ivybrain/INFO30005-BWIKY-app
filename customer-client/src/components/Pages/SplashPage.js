@@ -1,5 +1,5 @@
 import { Container, Paper, Typography, TextField } from '@material-ui/core'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import NearestVans from '../SplashPage/NearestVans'
 import VanMap from '../SplashPage/VanMap'
 import axios from 'axios'
@@ -8,38 +8,40 @@ import { API_URL } from '../../constants'
 const VAN_LIMIT = 5
 
 const SplashPage = (props) => {
-  const { location } = props
-  // Get Vans
-  const [vans, setVans] = useState(null)
+  const { location, setLocation, vans, setVans } = props
 
+  // Get Vans
   useEffect(() => {
-    if (location) {
+    if (location && !vans) {
+      console.log('getting vans')
       const headers = { 'Access-Control-Allow-Origin': '*' }
 
-      // axios(`${API_URL}/vendors`, { headers })
       axios(
-        `http://localhost:8080/vendors?lat=${location.coords.latitude}&long=${location.coords.longitude}&limit=${VAN_LIMIT}`,
+        `${API_URL}/vendors?lat=${location.coords.latitude}&long=${location.coords.longitude}&limit=${VAN_LIMIT}`,
         {
           headers,
         },
       )
         .then((res) => {
-          console.log(res.data)
+          // console.log(res)
           setVans(res.data)
         })
         .catch((err) => {
-          console.log(err)
+          console.error(err)
         })
     }
   }, [location])
 
   // Get Geolocation
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      // console.log('Latitude is :', position.coords.latitude)
-      // console.log('Longitude is :', position.coords.longitude)
-      props.setLocation(position)
-    })
+    if (!location) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(
+          `got location lat ${position.coords.latitude} long ${position.coords.longitude}`,
+        )
+        setLocation(position)
+      })
+    }
   }, [])
 
   return (
@@ -122,16 +124,18 @@ const SplashPage = (props) => {
           {/* <Button>Find my location!</Button> */}
         </form>
         <Typography
-          variant="h5"
+          variant="body"
           style={{
             color: 'white',
           }}
           fontStyle="italic"
         >
-          Location:{' '}
+          Your Location:{' '}
           {location == null
             ? 'no location'
-            : `${location.coords.latitude}, ${location.coords.longitude}`}
+            : `(${Math.round(location.coords.latitude * 10000) / 10000}, ${
+                Math.round(location.coords.longitude * 10000) / 10000
+              })`}
         </Typography>
 
         <VanMap vans={vans}></VanMap>

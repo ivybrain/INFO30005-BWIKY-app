@@ -7,9 +7,12 @@ import { Switch, Route } from 'react-router-dom'
 import SplashPage from './components/Pages/SplashPage'
 import Login from './components/Pages/Login'
 import MyOrder from './components/Pages/MyOrder'
+import VanDetails from './components/Pages/VanDetails'
 
 const App = () => {
   const [location, setLocation] = useState(null)
+  const [vans, setVans] = useState(null)
+  const [menu, setMenu] = useState(null)
   const [order, setOrder] = useState({
     items: [
       { item_name: 'item 1', quantity: '10' },
@@ -28,7 +31,12 @@ const App = () => {
           exact
           path="/"
           render={() => (
-            <SplashPage location={location} setLocation={setLocation} />
+            <SplashPage
+              location={location}
+              setLocation={setLocation}
+              vans={vans}
+              setVans={setVans}
+            />
           )}
         />
         <Route exact path="/login" component={Login} />
@@ -37,11 +45,13 @@ const App = () => {
           path="/myorder"
           render={() => <MyOrder order={order} setOrder={setOrder} />}
         />
-        {/*
         <Route
-          path="/orders/:id"
-          render={(props) => <Order {...props}></Order>}
-        />*/}
+          exact
+          path="/van/:id"
+          render={(props) => (
+            <VanDetails {...props} vans={vans} menu={menu} setMenu={setMenu} />
+          )}
+        />
       </Switch>
     </div>
   )

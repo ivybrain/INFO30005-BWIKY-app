@@ -4,7 +4,7 @@ import VanCard from './VanCard'
 
 const NearestVans = (props) => {
   let { vans } = props
-  console.log(vans)
+  // console.log(vans)
   vans = vans
     .filter((van) => van.hasOwnProperty('location'))
     .map((van) => ({
@@ -20,14 +20,15 @@ const NearestVans = (props) => {
         </Typography>
 
         {vans.map((van, idx) => (
-          <Grid item key={van.title}>
+          <Grid item key={idx}>
             <VanCard
-              key={van.title}
+              key={idx}
               number={idx}
               title={van.van_name}
               rating={van.rating}
               distance={van.distance}
               simpleLocation={van.simpleLocation}
+              _id={van._id}
             ></VanCard>
           </Grid>
         ))}
