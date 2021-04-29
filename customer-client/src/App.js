@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { CssBaseline } from '@material-ui/core'
 // import Nav from './components/Nav'
 // import Nav2 from './components/Nav2'
@@ -10,6 +10,12 @@ import MyOrder from './components/Pages/MyOrder'
 
 const App = () => {
   const [location, setLocation] = useState(null)
+  const [order, setOrder] = useState({
+    items: [
+      { item_name: 'item 1', quantity: '10' },
+      { item_name: 'item 2', quantity: '6' },
+    ],
+  })
 
   return (
     <div className="App">
@@ -21,12 +27,16 @@ const App = () => {
         <Route
           exact
           path="/"
-          render={(props) => (
+          render={() => (
             <SplashPage location={location} setLocation={setLocation} />
           )}
         />
         <Route exact path="/login" component={Login} />
-        <Route exact path="/myorder" component={MyOrder} />
+        <Route
+          exact
+          path="/myorder"
+          render={() => <MyOrder order={order} setOrder={setOrder} />}
+        />
         {/*
         <Route
           path="/orders/:id"
