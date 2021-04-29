@@ -48,10 +48,12 @@ exports.vendor_list = async (req, res) => {
   }
 
   if (has_location) {
-    var distances = {};
-    vendors.forEach(x => distances[x.id] = distance(x));
-    vendors.sort((x,y) => distances[x.id] - distances[y.id]);
-    
+    vendors = vendors.map(x => x.toObject())
+        .filter(x => x.hasOwnProperty('location'));
+
+    vendors.forEach(x => x["distance"] = distance(x));    
+    vendors.sort((x,y) => x.distance - y.distance);
+
   }
 
   if (req.query.hasOwnProperty('limit')) {
