@@ -24,8 +24,9 @@ const VanCard = (props) => {
 
   const distance =
     props.distance < 2
-      ? 'Within 2km'
-      : Math.round(props.distance * 10) / 10 + 'km'
+      ? 'Within 2km from you!'
+      : Math.round(props.distance * 10) / 10 +
+        'km from you -- click to view menu!'
 
   // console.log(styles, 'styles')
 
@@ -43,7 +44,7 @@ const VanCard = (props) => {
           alignItems="center"
           spacing={0}
         >
-          <Grid item xs={2}>
+          <Grid item xs={12} md={2}>
             <CardMedia
               component="img"
               className={styles.media}
@@ -52,7 +53,7 @@ const VanCard = (props) => {
             ></CardMedia>
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item xs={12} md={4}>
             <CardContent>
               <Typography
                 variant="h5"
@@ -67,7 +68,7 @@ const VanCard = (props) => {
             </CardContent>
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item md={4} xs={12}>
             <CardContent>
               <Ratings
                 rating={parseFloat(props.rating)}
@@ -83,7 +84,7 @@ const VanCard = (props) => {
             </CardContent>
           </Grid>
 
-          <Grid item xs={2}>
+          <Grid item md={2} xs={12}>
             <CardContent>
               <Typography
                 variant="body1"

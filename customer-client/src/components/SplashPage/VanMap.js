@@ -26,8 +26,8 @@ const VanMap = (props) => {
   const { vans } = props
 
   const [viewport, setViewport] = useState({
-    width: '100%',
-    height: 600,
+    width: 'fit',
+    height: '50vh',
     latitude: -37.80435,
     longitude: 144.96296,
     zoom: 14,
