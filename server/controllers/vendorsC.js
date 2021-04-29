@@ -19,7 +19,45 @@ exports.find_vendor = async (req, res, next) => {
 // GET /vendors
 // return list of vendors
 exports.vendor_list = async (req, res) => {
-  const vendors = await Vendor.find({})
+
+  var find_params = {};
+  var has_location = false;
+  var lat, long;
+
+  if (req.query.hasOwnProperty('lat') && req.query.hasOwnProperty('long')) {
+    has_location = true;
+    lat = parseFloat(req.query.lat);
+    long = parseFloat(req.query.long);
+
+    // Implement for efficiency with vendors in different cities
+
+    // Search for all vendors within 1 degree, ~= 100km
+    // Degree threshold
+    //const dg_th = 1;
+    //find_params['location'] = {lat: lat};
+    //find_params['location'] = {lat: { $gte: lat-dg_th, $lte: lat+dg_th}, long: { $gte: long-dg_th, $lte: long+dg_th}};
+  }
+
+  var vendors = await Vendor.find(find_params)
+
+  function distance(x) {
+    return Math.sqrt(
+      Math.pow(lat - x.location.lat, 2.0) +
+      Math.pow(long - x.location.long, 2.0));
+
+  }
+
+  if (has_location) {
+    var distances = {};
+    vendors.forEach(x => distances[x.id] = distance(x));
+    vendors.sort((x,y) => distances[x.id] - distances[y.id]);
+    
+  }
+
+  if (req.query.hasOwnProperty('limit')) {
+    res.json(vendors.slice(0, req.query.limit));
+    return;
+  }
   res.json(vendors);
 }
 
