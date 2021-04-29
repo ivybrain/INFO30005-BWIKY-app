@@ -11,10 +11,6 @@ const NearestVans = (props) => {
       ...van,
       simpleLocation: 'above the wheels',
       rating: 4,
-      distance:
-        Math.round(
-          Math.sqrt(van.location.lat ** 2 + van.location.long ** 2) * 10,
-        ) / 10,
     }))
   return (
     <Grid container direction="column" justify="space-between" spacing={3}>

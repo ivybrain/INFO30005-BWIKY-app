@@ -26,6 +26,7 @@ export default function ButtonAppBar() {
     <div
       className={classes.root}
       style={{ backgroundColor: 'white', color: 'white' }}
+      xs={2}
     >
       <AppBar
         position="static"
@@ -33,7 +34,11 @@ export default function ButtonAppBar() {
         style={{ backgroundColor: '#fafafa', boxShadow: 'none' }}
       >
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography
+            variant="h6"
+            className={classes.title}
+            style={{ marginLeft: '10vw' }}
+          >
             Snacks in a Van!
           </Typography>
           <Link to="/">
@@ -42,7 +47,7 @@ export default function ButtonAppBar() {
           <Link to="/login">
             <Button className={classes.text}>Login</Button>
           </Link>
-          <Link to="/myorder">
+          <Link to="/myorder" style={{ marginRight: '10vw' }}>
             <Button className={classes.text}>My Order</Button>
           </Link>
         </Toolbar>

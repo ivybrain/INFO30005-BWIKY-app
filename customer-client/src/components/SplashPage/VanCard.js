@@ -21,7 +21,10 @@ const useStyles = makeStyles((theme) => ({
 const VanCard = (props) => {
   const styles = useStyles()
 
-  const distance = props.distance < 2 ? 'Within 2km' : props.distance + 'km'
+  const distance =
+    props.distance < 2
+      ? 'Within 2km'
+      : Math.round(props.distance * 10) / 10 + 'km'
 
   console.log(styles, 'styles')
 
