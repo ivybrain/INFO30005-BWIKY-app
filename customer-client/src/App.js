@@ -14,6 +14,7 @@ const App = () => {
   const [vans, setVans] = useState(null)
   const [menu, setMenu] = useState(null)
   const [order, setOrder] = useState({ items: {} })
+  const [auth, setAuth] = useState(null)
 
   return (
     <div className="App">
@@ -34,7 +35,13 @@ const App = () => {
             />
           )}
         />
-        <Route exact path="/login" component={Login} />
+        <Route
+          exact
+          path="/login"
+          component={Login}
+          auth={auth}
+          setAuth={setAuth}
+        />
         <Route
           exact
           path="/myorder"

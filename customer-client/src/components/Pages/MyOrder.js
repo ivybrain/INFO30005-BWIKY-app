@@ -11,7 +11,7 @@ import {
   Grid,
 } from '@material-ui/core'
 import axios from 'axios'
-import { API_URL } from '../'
+import { API_URL } from '../../constants'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 
