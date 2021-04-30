@@ -14,6 +14,6 @@ router.route('/:customer_id([0-9a-fA-F]{24})')
   .get(customersC.customer_details)
   .delete(customersC.customer_delete);
 
-//router.get('/:customer_id([0-9a-fA-F]{24})/orders', customerC.customer_orders);
+router.get('/:customer_id([0-9a-fA-F]{24})/orders', customersC.customer_orders);
 
 module.exports = router;

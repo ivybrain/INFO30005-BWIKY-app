@@ -1,7 +1,8 @@
 require('../models/Customer')
 const mongoose = require('mongoose')
 
-const Customer = mongoose.model('Customer')
+const Customer = mongoose.model('Customer');
+const Order = mongoose.model('Order');
 
 //Middleware to set req.customer for any request at /customer/:customer_id/*
 exports.find_customer = async (req, res, next) => {
@@ -27,7 +28,6 @@ exports.customer_details = async(req, res) => {
 
 exports.customer_create = async (req, res) => {
   try {
-    await Customer.validate(req.body);
     const outputs = await Customer.create(req.body);
     res.json(outputs);
   }
@@ -43,4 +43,9 @@ exports.customer_delete = async(req, res) => {
   const deleted = await Customer.findByIdAndDelete(req.customer.id);
   res.status(200);
   res.json(deleted);
+}
+
+exports.customer_orders = async(req, res) => {
+  const orders = await Order.find({ customer: req.customer })
+  res.json(orders);
 }

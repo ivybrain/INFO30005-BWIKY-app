@@ -6,7 +6,7 @@ const ObjectId = Schema.ObjectId;
 const beautify_unique = require('mongoose-beautiful-unique-validation');
 
 const customer = new Schema({
-  email: {type: String, unique: true},
+  email: {type: String, unique: true, index: true, required: true},
   given_name: String,
   family_name: String
 
