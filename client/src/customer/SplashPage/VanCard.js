@@ -34,7 +34,7 @@ const VanCard = (props) => {
     <Card className={styles.root} classes={{}} style={{ marginTop: '40px' }}>
       <Card
         component={Link}
-        to={`/van/${props._id}`}
+        to={`/customer/van/${props._id}`}
         style={{ textDecoration: 'none' }}
       >
         <Grid
@@ -48,7 +48,7 @@ const VanCard = (props) => {
             <CardMedia
               component="img"
               className={styles.media}
-              image={`foodTrucks/foodTruck${props.number + 1}.jpg`}
+              image={`/foodTrucks/foodTruck${props.number + 1}.jpg`}
               title="Food Truck"
             ></CardMedia>
           </Grid>

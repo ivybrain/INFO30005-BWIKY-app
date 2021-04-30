@@ -97,7 +97,7 @@ export default function ButtonAppBar() {
                     >
                       <Button
                         component={Link}
-                        to="/"
+                        to="/customer/"
                         style={{ textDecoration: 'none' }}
                       >
                         Find a Van
@@ -113,7 +113,7 @@ export default function ButtonAppBar() {
                     >
                       <Button
                         component={Link}
-                        to="/login"
+                        to="/customer/login"
                         style={{ textDecoration: 'none' }}
                       >
                         Log In
@@ -129,7 +129,7 @@ export default function ButtonAppBar() {
                     >
                       <Button
                         component={Link}
-                        to="/myorder"
+                        to="/customer/myorder"
                         style={{ textDecoration: 'none' }}
                       >
                         My Order

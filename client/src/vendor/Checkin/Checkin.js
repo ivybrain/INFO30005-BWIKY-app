@@ -5,31 +5,31 @@ import {
   Paper,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { Link } from "react-router-dom";
-import Header from "../Header";
+} from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import Header from '../Header'
 
 const Checkin = () => {
   return (
-    <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
+    <div style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
       <Header />
-      <Container style={{ overflowX: "hidden", overflowY: "hidden" }}>
+      <Container style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
         <Grid
           container
           direction="column"
           justify="center"
           spacing={3}
-          style={{ margin: "auto" }}
+          style={{ margin: 'auto' }}
         >
-          <Grid item style={{ margin: "auto", width: "50%" }} xs={4}>
+          <Grid item style={{ margin: 'auto', width: '50%' }} xs={4}>
             <TextField
               variant="outlined"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               label="enter your current location to check in"
             />
           </Grid>
 
-          <Grid item style={{ margin: "auto" }}>
+          <Grid item style={{ margin: 'auto' }}>
             <Typography variant="h6">
               Past locations on this account:
             </Typography>
@@ -38,13 +38,13 @@ const Checkin = () => {
 
         <Grid
           item
-          style={{ margin: "auto", width: "60%", marginBottom: "10px" }}
+          style={{ margin: 'auto', width: '60%', marginBottom: '10px' }}
         >
           <Paper
             variant="outlined"
-            style={{ width: "50%", margin: "auto", height: "8vh" }}
+            style={{ width: '50%', margin: 'auto', height: '8vh' }}
           >
-            <Typography variant="h6" style={{ margin: "auto" }}>
+            <Typography variant="h6" style={{ margin: 'auto' }}>
               Off Grattan St
             </Typography>
           </Paper>
@@ -52,23 +52,23 @@ const Checkin = () => {
 
         <Grid
           item
-          style={{ margin: "auto", width: "60%", marginBottom: "10px" }}
+          style={{ margin: 'auto', width: '60%', marginBottom: '10px' }}
         >
           <Paper
             variant="outlined"
-            style={{ width: "50%", margin: "auto", height: "8vh" }}
+            style={{ width: '50%', margin: 'auto', height: '8vh' }}
           >
-            <Typography variant="h6" style={{ margin: "auto" }}>
+            <Typography variant="h6" style={{ margin: 'auto' }}>
               Near Swanston St
             </Typography>
           </Paper>
         </Grid>
 
-        <Grid item style={{ margin: "auto", width: "60%" }}>
+        <Grid item style={{ margin: 'auto', width: '60%' }}>
           <Button
             component={Link}
-            to={"/orders"}
-            style={{ textDecoration: "none" }}
+            to={'/vendor/orders'}
+            style={{ textDecoration: 'none' }}
           >
             <Button variant="contained" disableElevation>
               Check In
@@ -77,7 +77,7 @@ const Checkin = () => {
         </Grid>
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default Checkin;
+export default Checkin

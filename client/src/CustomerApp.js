@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { CssBaseline } from '@material-ui/core'
-// import Nav from './components/Nav'
-// import Nav2 from './components/Nav2'
-import Nav3 from './components/Nav3'
+// import Nav from './customer/Nav'
+// import Nav2 from './customer/Nav2'
+import Nav3 from './customer/Nav3'
 import { Switch, Route } from 'react-router-dom'
-import SplashPage from './components/Pages/SplashPage'
-import Login from './components/Pages/Login'
-import MyOrder from './components/Pages/MyOrder'
-import VanDetails from './components/Pages/VanDetails'
+import SplashPage from './customer/Pages/SplashPage'
+import Login from './customer/Pages/Login'
+import MyOrder from './customer/Pages/MyOrder'
+import VanDetails from './customer/Pages/VanDetails'
 
-const App = () => {
+const CustomerApp = () => {
   const [location, setLocation] = useState(null)
   const [vans, setVans] = useState(null)
   const [menu, setMenu] = useState(null)
@@ -25,7 +25,7 @@ const App = () => {
       <Switch>
         <Route
           exact
-          path="/"
+          path="/customer/"
           render={() => (
             <SplashPage
               location={location}
@@ -37,19 +37,19 @@ const App = () => {
         />
         <Route
           exact
-          path="/login"
+          path="/customer/login"
           component={Login}
           auth={auth}
           setAuth={setAuth}
         />
         <Route
           exact
-          path="/myorder"
+          path="/customer/myorder"
           render={() => <MyOrder order={order} setOrder={setOrder} />}
         />
         <Route
           exact
-          path="/van/:id"
+          path="/customer/van/:id"
           render={(props) => (
             <VanDetails
               {...props}
@@ -66,4 +66,4 @@ const App = () => {
   )
 }
 
-export default App
+export default CustomerApp
