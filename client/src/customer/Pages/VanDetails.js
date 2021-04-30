@@ -1,15 +1,44 @@
-import { Container, Typography, Grid } from '@material-ui/core'
+import {
+  Container,
+  Typography,
+  Grid,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  Dialog,
+} from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import Ratings from 'react-ratings-declarative'
 import MenuItem from '../VanDetails/MenuItem'
+import { Link } from 'react-router-dom'
 
 const VanDetails = (props) => {
   const { vans, menu, setMenu, order, setOrder } = props
   const id = props.match.params.id
 
   const [vanData, setVanData] = useState(null)
+
+  const [open, setOpen] = useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  // Whenever the order updates, check if we have reached 3 snacks
+  useEffect(() => {
+    if (Object.keys(order.items).length >= 3) {
+      console.log('3 snacks reached')
+      setOpen(true)
+    }
+  }, [order])
 
   useEffect(() => {
     if (!vanData) {
@@ -98,6 +127,39 @@ const VanDetails = (props) => {
           )}
         </div>
       )}
+      <div>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="three-snacks-reached"
+          aria-describedby="three-snacks-reached"
+        >
+          <DialogTitle id="three-snacks-reached">
+            {'Continue shopping?'}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="three-snacks-reached">
+              You have reached the maximum number of snacks available in one
+              order. You can add more of the same three snacks or review your
+              order!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Continue Shopping
+            </Button>
+            <Button onClick={handleClose} color="primary" autoFocus>
+              <Button
+                component={Link}
+                to="/customer/myorder"
+                style={{ textDecoration: 'none' }}
+              >
+                Review Order
+              </Button>
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </Container>
   )
 }
