@@ -1,0 +1,32 @@
+[
+  {
+    "given_name": "Sara",
+    "family_name": "Crewe",
+    "email": "littleprincess@empire.gb"
+  },
+
+  {
+    "given_name": "Tom",
+    "family_name": "Sawyer",
+    "email": "painter@fencesrus.com"
+  },
+
+  {
+    "given_name": "Matilda",
+    "family_name": "Wormwood",
+    "email": "honeyj@crunchem.edu.uk"
+  },
+
+  {
+    "given_name": "Nancy",
+    "family_name": "Blackett",
+    "email": "pirate@amazon.com"
+  },
+
+  {
+    "given_name": "Lucy",
+    "family_name": "Pevensie",
+    "email": "queen@wardro.be"
+  }
+
+]
