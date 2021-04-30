@@ -11,41 +11,66 @@ import {
 
 const columns = ['Item', 'Qty', 'Subtotal']
 
+var audFormatter = new Intl.NumberFormat('en-AU', {
+  style: 'currency',
+  currency: 'AUD',
+})
+
 const MyOrder = (props) => {
   const { order } = props
 
-  const rows = order.items
   return (
     <Container>
       <Typography variant="h2">My Order</Typography>
-      {order !== {} ? (
-        ''
-      ) : (
-        <Typography variant="subtitle">Your order is empty!</Typography>
-      )}
-
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell key={column}>{column}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {rows.map((row, idx) => (
-              <TableRow key={idx}>
-                <TableCell>{row.item_name}</TableCell>
-                <TableCell>{row.quantity}</TableCell>
-                {/* <TableCell>{row.price}</TableCell> */}
-                <TableCell>{6.34}</TableCell>
+      {order.items && Object.keys(order.items).length !== 0 ? (
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell key={column}>{column}</TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+
+            <TableBody>
+              {Object.keys(order.items).map((id, idx) => (
+                <TableRow key={idx}>
+                  <TableCell>{order.items[id].item_name}</TableCell>
+                  <TableCell>{order.items[id].quantity}</TableCell>
+                  <TableCell>
+                    {audFormatter.format(
+                      order.items[id].quantity * order.items[id].item_price,
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Total:{' '}
+                    {audFormatter.format(
+                      Object.keys(order.items)
+                        .map(
+                          (id) =>
+                            order.items[id].quantity *
+                            order.items[id].item_price,
+                        )
+                        .reduce((a, b) => a + b),
+                    )}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Typography variant="subtitle">
+          Your order is empty! Try adding some items to your order.
+        </Typography>
+      )}
     </Container>
   )
 }

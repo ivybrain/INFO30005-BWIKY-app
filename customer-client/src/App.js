@@ -13,12 +13,7 @@ const App = () => {
   const [location, setLocation] = useState(null)
   const [vans, setVans] = useState(null)
   const [menu, setMenu] = useState(null)
-  const [order, setOrder] = useState({
-    items: [
-      { item_name: 'item 1', quantity: '10' },
-      { item_name: 'item 2', quantity: '6' },
-    ],
-  })
+  const [order, setOrder] = useState({ items: {} })
 
   return (
     <div className="App">
@@ -49,7 +44,14 @@ const App = () => {
           exact
           path="/van/:id"
           render={(props) => (
-            <VanDetails {...props} vans={vans} menu={menu} setMenu={setMenu} />
+            <VanDetails
+              {...props}
+              vans={vans}
+              menu={menu}
+              setMenu={setMenu}
+              order={order}
+              setOrder={setOrder}
+            />
           )}
         />
       </Switch>

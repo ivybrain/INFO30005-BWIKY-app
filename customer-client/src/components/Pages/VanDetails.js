@@ -1,26 +1,15 @@
-import {
-  Container,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@material-ui/core'
+import { Container, Typography, Grid } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
-
-const columns = ['Item', 'Description', 'Price']
+import Ratings from 'react-ratings-declarative'
+import MenuItem from '../VanDetails/MenuItem'
 
 const VanDetails = (props) => {
-  const { vans, menu, setMenu } = props
+  const { vans, menu, setMenu, order, setOrder } = props
   const id = props.match.params.id
 
   const [vanData, setVanData] = useState(null)
-
-  const rows = menu
 
   useEffect(() => {
     if (!vanData) {
@@ -73,37 +62,39 @@ const VanDetails = (props) => {
       {vanData === null || vanData === undefined ? (
         <Typography variant="h3">Van Details Loading...</Typography>
       ) : (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h3">Van Details {vanData.van_name}</Typography>
           <Typography variant="body">
-            This van is {vanData.distance}km away!
+            This van is {Math.round(vanData.distance * 10) / 10}km away!
           </Typography>
+          <Ratings
+            rating={parseFloat(4)}
+            widgetDimensions="30px"
+            widgetSpacings="8px"
+          >
+            <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
+            <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
+            <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
+            <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
+            <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
+          </Ratings>
 
           {menu === null ? (
             ''
           ) : (
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    {columns.map((column) => (
-                      <TableCell key={column}>{column}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-
-                <TableBody>
-                  {rows.map((row, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell>{row.item_name}</TableCell>
-                      <TableCell>{row.item_description}</TableCell>
-                      {/* <TableCell>{row.price}</TableCell> */}
-                      <TableCell>{row.item_price}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <>
+              <Typography variant="body">Menu</Typography>
+              <Grid container direction="row" spacing={2}>
+                {menu.map((menuItem, idx) => (
+                  <MenuItem
+                    key={idx}
+                    menuItem={menuItem}
+                    order={order}
+                    setOrder={setOrder}
+                  ></MenuItem>
+                ))}
+              </Grid>
+            </>
           )}
         </div>
       )}
