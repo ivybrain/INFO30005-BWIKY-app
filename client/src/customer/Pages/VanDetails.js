@@ -115,12 +115,14 @@ const VanDetails = (props) => {
               <Typography variant="body">Menu</Typography>
               <Grid container direction="row" spacing={2}>
                 {menu.map((menuItem, idx) => (
-                  <MenuItem
-                    key={idx}
-                    menuItem={menuItem}
-                    order={order}
-                    setOrder={setOrder}
-                  ></MenuItem>
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <MenuItem
+                      key={idx}
+                      menuItem={menuItem}
+                      order={order}
+                      setOrder={setOrder}
+                    />
+                  </Grid>
                 ))}
               </Grid>
             </>

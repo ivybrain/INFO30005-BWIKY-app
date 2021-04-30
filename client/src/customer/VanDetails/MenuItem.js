@@ -39,7 +39,7 @@ const MenuItem = (props) => {
 
   return (
     <Grid item>
-      <Card variant="outlined" style={{ width: '280px' }}>
+      <Card variant="outlined" style={{ width: '100%' }}>
         <CardMedia
           component="img"
           image={`http://${menuItem.item_image_url}`}
