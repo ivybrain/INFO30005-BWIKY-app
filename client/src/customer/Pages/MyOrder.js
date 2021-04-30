@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core'
 import axios from 'axios'
 import { API_URL } from '../../constants'
+import { Redirect } from 'react-router-dom'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 
@@ -25,14 +26,17 @@ const MyOrder = (props) => {
 
   const handleCancelOrder = (e) => {
     e.preventDefault()
-    setOrder({ items: {} })
+    setOrder({ items: {}, confirmed: false })
     console.log('cleared order')
   }
 
   const handleConfirmOrder = (e) => {
     e.preventDefault()
-    const headers = { 'Access-Control-Allow-Origin': '*' }
+
+    setOrder({ ...order, confirmed: true })
+
     // Requires a customer ID, so implement after authentication
+    // const headers = { 'Access-Control-Allow-Origin': '*' }
 
     // axios
     //   .post(`${API_URL}/vendors/:vendor_id/orders`, {
@@ -109,6 +113,7 @@ const MyOrder = (props) => {
                   Confirm Order
                 </Typography>
               </Button>
+              {order.confirmed ? <Redirect to="/customer/orders" /> : null}
             </Grid>
           </Grid>
         </>

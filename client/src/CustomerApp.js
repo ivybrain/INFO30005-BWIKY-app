@@ -8,12 +8,13 @@ import SplashPage from './customer/Pages/SplashPage'
 import Login from './customer/Pages/Login'
 import MyOrder from './customer/Pages/MyOrder'
 import VanDetails from './customer/Pages/VanDetails'
+import Orders from './customer/Pages/Orders'
 
 const CustomerApp = () => {
   const [location, setLocation] = useState(null)
   const [vans, setVans] = useState(null)
   const [menu, setMenu] = useState(null)
-  const [order, setOrder] = useState({ items: {} })
+  const [order, setOrder] = useState({ items: {}, confirmed: false })
   const [auth, setAuth] = useState(null)
 
   return (
@@ -46,6 +47,11 @@ const CustomerApp = () => {
           exact
           path="/customer/myorder"
           render={() => <MyOrder order={order} setOrder={setOrder} />}
+        />
+        <Route
+          exact
+          path="/customer/orders"
+          render={() => <Orders order={order} setOrder={setOrder} />}
         />
         <Route
           exact
