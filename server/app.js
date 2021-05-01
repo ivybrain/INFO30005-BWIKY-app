@@ -12,12 +12,14 @@ app.use(cors())
 
 const vendorsR = require('./routes/vendorsR.js')
 const itemsR = require('./routes/itemsR.js')
+const customersR = require('./routes/customersR.js')
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.use('/vendors', vendorsR)
 app.use('/items', itemsR)
+app.use('/customers', customersR)
 app.use(express.static('public'))
 
 app.listen(process.env.PORT, function () {
