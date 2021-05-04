@@ -1,17 +1,6 @@
-import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ReactMapGL, { Source, Layer, Marker } from 'react-map-gl'
 import Logo from '../Logo/Logo'
-
-const userLocation = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [144.96296, -37.80435] },
-    },
-  ],
-}
 
 const userLocationStyle = {
   id: 'point',
@@ -23,7 +12,7 @@ const userLocationStyle = {
 }
 
 const VanMap = (props) => {
-  const { vans } = props
+  const { vans, location } = props
 
   const [viewport, setViewport] = useState({
     width: 'fit',
@@ -34,6 +23,16 @@ const VanMap = (props) => {
     bearing: 0,
     pitch: 0,
   })
+
+  useEffect(() => {
+    if (location != null) {
+      setViewport({
+        ...viewport,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      })
+    }
+  }, [location])
 
   return (
     <div style={{ borderRadius: '10px' }}>
@@ -71,7 +70,6 @@ const VanMap = (props) => {
             </div>
           </Marker>
         ))} */}
-
         {vans !== null
           ? vans
               .filter((van) => van.hasOwnProperty('location'))
@@ -90,20 +88,61 @@ const VanMap = (props) => {
                 </Marker>
               ))
           : ''}
-
-        <Source id="userLocation" type="geojson" data={userLocation}>
-          <Layer {...userLocationStyle} />
-          {/* <Layer
-            type="circle"
-            id="marker"
-            paint={{
-              'circle-color': 'black',
-              'circle-stroke-width': 1,
-              'circle-stroke-color': '#fff',
-              'circle-stroke-opacity': 1,
+        ==
+        {location == null ? (
+          ''
+        ) : (
+          <Source
+            id="userLocation"
+            type="geojson"
+            data={{
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [
+                      location.coords.longitude,
+                      location.coords.latitude,
+                      // 145.0224,
+                      // -37.8586,
+                      // 144.96296,
+                      // -37.80435,
+                    ],
+                  },
+                },
+              ],
             }}
-          ></Layer> */}
-        </Source>
+          >
+            <Layer {...userLocationStyle} />
+          </Source>
+        )}
+        {/* <Source
+          id="userLocation"
+          type="geojson"
+          data={{
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [
+                    // location.coords.longitude,
+                    // location.coords.latitude,
+                    145.0224,
+                    -37.8586,
+                    // 144.96296,
+                    // -37.80435,
+                  ],
+                },
+              },
+            ],
+          }}
+        >
+          <Layer {...userLocationStyle} />
+        </Source> */}
       </ReactMapGL>
     </div>
   )
