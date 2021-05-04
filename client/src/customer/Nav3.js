@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function ButtonAppBar() {
+const NavBar3 = (props) => {
+  const { order } = props
   const classes = useStyles()
 
   const xsMatch = useMediaQuery('(min-width:400px)')
@@ -132,7 +133,18 @@ export default function ButtonAppBar() {
                         to="/customer/myorder"
                         style={{ textDecoration: 'none' }}
                       >
-                        My Order
+                        My Order{' '}
+                        {order == null ? (
+                          ''
+                        ) : (
+                          <>
+                            (
+                            {Object.keys(order.items)
+                              .map((key) => order.items[key].quantity)
+                              .reduce((a, b) => a + b, 0)}
+                            )
+                          </>
+                        )}
                       </Button>
                     </Button>
                   </Grid>
@@ -145,3 +157,5 @@ export default function ButtonAppBar() {
     </Container>
   )
 }
+
+export default NavBar3

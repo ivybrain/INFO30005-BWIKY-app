@@ -25,8 +25,7 @@ const VanCard = (props) => {
   const distance =
     props.distance < 2
       ? 'Within 2km from you!'
-      : Math.round(props.distance * 10) / 10 +
-        'km from you -- click to view menu!'
+      : Math.round(props.distance * 10) / 10 + 'km from you'
 
   // console.log(styles, 'styles')
 
@@ -91,7 +90,7 @@ const VanCard = (props) => {
                 component="p"
                 className={styles.distanceText}
               >
-                {distance}
+                {distance} -- click to view menu!
               </Typography>
             </CardContent>
           </Grid>
