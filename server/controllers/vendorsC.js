@@ -41,9 +41,21 @@ exports.vendor_list = async (req, res) => {
   var vendors = await Vendor.find(find_params)
 
   function distance(x) {
-    return Math.sqrt(
-      Math.pow(lat - x.location.lat, 2.0) +
-      Math.pow(long - x.location.long, 2.0));
+    // return Math.sqrt(
+    //   Math.pow(lat - x.location.lat, 2.0) +
+    //   Math.pow(long - x.location.long, 2.0));
+
+    function degtorad(a) {
+      return a * Math.PI / 180;
+    }
+
+    // Radius of earth
+    const radius = 6371;
+    delta_lat = degtorad(lat - x.location.lat);
+    delta_long = degtorad(long - x.location.long);
+    const angle = Math.pow(Math.sin(delta_lat / 2)+Math.cos(lat)*Math.cos(x.location.lat)*Math.pow(Math.sin(delta_long/2), 2),2);
+    const dist = 2*radius*Math.asin(Math.sqrt(angle));
+    return dist
 
   }
 
@@ -51,7 +63,7 @@ exports.vendor_list = async (req, res) => {
     vendors = vendors.map(x => x.toObject())
         .filter(x => x.hasOwnProperty('location'));
 
-    vendors.forEach(x => x["distance"] = distance(x));    
+    vendors.forEach(x => x["distance"] = distance(x));
     vendors.sort((x,y) => x.distance - y.distance);
 
   }
