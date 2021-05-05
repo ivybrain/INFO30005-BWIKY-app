@@ -10,13 +10,13 @@ dotenv_expand(env)
 
 const app = express()
 
-const cors_options = {
-  origin: [/localhost\:3000$/, /.*/],
-  methods: ['GET', 'PATCH', 'POST', 'DELETE']
+// const cors_options = {
+//   origin: [/localhost\:3000$/, /.*/],
+//   methods: ['GET', 'PATCH', 'POST', 'DELETE']
+//
+// }
 
-}
-
-app.use(cors(cors_options))
+app.use(cors(/*cors_options*/))
 
 app.use(passport.initialize());
 
