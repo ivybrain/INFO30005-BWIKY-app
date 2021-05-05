@@ -1,5 +1,6 @@
 require('../models/Customer')
 const mongoose = require('mongoose')
+const auth = require('../auth')
 
 const Customer = mongoose.model('Customer');
 const Order = mongoose.model('Order');
@@ -48,4 +49,20 @@ exports.customer_delete = async(req, res) => {
 exports.customer_orders = async(req, res) => {
   const orders = await Order.find({ customer: req.customer })
   res.json(orders);
+}
+
+exports.customer_login = async(req, res) => {
+  if (!(req.body.hasOwnProperty("email")) && req.body.hasOwnProperty("password")) {
+    res.sendStatus(400);
+    return;
+  }
+  const customer = await Customer.findOne({"email":req.body.email});
+
+  if (customer.verify_password(req.body.password)) {
+
+    const token = auth.generate_token(customer.toObject());
+    res.json(token);
+  } else {
+    res.sendStatus(403);
+  }
 }
