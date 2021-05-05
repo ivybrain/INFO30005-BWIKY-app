@@ -58,6 +58,11 @@ exports.order_details = async (req, res) => {
 // Create a new order
 // POST /vendors/:vendor_id/orders/
 exports.order_create = async (req, res) => {
+
+  if (req.auth_user) {
+    req.body.customer = req.auth_user._id
+  }
+
   try {
     // Get vendor_id from req parameters
     req.body.vendor = req.vendor.id
