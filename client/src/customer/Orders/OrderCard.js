@@ -18,6 +18,8 @@ import { API_URL } from '../../constants'
 import { makeStyles } from '@material-ui/core/styles';
 
 const columns = ['Item', 'Qty', 'Subtotal']
+const checkmark = '\uD83D\uDDF9';
+const emptyBox = '\u2610';
 
 const audFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',
@@ -51,11 +53,6 @@ function dictify(list){
 
 };
 
-/*
-function setMenu(res){
-  return (dictify(res.body));
-}
-*/
 
 const OrderCard = (props) => {
   const { order } = props
@@ -92,23 +89,28 @@ const OrderCard = (props) => {
   itemDict = dictify(menu);
   console.log(itemDict);
   console.log(Object.keys(itemDict).length);
-  //console.log(order.items[0]['item']);
-  //console.log(itemDict[order.items[0]['item']])
-  //console.log(itemDict['607e8d4225c6c62f8e66ef67']['item_name'])
-  //console.log(menu);
-  //console.log(!!menu);
-  //const itemDict = dictify(menu);
+
 
   return (
 
       <Card className={classes.root} variant="outlined" style={{ marginTop: '20px' }}>
       {itemDict.length != 0 &&
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Order {order._id}
+        <Typography gutterBottom variant="h5" component="h2" display="inline">
+        Order{' '}
+        </Typography>
+        <Typography
+          gutterBottom
+          variant="h5"
+          component="h2"
+          display="inline"
+          style={{ color: '#FAA545' }}
+          >
+          #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}
+
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Bought from {vendor}
+            Bought from {vendor} on {order.modified.slice(0,10)}
           </Typography>
 
           {Object.keys(itemDict).length !== 0 && order.items && Object.keys(order.items).length !== 0 &&
@@ -161,6 +163,23 @@ const OrderCard = (props) => {
               </>
           }
 
+          {order.fulfilled ? (
+            <>
+            <tr style={{fontFamily: "Roboto", fontSize: 14, color:"green"}}><td>Fulfilled {checkmark}</td></tr>
+            </>
+          ) : (
+            <tr style={{fontFamily: "Roboto", fontSize: 14, color:"grey"}}><td>Fulfilled {emptyBox}</td></tr>
+          )
+        }
+
+        {order.picked_up ? (
+          <>
+          <tr style={{fontFamily: "Roboto", fontSize: 14, color:"green"}}><td>Picked Up {checkmark}</td></tr>
+          </>
+        ) : (
+          <tr style={{fontFamily: "Roboto", fontSize: 14, color:"grey"}}><td>Picked Up {emptyBox}</td></tr>
+        )
+      }
     </CardContent>
     }
   </Card>
