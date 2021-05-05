@@ -54,12 +54,11 @@ const handle_form_submit = (event) => {
   const headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
   const data = {email: event.target.email.value, password: event.target.password.value};
 
-  axios({url: `${API_URL}/customers`, headers: headers}).then((res) => {console.log(res.data)})
 
-  axios({url: `${API_URL}/customers/login`, method: 'post', data: data, headers: headers})
+  axios({url: `${API_URL}/customers/login`, method: 'POST', data: data, headers: headers})
     .then((res) => {
       if (res.status == 401) return console.log("Invalid login");
-      console.log(res.body);
+      console.log(res.data);
     }).catch((err) => {console.error(err)})
 }
 
