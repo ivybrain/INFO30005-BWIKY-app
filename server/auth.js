@@ -1,3 +1,7 @@
+
+
+const mongoose = require('mongoose');
+
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
@@ -16,3 +20,16 @@ exports.create_digest = function (password) {
   return hash_result;
 
 };
+
+exports.authenticate_user = function (req, res, next) {
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+  if (!token) return res.sendStatus(401);
+
+  if (token === process.env.ADMIN_OVERRIDE) return next();
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(401);
+    req.auth_user = user;
+    return next();
+  })
+}

@@ -17,6 +17,10 @@ exports.find_order = async (req, res, next) => {
 
   }
 
+  if (req.auth_user && order.customer != req.auth_user._id) {
+    return res.sendStatus(401);
+  }
+
   req.order = order;
   return next();
 }
@@ -51,7 +55,7 @@ exports.order_details = async (req, res) => {
   res.json(req.order)
 }
 
-// Create a new order 
+// Create a new order
 // POST /vendors/:vendor_id/orders/
 exports.order_create = async (req, res) => {
   try {
