@@ -16,9 +16,23 @@ const vendor = new Schema(
 
     // NOTE: Do secure auth stuff
     password: String,
+    rating: {
+      type: {rating: Number, count: Number},
+      get: x => x['rating'],
+      set: add_rating
+    }
   },
   { timestampts: true },
 )
+
+function add_rating(rating) {
+  if (!this.hasOwnProperty("rating")) {
+    return {"rating": rating, "count": 1}
+  }
+  const count = this.rating.count;
+  const new_rating = (this.rating.rating * count + rating) / (count + 1)
+  return {"rating": new_rating, "count": count+1}
+}
 
 vendor.plugin(beautify_unique)
 
