@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core'
 
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
 import { API_URL } from '../../constants'
 
 const Login = () => {
@@ -57,8 +58,8 @@ const handle_form_submit = (event) => {
 
   axios({url: `${API_URL}/customers/login`, method: 'POST', data: data, headers: headers})
     .then((res) => {
-      if (res.status == 401) return console.log("Invalid login");
       console.log(res.data);
+      console.log(jwt.decode(res.data));
     }).catch((err) => {console.error(err)})
 }
 
