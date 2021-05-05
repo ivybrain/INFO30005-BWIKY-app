@@ -12,7 +12,7 @@ router.use(function (req, res, next) {
 
 router.route('/')
   .get(ordersC.order_list)
-  .post(ordersC.order_create, auth.authenticate_user);
+  .post(auth.authenticate_user, ordersC.order_create);
 
 router.use('/:order_id([0-9a-fA-F]{24})', auth.authenticate_user, ordersC.find_order);
 router.route('/:order_id([0-9a-fA-F]{24})')
