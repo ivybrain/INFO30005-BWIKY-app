@@ -49,3 +49,11 @@ exports.customer_orders = async(req, res) => {
   const orders = await Order.find({ customer: req.customer })
   res.json(orders);
 }
+
+exports.customer_login = async(req, res) => {
+  if (!req.body.hasOwnProperty("email")) {
+    res.sendStatus(400);
+    return;
+  }
+  const customer = Customer.findOne({"email":req.body.email})
+}
