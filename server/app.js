@@ -9,7 +9,14 @@ var env = dotenv.config()
 dotenv_expand(env)
 
 const app = express()
-app.use(cors())
+
+const cors_options = {
+  origin: true,
+  methods: ['GET', 'PATCH', 'POST', 'DELETE']
+
+}
+
+app.use(cors(cors_options))
 
 app.use(passport.initialize());
 
