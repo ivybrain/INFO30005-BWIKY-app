@@ -15,6 +15,10 @@ const customer = new Schema({
 
 });
 
+customer.methods.verify_password = function(password) {
+  return this.password === create_digest(password);
+}
+
 customer.plugin(beautify_unique)
 
 mongoose.model('Customer', customer)

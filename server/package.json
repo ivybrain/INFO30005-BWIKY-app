@@ -10,8 +10,7 @@
     "jsonwebtoken": "8.5.1",
     "mongoose": "5.12.3",
     "mongoose-beautiful-unique-validation": "7.1.1",
-    "passport": "0.4.1",
-    "passport-local": "1.0.0"
+    "passport": "0.4.1"
   },
   "devDependencies": {
     "prettier": "2.2.1"
