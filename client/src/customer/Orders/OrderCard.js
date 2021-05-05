@@ -61,12 +61,12 @@ const OrderCard = (props) => {
   const { order } = props
   const [vendor, setVendor] = useState('')
   const [menu, setMenu] = useState(null)
-  const itemDict = {}
+  var itemDict = {}
 
   const classes = useStyles();
 
   useEffect(() => {
-      console.log('getting vendor and items')
+      console.log('getting vendor')
       const headers = { 'Access-Control-Allow-Origin': '*' }
 
       axios(`${API_URL}/vendors/${order.vendor}`, {
@@ -76,20 +76,25 @@ const OrderCard = (props) => {
         setVendor(res.data.van_name);
       })
 
-      axios(`${API_URL}/items`, {
-        headers,
-      }).then((res) => {
-        //const dictFilled = true;
-        //console.log(itemDict.length);
-        const itemDict = dictify(menu);
-        console.log(itemDict);
-        setMenu(res.data);
-      })
+
   }, [])
 
+  useEffect(() => {
+    console.log('getting items')
+    axios(`${API_URL}/items`)
+    .then((res) => {
+      setMenu(res.data);
+    })
+
+  },[])
 
 
+  itemDict = dictify(menu);
+  console.log(itemDict);
   console.log(Object.keys(itemDict).length);
+  //console.log(order.items[0]['item']);
+  //console.log(itemDict[order.items[0]['item']])
+  //console.log(itemDict['607e8d4225c6c62f8e66ef67']['item_name'])
   //console.log(menu);
   //console.log(!!menu);
   //const itemDict = dictify(menu);
