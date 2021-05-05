@@ -51,15 +51,17 @@ function dictify(list){
 
 };
 
+/*
 function setMenu(res){
   return (dictify(res.body));
 }
+*/
 
 const OrderCard = (props) => {
   const { order } = props
   const [vendor, setVendor] = useState('')
   const [menu, setMenu] = useState(null)
-  //const itemDict = {}
+  const itemDict = {}
 
   const classes = useStyles();
 
@@ -77,16 +79,19 @@ const OrderCard = (props) => {
       axios(`${API_URL}/items`, {
         headers,
       }).then((res) => {
-        // const itemDict = dictify(res.body);
         //const dictFilled = true;
         //console.log(itemDict.length);
-        setMenu(res);
+        const itemDict = dictify(menu);
+        console.log(itemDict);
+        setMenu(res.data);
       })
   }, [])
 
-  //console.log(itemDict);
-  console.log(menu);
-  console.log(!!menu);
+
+
+  console.log(Object.keys(itemDict).length);
+  //console.log(menu);
+  //console.log(!!menu);
   //const itemDict = dictify(menu);
 
   return (
@@ -98,10 +103,10 @@ const OrderCard = (props) => {
             Order {order._id}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Bought from {vendor} on {order.modified}
+            Bought from {vendor}
           </Typography>
 
-          {!!menu && order.items && Object.keys(order.items).length !== 0 &&
+          {Object.keys(itemDict).length !== 0 && order.items && Object.keys(order.items).length !== 0 &&
             <>
               <TableContainer>
                 <Table>
@@ -116,11 +121,11 @@ const OrderCard = (props) => {
                   <TableBody>
                     {Object.keys(order.items).map((id, idx) => (
                       <TableRow key={idx}>
-                        <TableCell>{menu[order.items[id]['item']]['item_name']}</TableCell>
+                        <TableCell>{itemDict[order.items[id]['item']]['item_name']}</TableCell>
                         <TableCell>{order.items[id].quantity}</TableCell>
                         <TableCell>
                           {audFormatter.format(
-                          order.items[id].quantity * menu[order.items[id]['item']]['item_price'],
+                          order.items[id].quantity * itemDict[order.items[id]['item']]['item_price'],
                           )}
                         </TableCell>
                       </TableRow>
@@ -136,7 +141,7 @@ const OrderCard = (props) => {
                               .map(
                                 (id) =>
                                   order.items[id].quantity
-                                 * menu[order.items[id]['item']]['item_price'],
+                                 * itemDict[order.items[id]['item']]['item_price'],
 
                               )
                               .reduce((a, b) => a + b),
