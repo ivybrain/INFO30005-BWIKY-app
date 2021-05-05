@@ -14,6 +14,11 @@ exports.find_customer = async (req, res, next) => {
     res.send("Customer not found");
     return;
   }
+
+  if (req.auth_user && customer != req.auth_user) {
+    return res.sendStatus(401);
+  }
+
   req.customer = customer;
   return next();
 }
@@ -24,7 +29,7 @@ exports.customer_list = async(req, res) => {
 }
 
 exports.customer_details = async(req, res) => {
-  res.send("yeet");
+  res.json(req.customer);
 }
 
 exports.customer_create = async (req, res) => {

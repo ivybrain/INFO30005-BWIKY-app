@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const ObjectId = Schema.ObjectId
 
 const order = new Schema({
-  customer: { type: ObjectId, index: true },
+  customer: { type: ObjectId, index: true, required: true},
   vendor: { type: ObjectId, required: true, index: true },
   modified: Date,
   fulfilled: Boolean,

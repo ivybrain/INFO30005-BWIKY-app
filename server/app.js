@@ -40,3 +40,5 @@ app.listen(process.env.PORT, function () {
     },
   )
 })
+
+module.exports = app;
