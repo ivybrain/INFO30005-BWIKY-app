@@ -1,15 +1,15 @@
 import { Card, CardContent, Typography } from '@material-ui/core'
 
-const Order = (props) => {
+const OrderCard = (props) => {
   const { order } = props
   return (
     <Card>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
-          Order
+          Order {order._id}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
-          Price here
+          Bought from {order.vendor}
         </Typography>
         {order.items.map((item) => (
           <p>{item.item_name}</p>
@@ -19,4 +19,4 @@ const Order = (props) => {
   )
 }
 
-export default Order
+export default OrderCard
