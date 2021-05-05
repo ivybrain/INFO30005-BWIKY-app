@@ -11,7 +11,7 @@ dotenv_expand(env)
 const app = express()
 
 const cors_options = {
-  origin: [/localhost\:3000$/, /.*/]
+  origin: [/localhost\:3000$/, /.*/],
   methods: ['GET', 'PATCH', 'POST', 'DELETE']
 
 }
