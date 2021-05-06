@@ -14,7 +14,11 @@ const CustomerApp = () => {
   const [location, setLocation] = useState(null)
   const [vans, setVans] = useState(null)
   const [menu, setMenu] = useState(null)
-  const [order, setOrder] = useState({ items: {}, confirmed: false })
+  const [order, setOrder] = useState({
+    items: {},
+    confirmed: false,
+    // modified: new Date(),
+  })
   const [auth, setAuth] = useState(null)
 
   return (
