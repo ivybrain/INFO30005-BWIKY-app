@@ -14,7 +14,11 @@ const CustomerApp = () => {
   const [location, setLocation] = useState(null)
   const [vans, setVans] = useState(null)
   const [menu, setMenu] = useState(null)
-  const [order, setOrder] = useState({ items: {}, confirmed: false })
+  const [order, setOrder] = useState({
+    items: {},
+    confirmed: false,
+    // modified: new Date(),
+  })
   const [auth, setAuth] = useState(null)
 
   return (
@@ -22,7 +26,7 @@ const CustomerApp = () => {
       <CssBaseline />
       {/* <Nav></Nav> */}
       {/* <Nav2></Nav2> */}
-      <Nav3 order={order}></Nav3>
+      <Nav3 order={order} auth={auth}></Nav3>
       <Switch>
         <Route
           exact
@@ -39,14 +43,14 @@ const CustomerApp = () => {
         <Route
           exact
           path="/customer/login"
-          component={Login}
-          auth={auth}
-          setAuth={setAuth}
+          render={() => <Login setAuth={setAuth} />}
         />
         <Route
           exact
           path="/customer/myorder"
-          render={() => <MyOrder order={order} setOrder={setOrder} />}
+          render={() => (
+            <MyOrder auth={auth} order={order} setOrder={setOrder} />
+          )}
         />
         <Route
           exact

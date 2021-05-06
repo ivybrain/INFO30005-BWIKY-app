@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import axios from 'axios'
 import { API_URL } from '../../constants'
-import { Redirect } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 
@@ -22,7 +22,9 @@ const audFormatter = new Intl.NumberFormat('en-AU', {
 })
 
 const MyOrder = (props) => {
-  const { order, setOrder } = props
+  const { order, setOrder, auth } = props
+
+  const history = useHistory()
 
   const handleCancelOrder = (e) => {
     e.preventDefault()
@@ -33,27 +35,43 @@ const MyOrder = (props) => {
   const handleConfirmOrder = (e) => {
     e.preventDefault()
 
+    if (!auth) {
+      console.log('please log in')
+      // window.location.href = '/customer/login'
+      history.push('/customer/login')
+      return
+    }
+
     setOrder({ ...order, confirmed: true })
 
     // Requires a customer ID, so implement after authentication
-    // const headers = { 'Access-Control-Allow-Origin': '*' }
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      Authorization: `Bearer ${auth}`,
+    }
 
-    // axios
-    //   .post(`${API_URL}/vendors/:vendor_id/orders`, {
-    //     headers,
-    //   })
-    //   .then((res) => {
-    //     console.log(res)
-    //   })
-    //   .catch((err) => {
-    //     console.error(err)
-    //   })
+    const newItems = Object.keys(order.items).map((key) => ({
+      ...order.items[key],
+      item: key,
+    }))
+
+    const data = { items: newItems }
+
+    axios
+      .post(`${API_URL}/vendors/${order.vendor}/orders`, data, {
+        headers,
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
-
   return (
     <Container>
       <Typography variant="h2">My Order</Typography>
-      {order.items && Object.keys(order.items).length !== 0 ? (
+      {order && order.items && Object.keys(order.items).length !== 0 ? (
         <>
           <TableContainer>
             <Table>
@@ -113,6 +131,7 @@ const MyOrder = (props) => {
                   Confirm Order
                 </Typography>
               </Button>
+              {/* {!auth ? <Redirect to="/customer/login" /> : null} */}
               {order.confirmed ? <Redirect to="/customer/orders" /> : null}
             </Grid>
           </Grid>
