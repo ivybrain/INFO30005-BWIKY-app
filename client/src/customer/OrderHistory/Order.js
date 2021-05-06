@@ -11,8 +11,8 @@ const Order = (props) => {
         <Typography variant="body2" color="textSecondary" component="p">
           Price here
         </Typography>
-        {order.items.map((item) => (
-          <p>{item.item_name}</p>
+        {order.items.map((item, idx) => (
+          <p key={idx}>{item.item_name}</p>
         ))}
       </CardContent>
     </Card>
