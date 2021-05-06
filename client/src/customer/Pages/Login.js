@@ -58,8 +58,12 @@ const handle_form_submit = (event) => {
 
   axios({url: `${API_URL}/customers/login`, method: 'POST', data: data, headers: headers})
     .then((res) => {
-      console.log(res.data);
-      console.log(jwt.decode(res.data));
+      const cst = jwt.decode(res.data);
+      if(cst) {
+        const [auth_token, set_auth_token] = useState(res.data);
+        const [customer, set_customer] = useState(cst);
+      }
+      else console.err("Invalid token");
     }).catch((err) => {console.error(err)})
 }
 
