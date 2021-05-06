@@ -3,14 +3,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import {
   AppBar,
   Toolbar,
-  Typography,
   Button,
   Container,
   Grid,
   useMediaQuery,
+  CardMedia,
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import Logo from './Logo/Logo'
 import jwt from 'jsonwebtoken'
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +64,7 @@ const NavBar3 = (props) => {
                 lg={4}
                 style={{ display: 'flex' }}
               >
-                <Button
+                {/* <Button
                   component={Link}
                   to="/customer/"
                   style={{ textDecoration: 'none' }}
@@ -75,7 +74,14 @@ const NavBar3 = (props) => {
 
                 <Typography variant="h5" className={classes.title}>
                   Snacks in a Van!
-                </Typography>
+                </Typography> */}
+
+                <CardMedia
+                  component="img"
+                  image={`/navLogo2.png`}
+                  title="Food Truck"
+                  style={{ height: '80px' }}
+                />
               </Grid>
 
               <Grid
