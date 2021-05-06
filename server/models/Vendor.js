@@ -11,6 +11,7 @@ const vendor = new Schema(
     location: {
       lat: { type: Number, required: false },
       long: { type: Number, required: false },
+      simple: {type: String, required: false}
     },
     ready: { type: Boolean, required: false },
 

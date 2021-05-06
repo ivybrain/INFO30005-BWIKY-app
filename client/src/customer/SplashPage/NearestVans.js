@@ -9,7 +9,7 @@ const NearestVans = (props) => {
     .filter((van) => van.hasOwnProperty('location'))
     .map((van) => ({
       ...van,
-      simpleLocation: 'above the wheels',
+      simpleLocation: (van.location.simple ? van.location.simple : "above the wheel"),
       rating: 4,
     }))
   return (
