@@ -43,7 +43,7 @@ const CustomerApp = () => {
         <Route
           exact
           path="/customer/login"
-          render={() => <Login setAuth={setAuth} />}
+          render={() => <Login auth={auth} setAuth={setAuth} />}
         />
         <Route
           exact

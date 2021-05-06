@@ -99,7 +99,7 @@ const SplashPage = (props) => {
           search for vans near you and order now for an easy pick-up!
         </Typography>
 
-        <form
+        {/* <form
           autoComplete="off"
           noValidate
           style={{
@@ -121,8 +121,9 @@ const SplashPage = (props) => {
               size: 'large',
             }}
           />
-          {/* <Button>Find my location!</Button> */}
-        </form>
+          {/* <Button>Find my location!</Button> }
+        </form> */}
+        <br></br>
         <Typography
           variant="body"
           style={{

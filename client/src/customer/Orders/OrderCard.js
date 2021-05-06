@@ -87,7 +87,7 @@ const OrderCard = (props) => {
       variant="outlined"
       style={{ marginTop: '20px' }}
     >
-      {itemDict.length != 0 && (
+      {itemDict.length !== 0 && (
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2" display="inline">
             Order{' '}
