@@ -62,6 +62,7 @@ exports.customer_login = async(req, res) => {
     return;
   }
   const customer = await Customer.findOne({"email":req.body.email});
+  if (!customer) return res.sendStatus(403);
 
   if (customer.verify_password(req.body.password)) {
 
