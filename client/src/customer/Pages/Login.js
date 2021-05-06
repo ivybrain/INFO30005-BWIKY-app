@@ -45,14 +45,15 @@ const Login = (props) => {
   return (
     <Container>
       <Typography variant="h2">Welcome back!</Typography>
-      <Typography variant="subtitle">Sign in to start ordering</Typography>
+      <Typography variant="subtitle">
+        Please log in before confirming your order.
+      </Typography>
       <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
         <Grid container direction="column">
           <Grid item style={{ marginTop: '1em' }}>
             <TextField
               required
               name="email"
-              id="outlined-required"
               label="Email Address"
               variant="outlined"
             />
@@ -62,7 +63,6 @@ const Login = (props) => {
               required
               name="password"
               type="password"
-              id="outlined-required"
               label="Password"
               variant="outlined"
             />

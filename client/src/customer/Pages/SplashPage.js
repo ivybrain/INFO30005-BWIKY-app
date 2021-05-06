@@ -132,7 +132,7 @@ const SplashPage = (props) => {
         >
           Your Location:{' '}
           {location == null
-            ? 'no location'
+            ? 'No location, please enable location in your browser!'
             : `(${Math.round(location.coords.latitude * 10000) / 10000}, ${
                 Math.round(location.coords.longitude * 10000) / 10000
               })`}

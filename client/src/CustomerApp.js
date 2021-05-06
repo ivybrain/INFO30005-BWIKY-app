@@ -22,7 +22,7 @@ const CustomerApp = () => {
       <CssBaseline />
       {/* <Nav></Nav> */}
       {/* <Nav2></Nav2> */}
-      <Nav3 order={order}></Nav3>
+      <Nav3 order={order} auth={auth}></Nav3>
       <Switch>
         <Route
           exact

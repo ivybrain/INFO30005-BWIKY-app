@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import Logo from './Logo/Logo'
+import jwt from 'jsonwebtoken'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const NavBar3 = (props) => {
-  const { order } = props
+  const { order, auth } = props
   const classes = useStyles()
 
   const xsMatch = useMediaQuery('(min-width:400px)')
@@ -64,7 +65,14 @@ const NavBar3 = (props) => {
                 lg={4}
                 style={{ display: 'flex' }}
               >
-                <Logo></Logo>
+                <Button
+                  component={Link}
+                  to="/customer/"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Logo />
+                </Button>
+
                 <Typography variant="h5" className={classes.title}>
                   Snacks in a Van!
                 </Typography>
@@ -117,7 +125,7 @@ const NavBar3 = (props) => {
                         to="/customer/login"
                         style={{ textDecoration: 'none' }}
                       >
-                        Log In
+                        {auth ? jwt.decode(auth).given_name : 'Log in'}
                       </Button>
                     </Button>
                   </Grid>

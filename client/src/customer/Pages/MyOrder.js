@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import axios from 'axios'
 import { API_URL } from '../../constants'
-import { Redirect } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 
@@ -24,6 +24,8 @@ const audFormatter = new Intl.NumberFormat('en-AU', {
 const MyOrder = (props) => {
   const { order, setOrder, auth } = props
 
+  const history = useHistory()
+
   const handleCancelOrder = (e) => {
     e.preventDefault()
     setOrder({ items: {}, confirmed: false })
@@ -32,6 +34,13 @@ const MyOrder = (props) => {
 
   const handleConfirmOrder = (e) => {
     e.preventDefault()
+
+    if (!auth) {
+      console.log('please log in')
+      // window.location.href = '/customer/login'
+      history.push('/customer/login')
+      return
+    }
 
     setOrder({ ...order, confirmed: true })
 
@@ -122,6 +131,7 @@ const MyOrder = (props) => {
                   Confirm Order
                 </Typography>
               </Button>
+              {/* {!auth ? <Redirect to="/customer/login" /> : null} */}
               {order.confirmed ? <Redirect to="/customer/orders" /> : null}
             </Grid>
           </Grid>
