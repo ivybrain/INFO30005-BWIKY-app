@@ -140,9 +140,10 @@ const SplashPage = (props) => {
         </Typography>
 
         <VanMap vans={vans} location={location}></VanMap>
-        <Paper elevation={0} style={{ marginTop: '40px' }}>
-          {vans === null ? '' : <NearestVans vans={vans}></NearestVans>}
-        </Paper>
+        <br />
+        <br />
+        {vans === null ? '' : <NearestVans vans={vans}></NearestVans>}
+        <br />
       </Container>
     </div>
   )
