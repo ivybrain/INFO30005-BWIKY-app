@@ -39,15 +39,9 @@ const CustomerApp = () => {
         <Route
           exact
           path="/customer/login"
-          component={Login}
-          auth={auth}
-          setAuth={setAuth}
+          render={() => <Login auth={auth} setAuth={setAuth} />}
         />
-        <Route
-          exact
-          path="/customer/myorder"
-          render={() => <MyOrder order={order} setOrder={setOrder} />}
-        />
+        <Route exact path="/customer/myorder" />
         <Route
           exact
           path="/customer/orders"

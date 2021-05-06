@@ -10,7 +10,38 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import { API_URL } from '../../constants'
 
-const Login = () => {
+const Login = (props) => {
+  const { setAuth } = props
+
+  const handle_form_submit = (event) => {
+    event.preventDefault()
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    }
+    const data = {
+      email: event.target.email.value,
+      password: event.target.password.value,
+    }
+
+    axios({
+      url: `${API_URL}/customers/login`,
+      method: 'POST',
+      data: data,
+      headers: headers,
+    })
+      .then((res) => {
+        setAuth(res.data)
+        const cst = jwt.decode(res.data)
+        if (cst) {
+          console.log(cst)
+        } else console.err('Invalid token')
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
   return (
     <Container>
       <Typography variant="h2">Welcome back!</Typography>
@@ -30,6 +61,7 @@ const Login = () => {
             <TextField
               required
               name="password"
+              type="password"
               id="outlined-required"
               label="Password"
               variant="outlined"
@@ -41,30 +73,12 @@ const Login = () => {
           color="primary"
           disableElevation
           style={{ marginTop: '1em' }}
-
         >
           Sign in
         </Button>
       </form>
     </Container>
   )
-}
-
-const handle_form_submit = (event) => {
-  event.preventDefault()
-  const headers = {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-  const data = {email: event.target.email.value, password: event.target.password.value};
-
-
-  axios({url: `${API_URL}/customers/login`, method: 'POST', data: data, headers: headers})
-    .then((res) => {
-      const cst = jwt.decode(res.data);
-      if(cst) {
-        const [auth_token, set_auth_token] = useState(res.data);
-        const [customer, set_customer] = useState(cst);
-      }
-      else console.err("Invalid token");
-    }).catch((err) => {console.error(err)})
 }
 
 export default Login
