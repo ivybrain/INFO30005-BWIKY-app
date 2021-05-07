@@ -27,6 +27,10 @@ const VanDetails = (props) => {
     setOpen(false)
   }
 
+  const [rating, setRating] = useState(
+    parseFloat(4 + Math.floor(Math.random() * 3 - 1)),
+  )
+
   // Whenever the order updates, check if we have reached 3 snacks
   useEffect(() => {
     if (Object.keys(order.items).length >= 3) {
@@ -96,11 +100,7 @@ const VanDetails = (props) => {
               ? `This van is ${Math.round(vanData.distance * 10) / 10}km away!`
               : null}
           </Typography>
-          <Ratings
-            rating={parseFloat(4 + Math.floor(Math.random() * 3 - 1))}
-            widgetDimensions="30px"
-            widgetSpacings="8px"
-          >
+          <Ratings rating={rating} widgetDimensions="30px" widgetSpacings="8px">
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
