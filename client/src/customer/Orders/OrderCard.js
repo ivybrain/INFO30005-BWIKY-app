@@ -100,8 +100,8 @@ const OrderCard = (props) => {
             #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {/* Bought from {vendor} on {order.modified.slice(0, 10)} */}
-            Bought from {vendor}
+            Bought from {vendor}{' '}
+            {order.modified ? `on ${order.modified.slice(0, 10)}` : null}
           </Typography>
 
           {Object.keys(itemDict).length !== 0 &&
