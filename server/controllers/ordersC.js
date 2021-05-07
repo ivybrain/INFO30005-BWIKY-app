@@ -58,6 +58,7 @@ exports.order_details = async (req, res) => {
 // Create a new order
 // POST /vendors/:vendor_id/orders/
 exports.order_create = async (req, res) => {
+  req.body.modified = new Date();
 
   if (req.auth_user) {
     req.body.customer = req.auth_user._id
@@ -80,6 +81,7 @@ exports.order_create = async (req, res) => {
 // Can be used to mark as fulfilled, add more items, etc
 exports.order_update = async (req, res) => {
   try {
+    req.body.modified = new Date();
     if (req.body.fulfilled) {
       req.body.fulfilled_time = new Date();
     }
