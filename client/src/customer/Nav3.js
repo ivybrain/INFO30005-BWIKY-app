@@ -75,13 +75,18 @@ const NavBar3 = (props) => {
                 <Typography variant="h5" className={classes.title}>
                   Snacks in a Van!
                 </Typography> */}
-
                 <CardMedia
-                  component="img"
-                  image={`/navLogo2.png`}
-                  title="Food Truck"
-                  style={{ height: '80px' }}
-                />
+                  component={Link}
+                  to="/customer/"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={`/navLogo2.png`}
+                    title="Food Truck"
+                    style={{ height: '80px' }}
+                  />
+                </CardMedia>
               </Grid>
 
               <Grid
