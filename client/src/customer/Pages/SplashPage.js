@@ -42,6 +42,9 @@ const SplashPage = (props) => {
         setLocation(position)
       })
     }
+    if (!location) {
+      setLocation({coords: {latitude: -37.80435, longitude: 144.96296}})
+    }
   }, [])
 
   return (
