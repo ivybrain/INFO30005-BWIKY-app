@@ -29,7 +29,7 @@ const NavBar3 = (props) => {
   const { order, auth } = props
   const classes = useStyles()
 
-  const xsMatch = useMediaQuery('(min-width:400px)')
+  const xsMatch = useMediaQuery('(min-width:410px)')
   const smMatch = useMediaQuery('(min-width:600px)')
   const sevenFiftyMatch = useMediaQuery('(min-width:750px)')
 
@@ -95,20 +95,26 @@ const NavBar3 = (props) => {
                 sm={7}
                 md={6}
                 lg={4}
-                style={{ marginTop: '0.5em', marginBottom: '0.5em' }}
+                style={{
+                  marginTop: '0.5em',
+                  marginBottom: '0.5em',
+                  width: !xsMatch ? '100%' : '',
+                }}
               >
                 <Grid
                   container
                   direction={!xsMatch ? 'column' : 'row'}
                   spacing={!xsMatch ? 1 : 0}
                   style={{
-                    justifyContent: 'flex-end',
-                    alignItems: !xsMatch ? 'stretch' : 'center',
+                    justifyContent: !sevenFiftyMatch ? 'center' : 'flex-end',
+                    // alignItems: !xsMatch ? 'stretch' : 'center',
+                    alignItems: 'stretch',
                   }}
                   justify="flex-end"
                   // alignItems={!xsMatch ? 'stretch' : 'center'}
+                  alignItems="stretch"
                 >
-                  <Grid item style={{}}>
+                  <Grid item>
                     <Button
                       variant="outlined"
                       className={classes.text}
@@ -124,7 +130,7 @@ const NavBar3 = (props) => {
                       </Button>
                     </Button>
                   </Grid>
-                  <Grid item style={{ marginLeft: '0.5em' }}>
+                  <Grid item style={{ marginLeft: !xsMatch ? '0px' : '0.5em' }}>
                     <Button
                       variant="outlined"
                       className={classes.text}
@@ -140,7 +146,7 @@ const NavBar3 = (props) => {
                       </Button>
                     </Button>
                   </Grid>
-                  <Grid item style={{ marginLeft: '0.5em' }}>
+                  <Grid item style={{ marginLeft: !xsMatch ? '0px' : '0.5em' }}>
                     <Button
                       variant="outlined"
                       className={classes.text}

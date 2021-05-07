@@ -6,6 +6,7 @@ import {
   CardMedia,
   Typography,
   Grid,
+  useMediaQuery,
 } from '@material-ui/core'
 import Ratings from 'react-ratings-declarative'
 import { Link } from 'react-router-dom'
@@ -21,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
 
 const VanCard = (props) => {
   const styles = useStyles()
+
+  const xsMatch = useMediaQuery('(min-width:410px)')
 
   const distance =
     props.distance < 2
@@ -89,7 +92,7 @@ const VanCard = (props) => {
                 component="p"
                 className={styles.distanceText}
               >
-                {distance} -- click to view menu!
+                {distance} -- {!xsMatch ? 'tap' : 'click'} to view menu!
               </Typography>
             </CardContent>
           </Grid>
