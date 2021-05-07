@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import axios from 'axios'
 import { API_URL } from '../../constants'
-import { Redirect, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 
@@ -44,7 +44,6 @@ const MyOrder = (props) => {
 
     setOrder({ ...order, confirmed: true })
 
-    // Requires a customer ID, so implement after authentication
     const headers = {
       'Access-Control-Allow-Origin': '*',
       Authorization: `Bearer ${auth}`,
@@ -62,6 +61,8 @@ const MyOrder = (props) => {
         headers,
       })
       .then((res) => {
+        setOrder({ items: {}, confirmed: false })
+        console.log('cleared order')
         console.log(res)
       })
       .catch((err) => {
@@ -137,9 +138,27 @@ const MyOrder = (props) => {
           </Grid>
         </>
       ) : (
-        <Typography variant="subtitle">
-          Your order is empty! Try adding some items to your order.
-        </Typography>
+        <>
+          <Typography
+            variant="subtitle"
+            display="block"
+            style={{ marginBottom: '2rem' }}
+          >
+            Your order is empty! Try adding some items to your order.
+          </Typography>
+
+          <Button variant="outlined">
+            <Button
+              component={Link}
+              to="/customer/orders"
+              style={{ textDecoration: 'none' }}
+            >
+              <Typography variant="button" display="block" gutterBottom>
+                See Order History
+              </Typography>
+            </Button>
+          </Button>
+        </>
       )}
     </Container>
   )
