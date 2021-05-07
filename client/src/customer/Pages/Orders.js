@@ -24,7 +24,9 @@ const MyOrder = (props) => {
       <Typography variant="h2">My Orders</Typography>
       {orders == null
         ? ''
-        : orders.map((order) => <OrderCard order={order}></OrderCard>)}
+        : orders
+            .sort((a, b) => -(new Date(a.modified) - new Date(b.modified)))
+            .map((order) => <OrderCard order={order}></OrderCard>)}
     </Container>
   )
 }
