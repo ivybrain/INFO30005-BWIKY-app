@@ -42,14 +42,22 @@ const Registration = (props) => {
       headers: headers,
     })
 
-    if (data){
-      console.log(data)
-    }
+    .then(() => {
+      if (data){
+        console.log("Create new customer")
+        console.log(data)
+      }
+    })
+
+    .catch((err) => {
+      console.error(err)
+    })
   }
 
   return (
     <Container>
-      <Typography variant="h2">Create an account.</Typography>
+      <Typography variant="h3">Create an account.</Typography>
+      <br/>
       {auth ? (
         `You are logged in as ${jwt.decode(auth).given_name} ${
           jwt.decode(auth).family_name
@@ -57,7 +65,7 @@ const Registration = (props) => {
       ) : (
         <>
           <Typography variant="subtitle">
-            Please register to confirm your order.
+            Please register to start ordering.
           </Typography>
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
             <Grid container direction="row">
