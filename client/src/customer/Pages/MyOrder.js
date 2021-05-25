@@ -127,12 +127,22 @@ const MyOrder = (props) => {
               </Button>
             </Grid>
             <Grid item>
+              <Button variant="outlined">
+                <Button
+                  component={Link}
+                  to={`/customer/van/${order.vendor}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  Edit Order Details
+                </Button>
+              </Button>
+            </Grid>
+            <Grid item>
               <Button variant="outlined" onClick={handleConfirmOrder}>
                 <Typography variant="button" display="block" gutterBottom>
                   Confirm Order
                 </Typography>
               </Button>
-              {/* {!auth ? <Redirect to="/customer/login" /> : null} */}
               {order.confirmed ? <Redirect to="/customer/orders" /> : null}
             </Grid>
           </Grid>
