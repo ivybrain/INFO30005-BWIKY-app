@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router()
 
 const customersC = require('../controllers/customersC');
+const auth = require('../auth')
 
 router.use('/:customer_id([0-9a-fA-F]{24})', customersC.find_customer);
 
@@ -14,7 +15,8 @@ router.post('/login', customersC.customer_login);
 
 router.route('/:customer_id([0-9a-fA-F]{24})')
   .get(customersC.customer_details)
-  .delete(customersC.customer_delete);
+  .delete(customersC.customer_delete)
+  .patch(auth.authenticate_user, customersC.customer_update);
 
 router.get('/:customer_id([0-9a-fA-F]{24})/orders', customersC.customer_orders);
 
