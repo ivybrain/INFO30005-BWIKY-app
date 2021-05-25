@@ -11,7 +11,6 @@ import MyOrder from './customer/Pages/MyOrder'
 import VanDetails from './customer/Pages/VanDetails'
 import Orders from './customer/Pages/Orders'
 
-
 const CustomerApp = () => {
   const [location, setLocation] = useState(null)
   const [vans, setVans] = useState(null)
@@ -50,7 +49,7 @@ const CustomerApp = () => {
         <Route
           exact
           path="/customer/registration"
-          render={() => <Registration auth={auth} setAuth={setAuth} />}
+          render={() => <Registration auth={auth} />}
         />
         <Route
           exact

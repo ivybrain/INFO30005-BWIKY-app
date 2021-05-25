@@ -1,4 +1,4 @@
-import { Container, Paper, Typography, TextField } from '@material-ui/core'
+import { Container, Typography } from '@material-ui/core'
 import { useEffect } from 'react'
 import NearestVans from '../SplashPage/NearestVans'
 import VanMap from '../SplashPage/VanMap'
@@ -43,7 +43,7 @@ const SplashPage = (props) => {
       })
     }
     if (!location) {
-      setLocation({coords: {latitude: -37.80435, longitude: 144.96296}})
+      setLocation({ coords: { latitude: -37.80435, longitude: 144.96296 } })
     }
   }, [])
 

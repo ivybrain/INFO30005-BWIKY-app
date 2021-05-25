@@ -1,4 +1,4 @@
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles'
 
 const theme = createMuiTheme({
   // palette: {
@@ -9,21 +9,21 @@ const theme = createMuiTheme({
   //     main: green[500],
   //   },
   // },
-  palette:{
+  palette: {
     orange: {
       main: '#F27D52',
-      contrastText: '#ffffff'
+      contrastText: '#ffffff',
     },
     beige: {
       main: '#EDCC99',
     },
     green: {
       main: '#77DDAB',
-      contrastText: '#ffffff'
+      contrastText: '#ffffff',
     },
     brown: {
       main: '#776533',
-      contrastText: '#ffffff'
+      contrastText: '#ffffff',
     },
     grey: {
       main: '#959595',
@@ -31,8 +31,7 @@ const theme = createMuiTheme({
     white: {
       main: '#FFFFFF',
     },
-  }
-  
-});
+  },
+})
 
 export default theme

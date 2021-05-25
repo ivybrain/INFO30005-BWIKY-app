@@ -12,7 +12,7 @@ import { useHistory } from 'react-router'
 import { API_URL } from '../../constants'
 
 const Registration = (props) => {
-  const { auth, setAuth } = props
+  const { auth } = props
 
   const history = useHistory()
 
@@ -42,7 +42,7 @@ const Registration = (props) => {
       headers: headers,
     })
 
-    if (data){
+    if (data) {
       console.log(data)
     }
   }
@@ -61,22 +61,22 @@ const Registration = (props) => {
           </Typography>
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
             <Grid container direction="row">
-            <Grid item style={{ marginTop: '1em' }}>
-              <TextField
-                required
-                name="given_name"
-                label="Given Name"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item style={{ marginTop: '1em' , marginLeft:'0.5em'}}>
-              <TextField
-                required
-                name="family_name"
-                label="Family Name"
-                variant="outlined"
-              />
-            </Grid>
+              <Grid item style={{ marginTop: '1em' }}>
+                <TextField
+                  required
+                  name="given_name"
+                  label="Given Name"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item style={{ marginTop: '1em', marginLeft: '0.5em' }}>
+                <TextField
+                  required
+                  name="family_name"
+                  label="Family Name"
+                  variant="outlined"
+                />
+              </Grid>
             </Grid>
 
             <Grid container direction="row">
@@ -88,7 +88,7 @@ const Registration = (props) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item style={{ marginTop: '0.5em' , marginLeft:'0.5em'}}>
+              <Grid item style={{ marginTop: '0.5em', marginLeft: '0.5em' }}>
                 <TextField
                   required
                   name="password"
