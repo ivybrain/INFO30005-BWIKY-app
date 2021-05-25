@@ -38,6 +38,26 @@ const MenuItem = (props) => {
     console.log(order)
   }
 
+  const handleRemoveFromOrder = (e) => {
+    e.preventDefault()
+    console.log(`remove 1 ${menuItem.item_name} from order`)
+
+    // Is this item already in the items array?
+    let newOrder = JSON.parse(JSON.stringify(order))
+    const _id = menuItem._id
+    if (newOrder.items.hasOwnProperty(menuItem._id)) {
+      if (newOrder.items[menuItem._id].quantity > 0) {
+        // Decrement it's quantity
+        newOrder.items[_id].quantity--
+        setOrder(newOrder)
+      }
+    } else {
+      console.log("removed an item that doesn't exist in the order")
+    }
+
+    console.log(order)
+  }
+
   return (
     <Grid item>
       <Card variant="outlined" style={{ width: '100%' }}>
@@ -53,11 +73,22 @@ const MenuItem = (props) => {
           <Typography variant="body2" color="textSecondary" component="p">
             ${menuItem.item_price}
           </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {order.items[menuItem._id] ? order.items[menuItem._id].quantity : 0}{' '}
+            in current order
+          </Typography>
         </CardContent>
         <CardActions>
           <Button style={{ margin: 'auto' }} onClick={handleAddToOrder}>
             <Typography variant="button" display="block" gutterBottom>
               Add to Order
+            </Typography>
+          </Button>
+        </CardActions>
+        <CardActions>
+          <Button style={{ margin: 'auto' }} onClick={handleRemoveFromOrder}>
+            <Typography variant="button" display="block" gutterBottom>
+              Remove from Order
             </Typography>
           </Button>
         </CardActions>

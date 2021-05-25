@@ -127,12 +127,22 @@ const MyOrder = (props) => {
               </Button>
             </Grid>
             <Grid item>
+              <Button variant="outlined">
+                <Button
+                  component={Link}
+                  to={`/customer/van/${order.vendor}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  Edit Order Details
+                </Button>
+              </Button>
+            </Grid>
+            <Grid item>
               <Button variant="outlined" onClick={handleConfirmOrder}>
                 <Typography variant="button" display="block" gutterBottom>
                   Confirm Order
                 </Typography>
               </Button>
-              {/* {!auth ? <Redirect to="/customer/login" /> : null} */}
               {order.confirmed ? <Redirect to="/customer/orders" /> : null}
             </Grid>
           </Grid>
@@ -144,7 +154,7 @@ const MyOrder = (props) => {
             display="block"
             style={{ marginBottom: '2rem' }}
           >
-            Your order is empty! Try adding some items to your order.
+            Your order is empty! Try finding a van to start ordering snacks.
           </Typography>
 
           <Button variant="outlined">
@@ -154,7 +164,7 @@ const MyOrder = (props) => {
               style={{ textDecoration: 'none' }}
             >
               <Typography variant="button" display="block" gutterBottom>
-                See Order History
+                Order History
               </Typography>
             </Button>
           </Button>
