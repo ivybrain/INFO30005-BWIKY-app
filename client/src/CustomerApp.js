@@ -55,7 +55,7 @@ const CustomerApp = () => {
         <Route
           exact
           path="/customer/orders"
-          render={() => <Orders order={order} setOrder={setOrder} />}
+          render={() => <Orders auth={auth} />}
         />
         <Route
           exact
