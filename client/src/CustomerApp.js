@@ -6,9 +6,11 @@ import Nav3 from './customer/Nav3'
 import { Switch, Route } from 'react-router-dom'
 import SplashPage from './customer/Pages/SplashPage'
 import Login from './customer/Pages/Login'
+import Registration from './customer/Pages/Registration'
 import MyOrder from './customer/Pages/MyOrder'
 import VanDetails from './customer/Pages/VanDetails'
 import Orders from './customer/Pages/Orders'
+
 
 const CustomerApp = () => {
   const [location, setLocation] = useState(null)
@@ -47,6 +49,11 @@ const CustomerApp = () => {
         />
         <Route
           exact
+          path="/customer/registration"
+          render={() => <Registration auth={auth} setAuth={setAuth} />}
+        />
+        <Route
+          exact
           path="/customer/myorder"
           render={() => (
             <MyOrder auth={auth} order={order} setOrder={setOrder} />
@@ -55,7 +62,7 @@ const CustomerApp = () => {
         <Route
           exact
           path="/customer/orders"
-          render={() => <Orders order={order} setOrder={setOrder} />}
+          render={() => <Orders auth={auth} />}
         />
         <Route
           exact
