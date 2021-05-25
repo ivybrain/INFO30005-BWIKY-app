@@ -5,9 +5,10 @@ import {
   Paper,
   TextField,
   Typography,
-} from '@material-ui/core'
-import { Link } from 'react-router-dom'
-import Header from '../Header'
+} from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import Header from '../Header';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 const Checkin = () => {
   return (
