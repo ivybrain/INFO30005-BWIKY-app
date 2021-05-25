@@ -8,6 +8,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Button,
+  Grid,
+  Snackbar,
 } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -49,12 +52,45 @@ function dictify(list) {
 }
 
 const OrderCard = (props) => {
-  const { order } = props
+  const { order, auth, removeOrder } = props
   const [vendor, setVendor] = useState('')
   const [menu, setMenu] = useState(null)
+  const [open, setOpen] = useState(false)
+
+  const changeOpen = () => {
+    setOpen((open) => !open)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   var itemDict = {}
 
   const classes = useStyles()
+
+  const handleCancelOrder = (e) => {
+    e.preventDefault()
+    console.log('cancelling order')
+
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      Authorization: `Bearer ${auth}`,
+    }
+
+    axios
+      .delete(`${API_URL}/vendors/${order.vendor}/orders/${order._id}`, {
+        headers,
+      })
+      .then((res) => {
+        console.log('deleted order')
+        removeOrder(order._id)
+        changeOpen()
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
 
   useEffect(() => {
     console.log('getting vendor')
@@ -80,116 +116,166 @@ const OrderCard = (props) => {
   console.log(Object.keys(itemDict).length)
 
   return (
-    <Card
-      className={classes.root}
-      variant="outlined"
-      style={{ marginTop: '20px' }}
-    >
-      {itemDict.length !== 0 && (
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2" display="inline">
-            Order{' '}
-          </Typography>
-          <Typography
-            gutterBottom
-            variant="h5"
-            component="h2"
-            display="inline"
-            style={{ color: '#FAA545' }}
-          >
-            #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Bought from {vendor}{' '}
-            {order.modified ? `on ${order.modified.slice(0, 10)}` : null}
-          </Typography>
+    <>
+      <Card
+        className={classes.root}
+        variant="outlined"
+        style={{ marginTop: '20px' }}
+      >
+        {itemDict.length !== 0 && (
+          <CardContent>
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="h2"
+              display="inline"
+            >
+              Order{' '}
+            </Typography>
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="h2"
+              display="inline"
+              style={{ color: '#FAA545' }}
+            >
+              #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Bought from {vendor}{' '}
+              {order.modified ? `on ${order.modified.slice(0, 10)}` : null}
+            </Typography>
 
-          {Object.keys(itemDict).length !== 0 &&
-            order.items &&
-            Object.keys(order.items).length !== 0 && (
-              <>
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        {columns.map((column) => (
-                          <TableCell key={column}>{column}</TableCell>
+            {Object.keys(itemDict).length !== 0 &&
+              order.items &&
+              Object.keys(order.items).length !== 0 && (
+                <>
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          {columns.map((column) => (
+                            <TableCell key={column}>{column}</TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+
+                      <TableBody>
+                        {Object.keys(order.items).map((id, idx) => (
+                          <TableRow key={idx}>
+                            <TableCell>
+                              {itemDict[order.items[id]['item']]['item_name']}
+                            </TableCell>
+                            <TableCell>{order.items[id].quantity}</TableCell>
+                            <TableCell>
+                              {audFormatter.format(
+                                order.items[id].quantity *
+                                  itemDict[order.items[id]['item']][
+                                    'item_price'
+                                  ],
+                              )}
+                            </TableCell>
+                          </TableRow>
                         ))}
-                      </TableRow>
-                    </TableHead>
-
-                    <TableBody>
-                      {Object.keys(order.items).map((id, idx) => (
-                        <TableRow key={idx}>
+                        <TableRow>
+                          <TableCell></TableCell>
+                          <TableCell></TableCell>
                           <TableCell>
-                            {itemDict[order.items[id]['item']]['item_name']}
-                          </TableCell>
-                          <TableCell>{order.items[id].quantity}</TableCell>
-                          <TableCell>
-                            {audFormatter.format(
-                              order.items[id].quantity *
-                                itemDict[order.items[id]['item']]['item_price'],
-                            )}
+                            <Typography variant="subtitle2" gutterBottom>
+                              Total:{' '}
+                              {audFormatter.format(
+                                Object.keys(order.items)
+                                  .map(
+                                    (id) =>
+                                      order.items[id].quantity *
+                                      itemDict[order.items[id]['item']][
+                                        'item_price'
+                                      ],
+                                  )
+                                  .reduce((a, b) => a + b),
+                              )}
+                            </Typography>
                           </TableCell>
                         </TableRow>
-                      ))}
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>
-                          <Typography variant="subtitle2" gutterBottom>
-                            Total:{' '}
-                            {audFormatter.format(
-                              Object.keys(order.items)
-                                .map(
-                                  (id) =>
-                                    order.items[id].quantity *
-                                    itemDict[order.items[id]['item']][
-                                      'item_price'
-                                    ],
-                                )
-                                .reduce((a, b) => a + b),
-                            )}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <br />
-              </>
-            )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  <br />
+                </>
+              )}
 
-          {order.fulfilled ? (
-            <>
-              <tr
-                style={{ fontFamily: 'Roboto', fontSize: 14, color: 'green' }}
-              >
-                <td>Fulfilled {checkmark}</td>
-              </tr>
-            </>
-          ) : (
-            <tr style={{ fontFamily: 'Roboto', fontSize: 14, color: 'grey' }}>
-              <td>Fulfilled {emptyBox}</td>
-            </tr>
-          )}
+            <Grid container style={{ justifyContent: 'space-around' }}>
+              <Grid item>
+                {order.fulfilled ? (
+                  <>
+                    <tr
+                      style={{
+                        fontFamily: 'Roboto',
+                        fontSize: 14,
+                        color: 'green',
+                      }}
+                    >
+                      <td>Fulfilled {checkmark}</td>
+                    </tr>
+                  </>
+                ) : (
+                  <tr
+                    style={{
+                      fontFamily: 'Roboto',
+                      fontSize: 14,
+                      color: 'grey',
+                    }}
+                  >
+                    <td>Fulfilled {emptyBox}</td>
+                  </tr>
+                )}
 
-          {order.picked_up ? (
-            <>
-              <tr
-                style={{ fontFamily: 'Roboto', fontSize: 14, color: 'green' }}
-              >
-                <td>Picked Up {checkmark}</td>
-              </tr>
-            </>
-          ) : (
-            <tr style={{ fontFamily: 'Roboto', fontSize: 14, color: 'grey' }}>
-              <td>Picked Up {emptyBox}</td>
-            </tr>
-          )}
-        </CardContent>
-      )}
-    </Card>
+                {order.picked_up ? (
+                  <>
+                    <tr
+                      style={{
+                        fontFamily: 'Roboto',
+                        fontSize: 14,
+                        color: 'green',
+                      }}
+                    >
+                      <td>Picked Up {checkmark}</td>
+                    </tr>
+                  </>
+                ) : (
+                  <tr
+                    style={{
+                      fontFamily: 'Roboto',
+                      fontSize: 14,
+                      color: 'grey',
+                    }}
+                  >
+                    <td>Picked Up {emptyBox}</td>
+                  </tr>
+                )}
+              </Grid>
+              {!order.fulfilled ? (
+                <Grid item>
+                  <Button variant="outlined" onClick={handleCancelOrder}>
+                    <Typography variant="button" display="block" gutterBottom>
+                      Cancel Order
+                    </Typography>
+                  </Button>
+                </Grid>
+              ) : null}
+
+              <Grid item></Grid>
+            </Grid>
+          </CardContent>
+        )}
+      </Card>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={open}
+        onClose={handleClose}
+        message="Order cancelled!"
+      />
+    </>
   )
 }
 

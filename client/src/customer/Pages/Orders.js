@@ -8,6 +8,11 @@ import jwt from 'jsonwebtoken'
 const MyOrder = (props) => {
   const [orders, setOrders] = useState(null)
 
+  const removeOrder = (id) => {
+    let newOrders = JSON.parse(JSON.stringify(orders))
+    setOrders(newOrders.filter((order) => order._id !== id))
+  }
+
   // Get jwt token
   const { auth } = props
   console.log(auth)
@@ -52,7 +57,9 @@ const MyOrder = (props) => {
         ? 'You have no current or past orders!'
         : orders
             .sort((a, b) => -(new Date(a.modified) - new Date(b.modified)))
-            .map((order) => <OrderCard order={order} />)}
+            .map((order) => (
+              <OrderCard order={order} auth={auth} removeOrder={removeOrder} />
+            ))}
     </Container>
   )
 }
