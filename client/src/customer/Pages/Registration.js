@@ -10,12 +10,8 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import { useHistory } from 'react-router'
 import { API_URL } from '../../constants'
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
-import Link from '@material-ui/core/Link';
 
-
-const Login = (props) => {
+const Registration = (props) => {
   const { auth, setAuth } = props
 
   const history = useHistory()
@@ -23,46 +19,37 @@ const Login = (props) => {
   const handle_form_submit = (event) => {
     event.preventDefault()
 
+    history.push('/customer/login')
+
     const headers = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
     }
 
     const data = {
+      given_name: event.target.given_name.value,
+      family_name: event.target.family_name.value,
       email: event.target.email.value,
       password: event.target.password.value,
     }
 
+    // POST customer registration data to API
+    // Creates a new customer
     axios({
-      url: `${API_URL}/customers/login`,
+      url: `${API_URL}/customers`,
       method: 'POST',
       data: data,
       headers: headers,
     })
-    
-      .then((res) => {
-        setAuth(res.data)
-        const cst = jwt.decode(res.data)
-        if (cst) {
-          console.log(cst)
-          // Redirect successful login to my order page
-          history.push('/customer/myorder')
 
-        } else console.err('Invalid token')
-      })
-
-      // Invalid login
-      .catch((err) => {
-        console.error(err)
-
-        console.log("Invalid login")
-        history.push('/customer/login')
-      })
+    if (data){
+      console.log(data)
+    }
   }
 
   return (
     <Container>
-      <Typography variant="h2">Welcome back!</Typography>
+      <Typography variant="h2">Create an account.</Typography>
       {auth ? (
         `You are logged in as ${jwt.decode(auth).given_name} ${
           jwt.decode(auth).family_name
@@ -70,11 +57,30 @@ const Login = (props) => {
       ) : (
         <>
           <Typography variant="subtitle">
-            Please log in before confirming your order.
+            Please register to confirm your order.
           </Typography>
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
-            <Grid container direction="column">
-              <Grid item style={{ marginTop: '1em' }}>
+            <Grid container direction="row">
+            <Grid item style={{ marginTop: '1em' }}>
+              <TextField
+                required
+                name="given_name"
+                label="Given Name"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item style={{ marginTop: '1em' , marginLeft:'0.5em'}}>
+              <TextField
+                required
+                name="family_name"
+                label="Family Name"
+                variant="outlined"
+              />
+            </Grid>
+            </Grid>
+
+            <Grid container direction="row">
+              <Grid item style={{ marginTop: '0.5em' }}>
                 <TextField
                   required
                   name="email"
@@ -82,7 +88,7 @@ const Login = (props) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item style={{ marginTop: '1em' }}>
+              <Grid item style={{ marginTop: '0.5em' , marginLeft:'0.5em'}}>
                 <TextField
                   required
                   name="password"
@@ -96,21 +102,15 @@ const Login = (props) => {
               variant="contained"
               color="primary"
               disableElevation
-              style={{ marginTop: '1em' , marginBottom: '1em'}}
+              style={{ marginTop: '1em' }}
             >
-              Sign in
+              Register
             </Button>
           </form>
-          <Link
-            variant="body2"
-            href="/customer/registration"
-          >
-            New to Snacks In A Van? Create an account.
-          </Link>
         </>
       )}
     </Container>
   )
 }
 
-export default Login
+export default Registration

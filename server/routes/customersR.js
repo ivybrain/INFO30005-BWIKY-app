@@ -10,6 +10,8 @@ router.route('/')
   .get(customersC.customer_list)
   .post(customersC.customer_create);
 
+router.post('/login', customersC.customer_login);
+
 router.route('/:customer_id([0-9a-fA-F]{24})')
   .get(customersC.customer_details)
   .delete(customersC.customer_delete);

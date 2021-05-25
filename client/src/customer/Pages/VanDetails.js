@@ -21,16 +21,15 @@ const VanDetails = (props) => {
   const id = props.match.params.id
 
   const [vanData, setVanData] = useState(null)
-
   const [open, setOpen] = useState(false)
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
 
   const handleClose = () => {
     setOpen(false)
   }
+
+  const [rating, setRating] = useState(
+    parseFloat(4 + Math.floor(Math.random() * 3 - 1)),
+  )
 
   // Whenever the order updates, check if we have reached 3 snacks
   useEffect(() => {
@@ -59,7 +58,6 @@ const VanDetails = (props) => {
         })
           .then((res) => {
             let data = res.data
-            data.distance = 10
             setVanData(data)
           })
           .catch((err) => {
@@ -92,15 +90,17 @@ const VanDetails = (props) => {
         <Typography variant="h3">Van Details Loading...</Typography>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant="h3">Van Details {vanData.van_name}</Typography>
-          <Typography variant="body">
-            This van is {Math.round(vanData.distance * 10) / 10}km away!
-          </Typography>
-          <Ratings
-            rating={parseFloat(4)}
-            widgetDimensions="30px"
-            widgetSpacings="8px"
+          <Typography variant="h3">{vanData.van_name}</Typography>
+          <Typography
+            variant="body"
+            display="block"
+            style={{ marginBottom: '1rem' }}
           >
+            {!isNaN(vanData.distance)
+              ? `This van is ${Math.round(vanData.distance * 10) / 10}km away!`
+              : null}
+          </Typography>
+          <Ratings rating={rating} widgetDimensions="30px" widgetSpacings="8px">
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
@@ -112,15 +112,20 @@ const VanDetails = (props) => {
             ''
           ) : (
             <>
-              <Typography variant="body">Menu</Typography>
-              <Grid container direction="row" spacing={2}>
+              <Grid
+                container
+                direction="row"
+                spacing={2}
+                style={{ marginTop: '2rem' }}
+              >
                 {menu.map((menuItem, idx) => (
-                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={idx}>
                     <MenuItem
                       key={idx}
                       menuItem={menuItem}
                       order={order}
                       setOrder={setOrder}
+                      vendor={vanData._id}
                     />
                   </Grid>
                 ))}

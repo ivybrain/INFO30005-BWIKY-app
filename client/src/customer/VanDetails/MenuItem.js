@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 
 const MenuItem = (props) => {
-  const { menuItem, order, setOrder } = props
+  const { menuItem, order, setOrder, vendor } = props
 
   const handleAddToOrder = (e) => {
     e.preventDefault()
@@ -30,6 +30,7 @@ const MenuItem = (props) => {
       newOrder = {
         ...newOrder,
         items: newItems,
+        vendor: vendor,
       }
       setOrder(newOrder)
     }

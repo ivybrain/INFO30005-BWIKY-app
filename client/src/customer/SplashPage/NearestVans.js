@@ -9,8 +9,7 @@ const NearestVans = (props) => {
     .filter((van) => van.hasOwnProperty('location'))
     .map((van) => ({
       ...van,
-      simpleLocation: 'above the wheels',
-      rating: 4,
+      rating: 4 + Math.floor(Math.random() * 3 - 1),
     }))
   return (
     <Grid container direction="column" justify="space-between" spacing={3}>
@@ -27,7 +26,7 @@ const NearestVans = (props) => {
               title={van.van_name}
               rating={van.rating}
               distance={van.distance}
-              simpleLocation={van.simpleLocation}
+              simpleLocation={van.location.simple}
               _id={van._id}
             ></VanCard>
           </Grid>

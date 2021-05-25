@@ -6,15 +6,21 @@ import Nav3 from './customer/Nav3'
 import { Switch, Route } from 'react-router-dom'
 import SplashPage from './customer/Pages/SplashPage'
 import Login from './customer/Pages/Login'
+import Registration from './customer/Pages/Registration'
 import MyOrder from './customer/Pages/MyOrder'
 import VanDetails from './customer/Pages/VanDetails'
 import Orders from './customer/Pages/Orders'
+
 
 const CustomerApp = () => {
   const [location, setLocation] = useState(null)
   const [vans, setVans] = useState(null)
   const [menu, setMenu] = useState(null)
-  const [order, setOrder] = useState({ items: {}, confirmed: false })
+  const [order, setOrder] = useState({
+    items: {},
+    confirmed: false,
+    // modified: new Date(),
+  })
   const [auth, setAuth] = useState(null)
 
   return (
@@ -22,7 +28,7 @@ const CustomerApp = () => {
       <CssBaseline />
       {/* <Nav></Nav> */}
       {/* <Nav2></Nav2> */}
-      <Nav3 order={order}></Nav3>
+      <Nav3 order={order} auth={auth}></Nav3>
       <Switch>
         <Route
           exact
@@ -39,19 +45,24 @@ const CustomerApp = () => {
         <Route
           exact
           path="/customer/login"
-          component={Login}
-          auth={auth}
-          setAuth={setAuth}
+          render={() => <Login auth={auth} setAuth={setAuth} />}
+        />
+        <Route
+          exact
+          path="/customer/registration"
+          render={() => <Registration auth={auth} setAuth={setAuth} />}
         />
         <Route
           exact
           path="/customer/myorder"
-          render={() => <MyOrder order={order} setOrder={setOrder} />}
+          render={() => (
+            <MyOrder auth={auth} order={order} setOrder={setOrder} />
+          )}
         />
         <Route
           exact
           path="/customer/orders"
-          render={() => <Orders order={order} setOrder={setOrder} />}
+          render={() => <Orders auth={auth} />}
         />
         <Route
           exact

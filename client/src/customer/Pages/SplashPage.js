@@ -42,6 +42,9 @@ const SplashPage = (props) => {
         setLocation(position)
       })
     }
+    if (!location) {
+      setLocation({coords: {latitude: -37.80435, longitude: 144.96296}})
+    }
   }, [])
 
   return (
@@ -99,7 +102,7 @@ const SplashPage = (props) => {
           search for vans near you and order now for an easy pick-up!
         </Typography>
 
-        <form
+        {/* <form
           autoComplete="off"
           noValidate
           style={{
@@ -121,8 +124,9 @@ const SplashPage = (props) => {
               size: 'large',
             }}
           />
-          {/* <Button>Find my location!</Button> */}
-        </form>
+          {/* <Button>Find my location!</Button> }
+        </form> */}
+        <br></br>
         <Typography
           variant="body"
           style={{
@@ -132,16 +136,17 @@ const SplashPage = (props) => {
         >
           Your Location:{' '}
           {location == null
-            ? 'no location'
+            ? 'No location, please enable location in your browser!'
             : `(${Math.round(location.coords.latitude * 10000) / 10000}, ${
                 Math.round(location.coords.longitude * 10000) / 10000
               })`}
         </Typography>
 
         <VanMap vans={vans} location={location}></VanMap>
-        <Paper elevation={0} style={{ marginTop: '40px' }}>
-          {vans === null ? '' : <NearestVans vans={vans}></NearestVans>}
-        </Paper>
+        <br />
+        <br />
+        {vans === null ? '' : <NearestVans vans={vans}></NearestVans>}
+        <br />
       </Container>
     </div>
   )
