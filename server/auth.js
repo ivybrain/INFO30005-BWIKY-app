@@ -20,7 +20,7 @@ exports.create_digest = async (password) => {
 
 exports.compare_digest = async (password, hash) => {
   result = await bcrypt.compare(password, hash);
-  return hash
+  return result;
 }
 
 exports.authenticate_user = function (req, res, next) {

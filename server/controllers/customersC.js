@@ -50,7 +50,7 @@ exports.customer_create = async (req, res) => {
 exports.customer_update = async (req, res) => {
 
   req.body.password = req.body.hasOwnProperty("password") && req.body.password ?
-                      auth.create_digest(req.body.password) : undefined
+                      await auth.create_digest(req.body.password) : undefined
 
   try {
     const updated = await Customer.findByIdAndUpdate(
