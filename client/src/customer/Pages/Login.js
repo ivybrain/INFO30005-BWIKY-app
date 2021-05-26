@@ -20,6 +20,13 @@ const Login = (props) => {
 
   const history = useHistory()
 
+  const handle_log_out = (event) => {
+    event.preventDefault()
+    setAuth(null)
+    console.log('Logged Out')
+  }
+
+
   const handle_form_submit = (event) => {
     event.preventDefault()
 
@@ -109,6 +116,21 @@ const Login = (props) => {
         <Typography variant="subtitle">
         You are logged in as {jwt.decode(auth).given_name} {jwt.decode(auth).family_name}.
         </Typography>
+        <br/>
+
+        <Button
+          component={Link}
+          variant="outlined"
+          to="/customer/login"
+          style={{ textDecoration: 'none' }}
+        >
+          <Typography variant="button" display="block" onClick={handle_log_out}>
+            Log Out
+          </Typography>
+        </Button>
+        <br/>
+        <br/>
+
               <form noValidate autoComplete="off" onSubmit={handle_change_details}>
                 <Grid container direction="row">
                 <Grid item style={{ marginTop: '1em' }}>

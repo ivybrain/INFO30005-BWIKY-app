@@ -50,7 +50,7 @@ const CustomerApp = () => {
         <Route
           exact
           path="/customer/registration"
-          render={() => <Registration auth={auth} setAuth={setAuth} />}
+          render={() => <Registration auth={auth} />}
         />
         <Route
           exact
