@@ -33,35 +33,6 @@ function dictify(list) {
   return out
 }
 
-function getDeadline(order){
-  const time_limit = 15// dummy time limit in mins
-
-  var new_time = new Date(order.modified)
-  new_time.setMinutes(new_time.getMinutes() + time_limit );
-
-  return (new_time.getHours() + ":" + new_time.getMinutes())
-}
-
-
-function getTimeRemaining(order){
-  const time_limit = 15 *60000// dummy time_limit to be replaced in milliseconds
-
-  const current_time = new Date()
-  const modified_time = new Date(order.modified)
-
-  var countdown = time_limit - (current_time - modified_time)
-
-  const minutes = Math.trunc((countdown / 1000) / 60) // convert milliseconds to minutes
-  const seconds = Math.trunc((countdown / 1000) % 60) // convert milliseconds to seconds
-
-  if (countdown > 0){
-    return (minutes.toString() + ":" + seconds.toString())
-  }else{
-    return("0:00")
-  }
-
-}
-
 
 function stringifyItems(order, itemDict){
   var string = ""
@@ -84,6 +55,33 @@ function stringifyItems(order, itemDict){
   return string
 }
 
+function getDeadline(order){
+  const time_limit = 15// dummy time limit in mins
+
+  var new_time = new Date(order.modified)
+  new_time.setMinutes(new_time.getMinutes() + time_limit );
+
+  return (new_time.getHours() + ":" + new_time.getMinutes())
+}
+
+function getTimeRemaining(order){
+  const time_limit = 15 *60000// dummy time_limit to be replaced in milliseconds
+
+  const current_time = new Date()
+  const modified_time = new Date(order.modified)
+
+  var countdown = time_limit - (current_time - modified_time)
+
+  const minutes = Math.trunc((countdown / 1000) / 60) // convert milliseconds to minutes
+  const seconds = Math.trunc((countdown / 1000) % 60) // convert milliseconds to seconds
+
+  if (countdown > 0){
+    return (minutes.toString() + ":" + seconds.toString())
+  }else{
+    return("0:00")
+  }
+
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,19 +91,19 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(20),
     flexBasis: '33.33%',
     flexShrink: 0,
-    color: theme.palette.warning.light
+    color: theme.palette.success.light
   },
   secondaryHeading: {
     marginTop: '0.25em',
     fontSize: theme.typography.pxToRem(15),
-    flexBasis: '80%',
+    flexBasis: '33.33%',
     flexShrink: 0,
     color: theme.palette.text.secondary,
   },
 }));
 
 
-const OrderCard = (props) => {
+const FulfilledOrderCard = (props) => {
   const classes = useStyles();
   const [menu, setMenu] = useState(null)
   const [customer, setCustomer] = useState(null)
@@ -120,10 +118,10 @@ const OrderCard = (props) => {
     setExpanded(isExpanded ? panel : false);
   }
 
-  const handleFulfillOrder = (event) => {
+  const handlePickUpOrder = (event) => {
     event.preventDefault()
 
-    console.log('Fulfilling order')
+    console.log('Picking up order')
 
     history.push('/vendor/orders')
 
@@ -133,7 +131,7 @@ const OrderCard = (props) => {
     }
 
     const data = {
-      fulfilled: true
+      picked_up: true
     }
 
     axios({
@@ -195,92 +193,28 @@ const OrderCard = (props) => {
       <AccordionSummary
         id= {order._id}
       >
-        <Typography className={classes.heading}>{getTimeRemaining(order)} mins</Typography>
-        <Typography className={classes.secondaryHeading}>Order #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}   {stringifyItems(order, itemDict)}</Typography>
+        <Typography className={classes.heading}>Order #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}</Typography>
+        <Typography className={classes.secondaryHeading}>{customer_name}</Typography>
       </AccordionSummary>
 
       {/*Individual Order Cards to be expanded*/}
       <AccordionDetails>
       <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
         <Container>
-            <Grid
-              container
-              direction="row"
-              justify="space-around"
-              spacing={3}
-              style={{ height: "100%" }}
-            >
-              <Grid item xs={7}>
-                <Grid
-                  container
-                  direction="column"
-                  justify="space-around"
-                  alignItems="stretch"
-                  style={{ height: "100%" }}
-                >
-
-                {Object.keys(itemDict).length !== 0 && (
-                  <Grid item xs={8}>
-                    <TableContainer>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            {columns.map((column) => (
-                              <TableCell key={column}>{column}</TableCell>
-                            ))}
-                          </TableRow>
-                        </TableHead>
-
-                        {/*Mapping Items*/}
-                        <TableBody>
-                        {Object.keys(order.items).map((id, idx) => (
-                          <TableRow key={idx}>
-                            <TableCell>
-                              {itemDict[order.items[id]['item']]['item_name']}
-                            </TableCell>
-
-                            <TableCell>
-                            {order.items[id].quantity}
-                            </TableCell>
-
-                            <TableCell>
-                              <Checkbox
-                                color="primary"
-                              ></Checkbox>
-                            </TableCell>
-
-                          </TableRow>
-                        ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Grid>
-                )}
-                </Grid>
-              </Grid>
-
               {/*Customer Details*/}
-              <Grid item xs={4}>
-                <Typography variant="subtitle2" style={{ marginTop: "1em", marginLeft: "1em" }}>
-                  Customer Details
-                </Typography>
-                <br />
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>Name : {customer_name}</Typography>
-                <br />
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>Order Placed : {(new Date(order.modified)).getHours() + ":" + (new Date(order.modified)).getMinutes()}</Typography>
-                <br />
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>Order Deadline : {getDeadline(order)}</Typography>
-                <br />
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>Discount : {getTimeRemaining(order)==="0:00" ? "20" : "0"}%</Typography>
+              <Grid item xs={12}>
+                <Typography variant="subtitle2" style={{ marginBottom: "1em" }}>{stringifyItems(order, itemDict)}</Typography>
+                <Typography variant="body2" style={{ marginBottom: "1em" }}>Order Placed : {(new Date(order.modified)).getHours() + ":" + (new Date(order.modified)).getMinutes()}</Typography>
+                <Typography variant="body2" style={{ marginBottom: "1em" }}>Order Fulfilled : {(new Date(order.fulfilled_time)).getHours() + ":" + (new Date(order.fulfilled_time)).getMinutes()}</Typography>
+                <Typography variant="body2" style={{ marginBottom: "1em" }}>Discount : {getTimeRemaining(order)==="0:00" ? "20" : "0"}%</Typography>
 
                 {/*Button to mark order as fulfilled*/}
-                <Button variant="outlined" style={{ marginLeft: "1em", marginTop: "1em"}} onClick={handleFulfillOrder}>
+                <Button variant="outlined" style={{marginTop: "1em"}} onClick={handlePickUpOrder}>
                   <Typography variant="button" display="block">
-                    Complete
+                    Picked Up
                   </Typography>
                 </Button>
               </Grid>
-            </Grid>
         </Container>
       </div>
       </AccordionDetails>
@@ -289,4 +223,4 @@ const OrderCard = (props) => {
   );
 };
 
-export default OrderCard;
+export default FulfilledOrderCard;

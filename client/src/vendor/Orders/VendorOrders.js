@@ -1,9 +1,7 @@
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid , Typography} from "@material-ui/core";
 import Header from "../Header";
-import CompletedOrder from "./CompletedOrder";
-import OrderPreviewLarge from "./OrderPreviewLarge";
-import OrderPreviewSmall from "./OrderPreviewSmall";
 import OrderCard from "./VendorOrderCard";
+import FulfilledOrderCard from './FulfilledOrderCard'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
@@ -79,14 +77,17 @@ const VendorOrders = (props) => {
           spacing={2}
         >
           <Grid item xs={8}>
-            <p>Ongoing Orders</p>
-
+            <Typography variant="h6" style={{ marginTop: "1em",marginBottom: "1em", marginLeft: "1em" }}>
+              Unfulfilled Orders
+            </Typography>
+            {/*Only display unfulfilled (ongoing) orders. Sort by older orders first*/}
             {orders == null
               ? null
               : orders.length === 0
               ? 'You have no current or past orders!'
               : orders
-                  .sort((a, b) => -(new Date(a.modified) - new Date(b.modified)))
+                  .sort((a, b) => -(new Date(b.modified) - new Date(a.modified)))
+                  .filter(order => !order.fulfilled)
                   .map((order) => (
                     <Grid container direction="column" spacing={2}>
                       <Grid item>
@@ -96,20 +97,30 @@ const VendorOrders = (props) => {
 
                   ))}
 
-
-
           </Grid>
 
           <Grid item xs={4}>
-            <p>Completed Orders</p>
-            <Grid container direction="column" spacing={1}>
-              <Grid item>
-                <CompletedOrder orderNumber={104} />
-              </Grid>
-              <Grid item>
-                <CompletedOrder orderNumber={103} />
-              </Grid>
-            </Grid>
+
+          <Typography variant="h6" style={{ marginTop: "1em", marginBottom: "1em", arginLeft: "1em" }}>
+            Orders Awaiting Pick Up
+          </Typography>
+
+          {/*Only display unfulfilled (ongoing) orders. Sort by older orders first*/}
+          {orders == null
+            ? null
+            : orders.length === 0
+            ? 'You have no current or past orders!'
+            : orders
+                .sort((a, b) => -(new Date(b.modified) - new Date(a.modified)))
+                .filter(order => order.fulfilled && !order.picked_up)
+                .map((order) => (
+                  <Grid container direction="column" spacing={2}>
+                    <Grid item>
+                      <FulfilledOrderCard order={order} />
+                    </Grid>
+                  </Grid>
+
+                ))}
           </Grid>
         </Grid>
       </Container>

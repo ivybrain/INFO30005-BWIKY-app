@@ -5,6 +5,7 @@ import Order from './vendor/Order/Order'
 import VendorOrders from './vendor/Orders/VendorOrders'
 import OrderHistory from './vendor/History/OrderHistory'
 import OrderCard from './vendor/Orders/VendorOrderCard'
+import FulfilledOrderCard from './vendor/Orders/FulfilledOrderCard'
 
 
 function VendorApp() {
@@ -17,6 +18,13 @@ function VendorApp() {
           exact path="/vendor/orders"
           component={VendorOrders}
           render={(props) => <OrderCard {...props}></OrderCard>
+          }
+        />
+
+        <Route
+          exact path="/vendor/orders"
+          component={VendorOrders}
+          render={(props) => <FulfilledOrderCard {...props}></FulfilledOrderCard>
           }
         />
 
