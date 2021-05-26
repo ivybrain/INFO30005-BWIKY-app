@@ -160,6 +160,7 @@ const OrderCard = (props) => {
                         </TableRow>
                       </TableHead>
 
+                      {/*Mapping Items*/}
                       <TableBody>
                         {Object.keys(order.items).map((id, idx) => (
                           <TableRow key={idx}>
