@@ -1,7 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-const passport = require('passport');
 
 const dotenv = require('dotenv')
 const dotenv_expand = require('dotenv-expand')
@@ -18,7 +17,6 @@ const app = express()
 
 app.use(cors(/*cors_options*/))
 
-app.use(passport.initialize());
 
 const vendorsR = require('./routes/vendorsR.js')
 const itemsR = require('./routes/itemsR.js')
