@@ -48,8 +48,8 @@ exports.customer_create = async (req, res) => {
 exports.customer_update = async (req, res) => {
 
   try {
-    const updated = await Customer.findOneAndUpdate(
-      req.customer.id,
+    const updated = await Customer.findByIdAndUpdate(
+      req.customer,
       req.body,
       { new: true });
     res.json(updated);
