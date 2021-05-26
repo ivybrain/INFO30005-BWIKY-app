@@ -58,6 +58,7 @@ const Registration = (props) => {
     <Container>
       <Typography variant="h3">Create an account.</Typography>
       <br/>
+
       {auth ? (
         `You are logged in as ${jwt.decode(auth).given_name} ${
           jwt.decode(auth).family_name
@@ -65,6 +66,7 @@ const Registration = (props) => {
       ) : (
         <>
           <Typography variant="subtitle">
+
             Please register to start ordering.
           </Typography>
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
@@ -96,6 +98,7 @@ const Registration = (props) => {
                   variant="outlined"
                 />
               </Grid>
+
               <Grid item style={{ marginTop: '0.5em' , marginLeft:'0.5em'}}>
                 <TextField
                   required

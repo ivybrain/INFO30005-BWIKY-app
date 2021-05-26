@@ -45,11 +45,27 @@ exports.customer_create = async (req, res) => {
 
 }
 
+exports.customer_update = async (req, res) => {
+
+  try {
+    const updated = await Customer.findOneAndUpdate(
+      req.customer.id,
+      req.body,
+      { new: true });
+    res.json(updated);
+  }
+  catch(err) {
+    res.status(400);
+    res.json(err);
+  }
+}
+
 exports.customer_delete = async(req, res) => {
   const deleted = await Customer.findByIdAndDelete(req.customer.id);
   res.status(200);
   res.json(deleted);
 }
+
 
 exports.customer_orders = async(req, res) => {
   const orders = await Order.find({ customer: req.customer })

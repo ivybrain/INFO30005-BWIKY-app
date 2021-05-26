@@ -21,23 +21,10 @@ const VanDetails = (props) => {
   const id = props.match.params.id
 
   const [vanData, setVanData] = useState(null)
-  const [open, setOpen] = useState(false)
-
-  const handleClose = () => {
-    setOpen(false)
-  }
 
   const [rating, setRating] = useState(
     parseFloat(4 + Math.floor(Math.random() * 3 - 1)),
   )
-
-  // Whenever the order updates, check if we have reached 3 snacks
-  useEffect(() => {
-    if (Object.keys(order.items).length >= 3) {
-      console.log('3 snacks reached')
-      setOpen(true)
-    }
-  }, [order])
 
   useEffect(() => {
     if (!vanData) {
@@ -134,39 +121,6 @@ const VanDetails = (props) => {
           )}
         </div>
       )}
-      <div>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="three-snacks-reached"
-          aria-describedby="three-snacks-reached"
-        >
-          <DialogTitle id="three-snacks-reached">
-            {'Continue shopping?'}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="three-snacks-reached">
-              You have reached the maximum number of snacks available in one
-              order. You can add more of the same three snacks or review your
-              order!
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Continue Shopping
-            </Button>
-            <Button onClick={handleClose} color="primary" autoFocus>
-              <Button
-                component={Link}
-                to="/customer/myorder"
-                style={{ textDecoration: 'none' }}
-              >
-                Review Order
-              </Button>
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
     </Container>
   )
 }
