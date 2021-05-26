@@ -12,7 +12,7 @@ import { useHistory } from 'react-router'
 import { API_URL } from '../../constants'
 
 const Registration = (props) => {
-  const { auth } = props
+  const { auth, setAuth } = props
 
   const history = useHistory()
 
@@ -42,14 +42,23 @@ const Registration = (props) => {
       headers: headers,
     })
 
-    if (data) {
-      console.log(data)
-    }
+    .then(() => {
+      if (data){
+        console.log("Create new customer")
+        console.log(data)
+      }
+    })
+
+    .catch((err) => {
+      console.error(err)
+    })
   }
 
   return (
     <Container>
-      <Typography variant="h2">Create an account.</Typography>
+      <Typography variant="h3">Create an account.</Typography>
+      <br/>
+
       {auth ? (
         `You are logged in as ${jwt.decode(auth).given_name} ${
           jwt.decode(auth).family_name
@@ -57,26 +66,27 @@ const Registration = (props) => {
       ) : (
         <>
           <Typography variant="subtitle">
-            Please register to confirm your order.
+
+            Please register to start ordering.
           </Typography>
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
             <Grid container direction="row">
-              <Grid item style={{ marginTop: '1em' }}>
-                <TextField
-                  required
-                  name="given_name"
-                  label="Given Name"
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item style={{ marginTop: '1em', marginLeft: '0.5em' }}>
-                <TextField
-                  required
-                  name="family_name"
-                  label="Family Name"
-                  variant="outlined"
-                />
-              </Grid>
+            <Grid item style={{ marginTop: '1em' }}>
+              <TextField
+                required
+                name="given_name"
+                label="Given Name"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item style={{ marginTop: '1em' , marginLeft:'0.5em'}}>
+              <TextField
+                required
+                name="family_name"
+                label="Family Name"
+                variant="outlined"
+              />
+            </Grid>
             </Grid>
 
             <Grid container direction="row">
@@ -88,7 +98,8 @@ const Registration = (props) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item style={{ marginTop: '0.5em', marginLeft: '0.5em' }}>
+
+              <Grid item style={{ marginTop: '0.5em' , marginLeft:'0.5em'}}>
                 <TextField
                   required
                   name="password"

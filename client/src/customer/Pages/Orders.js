@@ -5,17 +5,18 @@ import { API_URL } from '../../constants'
 import OrderCard from '../Orders/OrderCard'
 import jwt from 'jsonwebtoken'
 
+
+
 const MyOrder = (props) => {
   const [orders, setOrders] = useState(null)
+
+  // Get jwt token
+  const { auth } = props
 
   const removeOrder = (id) => {
     let newOrders = JSON.parse(JSON.stringify(orders))
     setOrders(newOrders.filter((order) => order._id !== id))
   }
-
-  // Get jwt token
-  const { auth } = props
-  console.log(auth)
 
   useEffect(() => {
     console.log('getting order history')
@@ -24,6 +25,7 @@ const MyOrder = (props) => {
     if (auth) {
       // Get customer id from jwt token
       const customerId = auth ? jwt.decode(auth)._id : null
+      console.log(auth)
       console.log('Customer id is %s', customerId)
 
       // Get all orders of specific customer (using customer id)

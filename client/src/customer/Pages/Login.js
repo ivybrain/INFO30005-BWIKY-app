@@ -39,11 +39,12 @@ const Login = (props) => {
       data: data,
       headers: headers,
     })
-    
+
       .then((res) => {
         setAuth(res.data)
         const cst = jwt.decode(res.data)
         if (cst) {
+          console.log(res.data)
           console.log(cst)
           // Redirect successful login to my order page
           history.push('/customer/myorder')
@@ -60,15 +61,111 @@ const Login = (props) => {
       })
   }
 
+
+  const handle_change_details = (event) => {
+    event.preventDefault()
+
+    history.push('/customer/login')
+
+    const headers = {
+     'Access-Control-Allow-Origin': '*',
+     'Authorization': `Bearer ${auth}`,
+   }
+
+    const data = {
+      given_name: event.target.given_name.value,
+      family_name: event.target.family_name.value,
+      email: event.target.email.value,
+      password: event.target.password.value,
+    }
+
+    // PATCH modified customer details
+    axios({
+      url: `${API_URL}/customers/${jwt.decode(auth)._id}`,
+      method: 'PATCH',
+      data: data,
+      headers: headers,
+    })
+
+    .then((res) => {
+      if (res.data){
+        console.log("Change details for customer %s", jwt.decode(auth)._id)
+        console.log(data)
+      }
+    })
+
+    .catch((err) => {
+      console.error(err)
+    })
+
+  }
+
   return (
     <Container>
-      <Typography variant="h2">Welcome back!</Typography>
       {auth ? (
-        `You are logged in as ${jwt.decode(auth).given_name} ${
-          jwt.decode(auth).family_name
-        }`
+        <>
+        <Typography variant="h3">Account Details</Typography>
+        <br/>
+        <Typography variant="subtitle">
+        You are logged in as {jwt.decode(auth).given_name} {jwt.decode(auth).family_name}.
+        </Typography>
+              <form noValidate autoComplete="off" onSubmit={handle_change_details}>
+                <Grid container direction="row">
+                <Grid item style={{ marginTop: '1em' }}>
+                  <TextField
+                    required
+                    name="given_name"
+                    label="Given Name"
+                    defaultValue= {jwt.decode(auth).given_name}
+                    variant="filled"
+                  />
+                </Grid>
+                <Grid item style={{ marginTop: '1em' , marginLeft:'0.5em'}}>
+                  <TextField
+                    required
+                    name="family_name"
+                    label="Family Name"
+                    defaultValue= {jwt.decode(auth).family_name}
+                    variant="filled"
+                  />
+                </Grid>
+                </Grid>
+
+                <Grid container direction="row">
+                  <Grid item style={{ marginTop: '0.5em' }}>
+                    <TextField
+                      required
+                      name="email"
+                      label="Email Address"
+                      defaultValue= {jwt.decode(auth).email}
+                      variant="filled"
+                    />
+                  </Grid>
+                  <Grid item style={{ marginTop: '0.5em' , marginLeft:'0.5em'}}>
+                    <TextField
+                      required
+                      name="password"
+                      type="password"
+                      label="Password"
+                      defaultValue= {jwt.decode(auth).password}
+                      variant="filled"
+                    />
+                  </Grid>
+                </Grid>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disableElevation
+                  style={{ marginTop: '1em' }}
+                >
+                  Change Profile Details
+                </Button>
+              </form>
+            </>
       ) : (
         <>
+          <Typography variant="h3">Welcome Back!</Typography>
+          <br/>
           <Typography variant="subtitle">
             Please log in before confirming your order.
           </Typography>
