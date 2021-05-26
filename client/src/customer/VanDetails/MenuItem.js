@@ -49,13 +49,14 @@ const MenuItem = (props) => {
       if (newOrder.items[menuItem._id].quantity > 0) {
         // Decrement it's quantity
         newOrder.items[_id].quantity--
-        setOrder(newOrder)
       }
 
       // remove the item if it's quantity is 0
       if (newOrder.items[menuItem._id].quantity === 0) {
         delete newOrder.items[menuItem._id]
       }
+
+      setOrder(newOrder)
     } else {
       console.log("removed an item that doesn't exist in the order")
     }

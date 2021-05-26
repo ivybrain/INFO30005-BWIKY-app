@@ -1,20 +1,9 @@
-import {
-  Container,
-  Typography,
-  Grid,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  Dialog,
-} from '@material-ui/core'
+import { Container, Typography, Grid } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import Ratings from 'react-ratings-declarative'
 import MenuItem from '../VanDetails/MenuItem'
-import { Link } from 'react-router-dom'
 
 const VanDetails = (props) => {
   const { vans, menu, setMenu, order, setOrder } = props

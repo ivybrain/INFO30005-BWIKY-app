@@ -10,6 +10,7 @@ import Registration from './customer/Pages/Registration'
 import MyOrder from './customer/Pages/MyOrder'
 import VanDetails from './customer/Pages/VanDetails'
 import Orders from './customer/Pages/Orders'
+import ModifyOrder from './customer/Pages/ModifyOrder'
 
 
 const CustomerApp = () => {
@@ -63,6 +64,13 @@ const CustomerApp = () => {
           exact
           path="/customer/orders"
           render={() => <Orders auth={auth} />}
+        />
+        <Route
+          exact
+          path="/customer/modify/:vendor_id/:order_id"
+          render={(props) => (
+            <ModifyOrder {...props} auth={auth} menu={menu} setMenu={setMenu} />
+          )}
         />
         <Route
           exact

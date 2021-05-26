@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import { makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 const checkmark = '\uD83D\uDDF9'
@@ -254,6 +255,27 @@ const OrderCard = (props) => {
                   </tr>
                 )}
               </Grid>
+
+              {!order.fulfilled ? (
+                <Grid item>
+                  <Button variant="outlined">
+                    <Typography
+                      variant="button"
+                      display="block"
+                      gutterBottom
+                      component={Link}
+                      to={{
+                        pathname: `/customer/modify/${order.vendor}/${order._id}`,
+                        order: order,
+                      }}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      Modify Order
+                    </Typography>
+                  </Button>
+                </Grid>
+              ) : null}
+
               {!order.fulfilled ? (
                 <Grid item>
                   <Button variant="outlined" onClick={handleCancelOrder}>
