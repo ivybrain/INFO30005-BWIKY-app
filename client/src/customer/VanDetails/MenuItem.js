@@ -73,7 +73,18 @@ const MenuItem = (props) => {
           <Typography variant="body2" color="textSecondary" component="p">
             ${menuItem.item_price}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            style={
+              order.items[menuItem._id]
+                ? order.items[menuItem._id].quantity > 0
+                  ? { color: '#e69705' }
+                  : {}
+                : {}
+            }
+          >
             {order.items[menuItem._id] ? order.items[menuItem._id].quantity : 0}{' '}
             in current order
           </Typography>
