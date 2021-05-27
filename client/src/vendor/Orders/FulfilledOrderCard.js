@@ -134,26 +134,28 @@ const FulfilledOrderCard = (props) => {
   const [menu, setMenu] = useState(null)
   const [customer, setCustomer] = useState(null)
   const [expanded, setExpanded] = React.useState(false);
-  const { order } = props
-  var itemDict = {}
-  var customer_name = ""
   const columns = ["Item", "Qty", "Status"];
   const history = useHistory()
+
+  const { order , auth, setAuth } = props
+  var itemDict = {}
+  var customer_name = ""
+
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   }
 
+
   const handlePickUpOrder = (event) => {
     event.preventDefault()
+    history.push('/vendor/orders')
 
     console.log('Picking up order')
 
-    history.push('/vendor/orders')
-
     const headers = {
       'Access-Control-Allow-Origin': '*',
-      'Authorization': `Bearer totessecure`, // override for testing
+      'Authorization': `Bearer ${auth}`,
     }
 
     const data = {
@@ -169,13 +171,16 @@ const FulfilledOrderCard = (props) => {
       .catch((err) => {
         console.error(err)
       })
-
   }
-
-  const headers = { 'Access-Control-Allow-Origin': '*' }
 
   useEffect(() => {
     console.log('Getting Customer Name')
+
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': `Bearer ${auth}`,
+    }
+
     axios(`${API_URL}/customers/${order.customer}`, {
         headers,
     }).then((res) => {
@@ -188,6 +193,7 @@ const FulfilledOrderCard = (props) => {
     })
   }, [])
 
+
   useEffect(() => {
     console.log('getting items')
 
@@ -195,6 +201,7 @@ const FulfilledOrderCard = (props) => {
       setMenu(res.data)
     })
   }, [])
+  
 
   itemDict = dictify(menu)
 

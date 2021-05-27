@@ -20,7 +20,10 @@ const MyOrder = (props) => {
 
   useEffect(() => {
     console.log('getting order history')
-    const headers = { 'Access-Control-Allow-Origin': '*' }
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': `Bearer ${auth}`,
+    }
 
     if (auth) {
       // Get customer id from jwt token

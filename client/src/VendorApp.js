@@ -19,33 +19,27 @@ function VendorApp() {
 
       <NavBar auth={auth} setAuth = {setAuth}></NavBar>
 
-      <Route
-        exact path="/vendor/"
-        component={LoginScreen}
-        render={(props) => <Checkin auth={auth}></Checkin>}
-      />
-
       <Switch>
-        <Route exact path="/vendor/checkin" component={Checkin} />
+        <Route
+          exact path="/vendor/"
+          render={(props) => <LoginScreen auth={auth} setAuth = {setAuth}></LoginScreen>}
+        />
 
         <Route
-          exact path="/vendor/orders"
-          component={VendorOrders}
-          render={(props) => <OrderCard {...props}></OrderCard>
-          }
+          exact path="/vendor/checkin"
+          render={(props) => <Checkin auth={auth} setAuth = {setAuth}></Checkin>}
         />
 
         <Route
           exact path="/vendor/orders"
-          component={VendorOrders}
-          render={(props) => <FulfilledOrderCard {...props}></FulfilledOrderCard>
-          }
+          render={(props) => (
+            <VendorOrders {...props} auth={auth} setAuth = {setAuth}></VendorOrders>
+          )}
         />
 
         <Route
           exact path="/vendor/history"
-          component={VendorPastOrders}
-          render={(props) => <PastOrderCard {...props}></PastOrderCard>
+          render={(props) => <VendorPastOrders auth={auth} setAuth = {setAuth}></VendorPastOrders>
           }
         />
 

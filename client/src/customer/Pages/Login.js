@@ -191,6 +191,8 @@ const Login = (props) => {
           <Typography variant="subtitle">
             Please log in before confirming your order.
           </Typography>
+
+          {/*Form for login*/}
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
             <Grid container direction="column">
               <Grid item style={{ marginTop: '1em' }}>
@@ -220,6 +222,8 @@ const Login = (props) => {
               Sign in
             </Button>
           </form>
+
+          {/*Link to Customer Registration Page*/}
           <Link
             variant="body2"
             href="/customer/registration"
