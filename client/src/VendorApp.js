@@ -1,16 +1,30 @@
+import { useState } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import LoginScreen from './vendor/LoginScreen'
-import Checkin from './vendor/Checkin/Checkin'
-import Order from './vendor/Order/Order'
-import VendorOrders from './vendor/Orders/VendorOrders'
-import OrderHistory from './vendor/History/OrderHistory'
+import { CssBaseline } from '@material-ui/core'
+import LoginScreen from './vendor/Pages/LoginScreen'
+import Checkin from './vendor/Pages/Checkin'
+import VendorOrders from './vendor/Pages/VendorOrders'
 import OrderCard from './vendor/Orders/VendorOrderCard'
 import FulfilledOrderCard from './vendor/Orders/FulfilledOrderCard'
-
+import PastOrderCard from "./vendor/PastOrders/PastOrderCard"
+import VendorPastOrders from "./vendor/Pages/VendorPastOrders"
+import NavBar from "./vendor/Nav"
 
 function VendorApp() {
+  const [auth, setAuth] = useState(null)
+
   return (
     <div>
+      <CssBaseline />
+
+      <NavBar auth={auth} setAuth = {setAuth}></NavBar>
+
+      <Route
+        exact path="/vendor/"
+        component={LoginScreen}
+        render={(props) => <Checkin auth={auth}></Checkin>}
+      />
+
       <Switch>
         <Route exact path="/vendor/checkin" component={Checkin} />
 
@@ -29,13 +43,12 @@ function VendorApp() {
         />
 
         <Route
-          path="/vendor/orders/:id"
-          render={(props) => <Order {...props}></Order>}
+          exact path="/vendor/history"
+          component={VendorPastOrders}
+          render={(props) => <PastOrderCard {...props}></PastOrderCard>
+          }
         />
 
-        <Route exact path="/vendor/history" component={OrderHistory} />
-
-        <Route exact path="/vendor/" component={LoginScreen} />
 
       </Switch>
     </div>

@@ -26,9 +26,9 @@ const CustomerApp = () => {
   return (
     <div className="App">
       <CssBaseline />
-      {/* <Nav></Nav> */}
-      {/* <Nav2></Nav2> */}
+
       <Nav3 order={order} auth={auth}></Nav3>
+      
       <Switch>
         <Route
           exact
@@ -42,6 +42,7 @@ const CustomerApp = () => {
             />
           )}
         />
+
         <Route
           exact
           path="/customer/login"

@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 
+const time_limit = 15 // dummy time limit in minutes
 
 function dictify(list) {
   var out = {}
@@ -31,6 +32,23 @@ function dictify(list) {
     list.forEach((x) => (out[x._id] = x))
   }
   return out
+}
+
+function formatTime(time){
+  var hours = new Date(time).getHours()
+  var minutes = new Date(time).getMinutes()
+
+  if (hours < 10){
+    var temp = hours
+    hours = "0" + temp
+  }
+
+  if (minutes < 10){
+    var temp = minutes
+    minutes = "0" + temp
+  }
+
+  return (hours + ":" + minutes)
 }
 
 
@@ -41,7 +59,6 @@ function stringifyItems(order, itemDict){
   var i;
 
   if (order && Object.keys(itemDict).length !== 0){
-    console.log("stringify")
 
     for (i = 0; i < order.items.length; i++) {
       item_name = itemDict[order.items[i]['item']]['item_name']
@@ -50,14 +67,23 @@ function stringifyItems(order, itemDict){
     }
   }
 
-  console.log(string)
-
   return string
 }
 
-function getDeadline(order){
-  const time_limit = 15// dummy time limit in mins
 
+function checkDiscount(order){
+  const fulfilled_time = new Date(order.fulfilled_time)
+  const modified_time = new Date(order.modified)
+
+  if ((fulfilled_time-modified_time) > time_limit * 60000 ){
+    return true // Apply discount
+  }else{
+    return false // No discount
+  }
+}
+
+
+function getDeadline(order){
   var new_time = new Date(order.modified)
   new_time.setMinutes(new_time.getMinutes() + time_limit );
 
@@ -65,12 +91,12 @@ function getDeadline(order){
 }
 
 function getTimeRemaining(order){
-  const time_limit = 15 *60000// dummy time_limit to be replaced in milliseconds
+  const limit = time_limit *60000// dummy time_limit to be replaced in milliseconds
 
   const current_time = new Date()
   const modified_time = new Date(order.modified)
 
-  var countdown = time_limit - (current_time - modified_time)
+  var countdown = limit - (current_time - modified_time)
 
   const minutes = Math.trunc((countdown / 1000) / 60) // convert milliseconds to minutes
   const seconds = Math.trunc((countdown / 1000) % 60) // convert milliseconds to seconds
@@ -177,11 +203,6 @@ const FulfilledOrderCard = (props) => {
   }
 
 
-  console.log('After dictify')
-  console.log(itemDict)
-  console.log(Object.keys(itemDict).length)
-
-
   return (
     <Card
       className={classes.root}
@@ -204,9 +225,9 @@ const FulfilledOrderCard = (props) => {
               {/*Customer Details*/}
               <Grid item xs={12}>
                 <Typography variant="subtitle2" style={{ marginBottom: "1em" }}>{stringifyItems(order, itemDict)}</Typography>
-                <Typography variant="body2" style={{ marginBottom: "1em" }}>Order Placed : {(new Date(order.modified)).getHours() + ":" + (new Date(order.modified)).getMinutes()}</Typography>
-                <Typography variant="body2" style={{ marginBottom: "1em" }}>Order Fulfilled : {(new Date(order.fulfilled_time)).getHours() + ":" + (new Date(order.fulfilled_time)).getMinutes()}</Typography>
-                <Typography variant="body2" style={{ marginBottom: "1em" }}>Discount : {getTimeRemaining(order)==="0:00" ? "20" : "0"}%</Typography>
+                <Typography variant="body2" style={{ marginBottom: "1em" }}>Order Placed : {formatTime(order.modified)}</Typography>
+                <Typography variant="body2" style={{ marginBottom: "1em" }}>Order Fulfilled : {formatTime(order.fulfilled_time)}</Typography>
+                <Typography variant="body2" style={{ marginBottom: "1em" }}>Discount : {checkDiscount(order) ? "20" : "0"}%</Typography>
 
                 {/*Button to mark order as fulfilled*/}
                 <Button variant="outlined" style={{marginTop: "1em"}} onClick={handlePickUpOrder}>

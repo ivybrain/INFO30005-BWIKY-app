@@ -25,6 +25,8 @@ import axios from 'axios'
 import { API_URL } from '../../constants'
 
 
+const time_limit = 15 // dummy time limit in mins
+
 function dictify(list) {
   var out = {}
   if (list) {
@@ -33,23 +35,54 @@ function dictify(list) {
   return out
 }
 
-function getDeadline(order){
-  const time_limit = 15// dummy time limit in mins
 
+function formatTime(time){
+  var hours = new Date(time).getHours()
+  var minutes = new Date(time).getMinutes()
+
+  if (hours < 10){
+    var temp = hours
+    hours = "0" + temp
+  }
+
+  if (minutes < 10){
+    var temp = minutes
+    minutes = "0" + temp
+  }
+
+  return (hours + ":" + minutes)
+}
+
+
+function checkDiscount(order){
+  const fulfilled_time = new Date(order.fulfilled_time)
+  const modified_time = new Date(order.modified)
+
+  if ((fulfilled_time-modified_time) > time_limit * 60000 ){
+    console.log("Checking Discount")
+    console.log((fulfilled_time-modified_time).toString())
+    return true // Apply discount
+  }else{
+    return false // No discount
+  }
+}
+
+
+function getDeadline(order){
   var new_time = new Date(order.modified)
   new_time.setMinutes(new_time.getMinutes() + time_limit );
 
-  return (new_time.getHours() + ":" + new_time.getMinutes())
+  return (formatTime(new_time))
 }
 
 
 function getTimeRemaining(order){
-  const time_limit = 15 *60000// dummy time_limit to be replaced in milliseconds
+  const limit = time_limit *60000// dummy time_limit to be replaced in milliseconds
 
   const current_time = new Date()
   const modified_time = new Date(order.modified)
 
-  var countdown = time_limit - (current_time - modified_time)
+  var countdown = limit - (current_time - modified_time)
 
   const minutes = Math.trunc((countdown / 1000) / 60) // convert milliseconds to minutes
   const seconds = Math.trunc((countdown / 1000) % 60) // convert milliseconds to seconds
@@ -70,7 +103,6 @@ function stringifyItems(order, itemDict){
   var i;
 
   if (order && Object.keys(itemDict).length !== 0){
-    console.log("stringify")
 
     for (i = 0; i < order.items.length; i++) {
       item_name = itemDict[order.items[i]['item']]['item_name']
@@ -78,8 +110,6 @@ function stringifyItems(order, itemDict){
       string += item_name + " " + "x" + quantity + " "
     }
   }
-
-  console.log(string)
 
   return string
 }
@@ -179,11 +209,6 @@ const OrderCard = (props) => {
   }
 
 
-  console.log('After dictify')
-  console.log(itemDict)
-  console.log(Object.keys(itemDict).length)
-
-
   return (
     <Card
       className={classes.root}
@@ -196,7 +221,7 @@ const OrderCard = (props) => {
         id= {order._id}
       >
         <Typography className={classes.heading}>{getTimeRemaining(order)} mins</Typography>
-        <Typography className={classes.secondaryHeading}>Order #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}   {stringifyItems(order, itemDict)}</Typography>
+        <Typography className={classes.secondaryHeading}>Order #{parseInt(order._id.slice(-4), 16).toString().slice(-4)} : {stringifyItems(order, itemDict)}</Typography>
       </AccordionSummary>
 
       {/*Individual Order Cards to be expanded*/}
@@ -271,7 +296,7 @@ const OrderCard = (props) => {
                 <br />
                 <Typography variant="body2" style={{ marginLeft: "1em" }}>Order Deadline : {getDeadline(order)}</Typography>
                 <br />
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>Discount : {getTimeRemaining(order)==="0:00" ? "20" : "0"}%</Typography>
+                <Typography variant="body2" style={{ marginLeft: "1em" }}>Discount : {checkDiscount(order) ? "20" : "0"}%</Typography>
 
                 {/*Button to mark order as fulfilled*/}
                 <Button variant="outlined" style={{ marginLeft: "1em", marginTop: "1em"}} onClick={handleFulfillOrder}>

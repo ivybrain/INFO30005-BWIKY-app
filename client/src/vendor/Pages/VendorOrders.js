@@ -1,7 +1,6 @@
 import { Container, Grid , Typography} from "@material-ui/core";
-import Header from "../Header";
-import OrderCard from "./VendorOrderCard";
-import FulfilledOrderCard from './FulfilledOrderCard'
+import OrderCard from "../Orders/VendorOrderCard";
+import FulfilledOrderCard from '../Orders/FulfilledOrderCard'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
@@ -35,13 +34,13 @@ const VendorOrders = (props) => {
 
 
     if (auth) {
-      // Get customer id from jwt token
-      const customerId = auth ? jwt.decode(auth)._id : null
+      // Get vendor id from jwt token
+      const vendor_id = auth ? jwt.decode(auth)._id : null
       console.log(auth)
-      console.log('Customer id is %s', customerId)
+      console.log('Vendor id is %s', vendor_id)
 
       // Get all orders of specific customer (using customer id)
-      axios(`${API_URL}/customers/${customerId}/orders`, {
+      axios(`${API_URL}/vendors/${vendor_id}/orders`, {
         headers,
       }).then((res) => {
         setOrders(res.data)
@@ -66,7 +65,6 @@ const VendorOrders = (props) => {
 
   return (
     <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
-      <Header />
       <Container>
         <h1>Order List</h1>
         <Grid
@@ -78,7 +76,7 @@ const VendorOrders = (props) => {
         >
           <Grid item xs={8}>
             <Typography variant="h6" style={{ marginTop: "1em",marginBottom: "1em", marginLeft: "1em" }}>
-              Unfulfilled Orders
+              Outstanding Orders
             </Typography>
             {/*Only display unfulfilled (ongoing) orders. Sort by older orders first*/}
             {orders == null
