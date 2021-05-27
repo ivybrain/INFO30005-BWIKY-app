@@ -16,7 +16,6 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import { makeStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 const checkmark = '\uD83D\uDDF9'
@@ -44,6 +43,42 @@ const useStyles = makeStyles({
   },
 })
 
+
+const time_limit = 15
+
+function formatTime(time){
+  var hours = new Date(time).getHours()
+  var minutes = new Date(time).getMinutes()
+
+  // Format with a 0 in front for single numbers
+  if (hours < 10){
+    var temp = hours
+    hours = "0" + temp
+  }
+
+  if (minutes < 10){
+    var temp = minutes
+    minutes = "0" + temp
+  }
+
+  return (hours + ":" + minutes)
+}
+
+
+function checkDiscount(order){
+  const fulfilled_time = new Date(order.fulfilled_time)
+  const modified_time = new Date(order.modified)
+
+  if ((fulfilled_time-modified_time) > time_limit * 60000 ){
+    console.log("Checking Discount")
+    console.log((fulfilled_time-modified_time).toString())
+    return true // Apply discount
+  }else{
+    return false // No discount
+  }
+}
+
+
 function dictify(list) {
   var out = {}
   if (list) {
@@ -52,11 +87,12 @@ function dictify(list) {
   return out
 }
 
-const OrderCard = (props) => {
-  const { order, auth, removeOrder } = props
-  const [vendor, setVendor] = useState('')
+const PastOrderCard = (props) => {
+  const { order, removeOrder } = props
+  const [customer, setCustomer] = useState('')
   const [menu, setMenu] = useState(null)
   const [open, setOpen] = useState(false)
+  var customer_name = ""
 
   const changeOpen = () => {
     setOpen((open) => !open)
@@ -70,38 +106,19 @@ const OrderCard = (props) => {
 
   const classes = useStyles()
 
-  const handleCancelOrder = (e) => {
-    e.preventDefault()
-    console.log('cancelling order')
-
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      Authorization: `Bearer ${auth}`,
-    }
-
-    axios
-      .delete(`${API_URL}/vendors/${order.vendor}/orders/${order._id}`, {
-        headers,
-      })
-      .then((res) => {
-        console.log('deleted order')
-        removeOrder(order._id)
-        changeOpen()
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }
+  const headers = { 'Access-Control-Allow-Origin': '*' }
 
   useEffect(() => {
-    console.log('getting vendor')
-    const headers = { 'Access-Control-Allow-Origin': '*' }
-
-    axios(`${API_URL}/vendors/${order.vendor}`, {
-      headers,
+    console.log('Getting Customer')
+    axios(`${API_URL}/customers/${order.customer}`, {
+        headers,
     }).then((res) => {
-      console.log(res.data.van_name)
-      setVendor(res.data.van_name)
+        setCustomer(res.data)
+    })
+    // Invalid Customer
+    .catch((err) => {
+        console.error(err)
+        console.log("Invalid customer")
     })
   }, [])
 
@@ -113,8 +130,10 @@ const OrderCard = (props) => {
   }, [])
 
   itemDict = dictify(menu)
-  console.log(itemDict)
-  console.log(Object.keys(itemDict).length)
+
+  if (customer){
+    customer_name = customer.given_name + " " + customer.family_name
+  }
 
   return (
     <>
@@ -143,8 +162,22 @@ const OrderCard = (props) => {
               #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              Bought from {vendor}{' '}
-              {order.modified ? `on ${order.modified.slice(0, 10)}` : null}
+              Ordered by {customer_name}{' '}
+              {order.modified ? `on ${(new Date(order.modified).toString())}` : null}
+            </Typography>
+
+            <Typography variant="body2" color="textSecondary" component="p">
+              Discount {' '}
+              {checkDiscount(order) ? "20" : "0"}% applied
+            </Typography>
+
+            <Typography variant="body2" color="textSecondary" component="p">
+              Fulfilled at {' '}
+              {order.fulfilled ? `${formatTime(order.fulfilled_time)}` : null}
+            </Typography>
+
+            <Typography variant="body2" color="textSecondary" component="p">
+              Picked Up {checkmark}
             </Typography>
 
             {Object.keys(itemDict).length !== 0 &&
@@ -205,101 +238,11 @@ const OrderCard = (props) => {
                   <br />
                 </>
               )}
-
-            <Grid container style={{ justifyContent: 'space-around' }}>
-              <Grid item>
-                {order.fulfilled ? (
-                  <>
-                    <tr
-                      style={{
-                        fontFamily: 'Roboto',
-                        fontSize: 14,
-                        color: 'green',
-                      }}
-                    >
-                      <td>Fulfilled {checkmark}</td>
-                    </tr>
-                  </>
-                ) : (
-                  <tr
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontSize: 14,
-                      color: 'grey',
-                    }}
-                  >
-                    <td>Fulfilled {emptyBox}</td>
-                  </tr>
-                )}
-
-                {order.picked_up ? (
-                  <>
-                    <tr
-                      style={{
-                        fontFamily: 'Roboto',
-                        fontSize: 14,
-                        color: 'green',
-                      }}
-                    >
-                      <td>Picked Up {checkmark}</td>
-                    </tr>
-                  </>
-                ) : (
-                  <tr
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontSize: 14,
-                      color: 'grey',
-                    }}
-                  >
-                    <td>Picked Up {emptyBox}</td>
-                  </tr>
-                )}
-              </Grid>
-
-              {!order.fulfilled ? (
-                <Grid item>
-                  <Button variant="outlined">
-                    <Typography
-                      variant="button"
-                      display="block"
-                      gutterBottom
-                      component={Link}
-                      to={{
-                        pathname: `/customer/modify/${order.vendor}/${order._id}`,
-                        order: order,
-                      }}
-                      style={{ textDecoration: 'none' }}
-                    >
-                      Modify Order
-                    </Typography>
-                  </Button>
-                </Grid>
-              ) : null}
-
-              {!order.fulfilled ? (
-                <Grid item>
-                  <Button variant="outlined" onClick={handleCancelOrder}>
-                    <Typography variant="button" display="block" gutterBottom>
-                      Cancel Order
-                    </Typography>
-                  </Button>
-                </Grid>
-              ) : null}
-
-              <Grid item></Grid>
-            </Grid>
           </CardContent>
         )}
       </Card>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={open}
-        onClose={handleClose}
-        message="Order cancelled!"
-      />
     </>
   )
 }
 
-export default OrderCard
+export default PastOrderCard

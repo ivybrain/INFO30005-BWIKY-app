@@ -5,12 +5,13 @@ import {
   Button,
   Typography,
 } from '@material-ui/core';
-import Logo from './Logo/Logo';
 import { Link } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
-import theme from '../theme';
+import theme from '../../theme';
 
-const LoginScreen = () => {
+const LoginScreen = (props) => {
+  const { auth, setAuth } = props
+  
   return (
     <ThemeProvider theme={theme}>
        <Grid container direction="row" justify="center">
@@ -19,31 +20,21 @@ const LoginScreen = () => {
           style={{
             // margin: "0",
             // position: 'absolute',
-            marginTop: '10%',
+            marginTop: '5%',
           }}
         >
-          <Grid container direction="column" justify="center" spacing={3}>
-            <Grid item>
-              <Grid
-                container
-                direction="row"
-                spacing={0}
-                justify="center"
-                style={{
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  height: '50px',
-                }}
-              >
-                <Grid item xs={1}>
-                  <Logo></Logo>
-                </Grid>
-                <Grid item fontWeight="fontWeightBold">
-                  <Typography variant="h4">SNACKS IN A VAN</Typography>
-                </Grid>
-              </Grid>
-            </Grid>
 
+          <Grid container direction="column" justify="center" spacing={3}>
+
+          <Grid item style={{ margin: 'auto' }}>
+            <Typography variant="h3">Hello!</Typography>
+          </Grid>
+
+          <Grid item style={{ margin: 'auto' }}>
+            <Typography variant="subtitle">
+              Please enter your van name and password to check in.
+            </Typography>
+          </Grid>
             <Grid item style={{ margin: 'auto' }}>
               <TextField variant="outlined" label="Van Name" color='orange'></TextField>
             </Grid>
@@ -63,7 +54,7 @@ const LoginScreen = () => {
             </Grid>
           </Grid>
         </Container>
-      // </Grid>
+      </Grid>
      </ThemeProvider>
   );
 }
