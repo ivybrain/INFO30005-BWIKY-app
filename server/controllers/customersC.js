@@ -15,7 +15,7 @@ exports.find_customer = async (req, res, next) => {
     return;
   }
 
-  if (req.auth_user && customer != req.auth_user) {
+  if (req.auth_user && (customer._id != req.auth_user._id)) {
     return res.sendStatus(401);
   }
 
@@ -24,8 +24,25 @@ exports.find_customer = async (req, res, next) => {
 }
 
 exports.customer_list = async(req, res) => {
-  const customers = await Customer.find({}).select("-password");
-  res.json(customers);
+
+  if (!req.auth_user) {
+    customers = await Customer.find({}).select("-password");
+    return res.json(customers);
+  }
+
+  // If authenticated user is not a custmoer, do not show them customer details
+  if (!req.auth_user.family_name)
+    return res.sendStatus(401);
+
+  try {
+    const customer = await Customer.findById(req.auth_user._id).select("-password");
+    return res.json(customer);
+  }
+  catch(err){
+    return res.sendStatus(401);
+  }
+
+
 }
 
 exports.customer_details = async(req, res) => {
@@ -33,8 +50,10 @@ exports.customer_details = async(req, res) => {
 }
 
 exports.customer_create = async (req, res) => {
-  req.body.password = req.body.hasOwnProperty("password") && req.body.password ?
-                      await auth.create_digest(req.body.password) : null
+  if (!req.body.password)
+    return sendStatus(400);
+
+  req.body.password = await auth.create_digest(req.body.password);
 
   try {
     const output = await Customer.create(req.body);
@@ -49,8 +68,12 @@ exports.customer_create = async (req, res) => {
 
 exports.customer_update = async (req, res) => {
 
-  req.body.password = req.body.hasOwnProperty("password") && req.body.password ?
-                      await auth.create_digest(req.body.password) : undefined
+  if (req.body.hasOwnProperty("password")) {
+    if (req.body.password)
+      req.body.password = await auth.create_digest(req.body.password);
+    else
+      delete req.body.password;
+  }
 
   try {
     const updated = await Customer.findByIdAndUpdate(
@@ -75,12 +98,12 @@ exports.customer_delete = async(req, res) => {
 
 
 exports.customer_orders = async(req, res) => {
-  const orders = await Order.find({ customer: req.customer })
+  const orders = await Order.find({ customer: req.customer , deleted: {$ne: true}})
   res.json(orders);
 }
 
 exports.customer_login = async(req, res) => {
-  if (!(req.body.hasOwnProperty("email")) && req.body.hasOwnProperty("password")) {
+  if (!(req.body.email && req.body.password)) {
     res.sendStatus(400);
     return;
   }

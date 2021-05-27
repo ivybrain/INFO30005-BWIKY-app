@@ -24,10 +24,12 @@ exports.compare_digest = async (password, hash) => {
 }
 
 exports.authenticate_user = function (req, res, next) {
+  console.log("Authenticating");
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
   if (!token) return res.sendStatus(401);
 
-  if (token === process.env.ADMIN_OVERRIDE) return next();
+  if (process.env.hasOwnProperty("ADMIN_OVERRIDE") &&
+      token === process.env.ADMIN_OVERRIDE) return next();
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(401);
