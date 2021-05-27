@@ -85,7 +85,7 @@ const LoginScreen = (props) => {
               Please enter your van name and password to log in.
             </Typography>
           </Grid>
-
+        </Grid>
           <br />
 
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
@@ -116,11 +116,8 @@ const LoginScreen = (props) => {
                   Log In
                 </Button>
             </Grid>
-
           </Grid>
-
-          </form>
-          </Grid>
+        </form>
         </Container>
       </Grid>
      </ThemeProvider>

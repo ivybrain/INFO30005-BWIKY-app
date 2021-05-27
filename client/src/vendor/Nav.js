@@ -195,7 +195,11 @@ const NavBar = (props) => {
                       style={{ width: !xsMatch ? '100%' : '' , textDecoration: 'none'}}
                       onClick={handle_check_out}
                     >
+                      <Button
+                        style={{ textDecoration: 'none' }}
+                      >
                       Check Out
+                      </Button>
                     </Button>
                   </Grid>
 

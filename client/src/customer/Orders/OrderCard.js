@@ -153,6 +153,56 @@ const OrderCard = (props) => {
               {order.modified ? `on ${order.modified.slice(0, 10)}` : null}
             </Typography>
 
+            <Grid item>
+              {order.fulfilled ? (
+                <>
+                  <p
+                    style={{
+                      fontFamily: 'Roboto',
+                      fontSize: 14,
+                      color: 'green',
+                    }}
+                  >
+                    <td>Fulfilled {checkmark}</td>
+                  </p>
+                </>
+              ) : (
+                <p
+                  style={{
+                    fontFamily: 'Roboto',
+                    fontSize: 14,
+                    color: 'grey',
+                  }}
+                >
+                  <td>Fulfilled {emptyBox}</td>
+                </p>
+              )}
+
+              {order.picked_up ? (
+                <>
+                  <p
+                    style={{
+                      fontFamily: 'Roboto',
+                      fontSize: 14,
+                      color: 'green',
+                    }}
+                  >
+                    <td>Picked Up {checkmark}</td>
+                  </p>
+                </>
+              ) : (
+                <p
+                  style={{
+                    fontFamily: 'Roboto',
+                    fontSize: 14,
+                    color: 'grey',
+                  }}
+                >
+                  <td>Picked Up {emptyBox}</td>
+                </p>
+              )}
+            </Grid>
+
             {Object.keys(itemDict).length !== 0 &&
               order.items &&
               Object.keys(order.items).length !== 0 && (
@@ -214,55 +264,6 @@ const OrderCard = (props) => {
               )}
 
             <Grid container style={{ justifyContent: 'space-around' }}>
-              <Grid item>
-                {order.fulfilled ? (
-                  <>
-                    <tr
-                      style={{
-                        fontFamily: 'Roboto',
-                        fontSize: 14,
-                        color: 'green',
-                      }}
-                    >
-                      <td>Fulfilled {checkmark}</td>
-                    </tr>
-                  </>
-                ) : (
-                  <tr
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontSize: 14,
-                      color: 'grey',
-                    }}
-                  >
-                    <td>Fulfilled {emptyBox}</td>
-                  </tr>
-                )}
-
-                {order.picked_up ? (
-                  <>
-                    <tr
-                      style={{
-                        fontFamily: 'Roboto',
-                        fontSize: 14,
-                        color: 'green',
-                      }}
-                    >
-                      <td>Picked Up {checkmark}</td>
-                    </tr>
-                  </>
-                ) : (
-                  <tr
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontSize: 14,
-                      color: 'grey',
-                    }}
-                  >
-                    <td>Picked Up {emptyBox}</td>
-                  </tr>
-                )}
-              </Grid>
 
               {!order.fulfilled ? (
                 <Grid item>
