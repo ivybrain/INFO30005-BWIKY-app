@@ -178,7 +178,7 @@ const ModifyOrder = (props) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={open}
         onClose={handleClose}
-        message="Order modified!"
+        message="Order Modified!"
       />
     </Container>
   )

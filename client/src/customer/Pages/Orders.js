@@ -19,28 +19,34 @@ const MyOrder = (props) => {
   }
 
   useEffect(() => {
-    console.log('getting order history')
     const headers = {
       'Access-Control-Allow-Origin': '*',
       Authorization: `Bearer ${auth}`,
     }
 
-    if (auth) {
-      // Get customer id from jwt token
-      const customerId = auth ? jwt.decode(auth)._id : null
-      console.log(auth)
-      console.log('Customer id is %s', customerId)
+    // Update orders every second
+    const interval = setInterval(() => {
 
-      // Get all orders of specific customer (using customer id)
-      axios(`${API_URL}/customers/${customerId}/orders`, {
-        headers,
-      }).then((res) => {
-        setOrders(res.data)
-      })
-    } else {
-      console.log("no auth yet, so let's wait until they're logged in")
-    }
+      console.log('getting order history')
+
+      if (auth) {
+        // Get customer id from jwt token
+        const customer_id = auth ? jwt.decode(auth)._id : null
+
+        // Get all orders of specific customer (using customer id)
+        axios(`${API_URL}/customers/${customer_id}/orders`, {
+          headers,
+        }).then((res) => {
+          setOrders(res.data)
+        })
+      } else {
+        console.log("no auth yet, so let's wait until they're logged in")
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [auth])
+
 
   if (!auth) {
     return (
