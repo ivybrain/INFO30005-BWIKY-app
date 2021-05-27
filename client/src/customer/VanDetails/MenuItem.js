@@ -8,6 +8,8 @@ import {
   CardActions,
 } from '@material-ui/core'
 
+
+// Snacks on Menu to be Ordered 
 const MenuItem = (props) => {
   const { menuItem, order, setOrder, vendor } = props
 

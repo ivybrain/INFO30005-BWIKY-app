@@ -12,11 +12,15 @@ import {
   Grid,
   Snackbar,
 } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { API_URL } from '../../constants'
-import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
+
+import { API_URL } from '../../constants'
+import { dictify ,
+  formatDateTime ,
+  checkModifyWindow} from '../../HelperFunctions'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 const checkmark = '\uD83D\uDDF9'
@@ -44,14 +48,8 @@ const useStyles = makeStyles({
   },
 })
 
-function dictify(list) {
-  var out = {}
-  if (list) {
-    list.forEach((x) => (out[x._id] = x))
-  }
-  return out
-}
 
+// Individual Order for Customer
 const OrderCard = (props) => {
   const { order, auth, removeOrder } = props
   const [vendor, setVendor] = useState('')
@@ -150,7 +148,7 @@ const OrderCard = (props) => {
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
               Bought from {vendor}{' '}
-              {order.modified ? `on ${order.modified.slice(0, 10)}` : null}
+              {order.modified ? `on ${formatDateTime(order.modified)}` : null}
             </Typography>
 
             <Grid item>
@@ -265,7 +263,8 @@ const OrderCard = (props) => {
 
             <Grid container style={{ justifyContent: 'space-around' }}>
 
-              {!order.fulfilled ? (
+            {/*Customer can only change or cancel order if order is unfulfilled AND it is within the time limit*/}
+              {!order.fulfilled && checkModifyWindow(order.modified) ? (
                 <Grid item>
                   <Button variant="outlined">
                     <Typography
@@ -285,7 +284,7 @@ const OrderCard = (props) => {
                 </Grid>
               ) : null}
 
-              {!order.fulfilled ? (
+              {!order.fulfilled && checkModifyWindow(order.modified) ? (
                 <Grid item>
                   <Button variant="outlined" onClick={handleCancelOrder}>
                     <Typography variant="button" display="block" gutterBottom>

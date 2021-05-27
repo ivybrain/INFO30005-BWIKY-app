@@ -9,10 +9,12 @@ import {
   TableRow,
   Button,
   Grid,
+  Snackbar
 } from '@material-ui/core'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import { Link, Redirect, useHistory } from 'react-router-dom'
+import { useState } from 'react'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 
@@ -21,16 +23,44 @@ const audFormatter = new Intl.NumberFormat('en-AU', {
   currency: 'AUD',
 })
 
+
+
 const MyOrder = (props) => {
   const { order, setOrder, auth } = props
-
   const history = useHistory()
+  const [confirmed, setConfirmed] = useState(false)
+  const [cancelled, setCancelled] = useState(false)
+
+  // To handle pop up
+  const openConfirmed = () => {
+    console.log(confirmed)
+    setConfirmed((confirmed) => !confirmed)
+    console.log("Confirm order pop up")
+    console.log(confirmed)
+  }
+
+  const openCancelled = () => {
+    setCancelled((cancelled) => !cancelled)
+    console.log("Cancel order pop up")
+  }
+
+  const handleConfirmClose = () => {
+    setConfirmed(false)
+  }
+
+  const handleCancelClose = () => {
+    setCancelled(false)
+  }
+
 
   const handleCancelOrder = (e) => {
     e.preventDefault()
     setOrder({ items: {}, confirmed: false })
     console.log('cleared order')
+
+    openCancelled() // Pop up
   }
+
 
   const handleConfirmOrder = (e) => {
     e.preventDefault()
@@ -43,6 +73,7 @@ const MyOrder = (props) => {
     }
 
     setOrder({ ...order, confirmed: true })
+    openConfirmed() // Pop up
 
     const headers = {
       'Access-Control-Allow-Origin': '*',
@@ -69,8 +100,11 @@ const MyOrder = (props) => {
         console.error(err)
       })
   }
+
+
   return (
     <Container>
+
       <Typography variant="h2">My Order</Typography>
       {order && order.items && Object.keys(order.items).length !== 0 ? (
         <>
@@ -126,6 +160,14 @@ const MyOrder = (props) => {
                 </Typography>
               </Button>
             </Grid>
+
+            <Snackbar
+              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              open={cancelled}
+              onClose={handleCancelClose}
+              message="Order cancelled!"
+            />
+
             <Grid item>
               <Button variant="outlined">
                 <Button
@@ -137,6 +179,7 @@ const MyOrder = (props) => {
                 </Button>
               </Button>
             </Grid>
+
             <Grid item>
               <Button variant="outlined" onClick={handleConfirmOrder}>
                 <Typography variant="button" display="block" gutterBottom>
@@ -145,6 +188,14 @@ const MyOrder = (props) => {
               </Button>
               {order.confirmed ? <Redirect to="/customer/orders" /> : null}
             </Grid>
+
+            <Snackbar
+              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              open={confirmed}
+              onClose={handleConfirmClose}
+              message="Order confirmed!"
+            />
+
           </Grid>
         </>
       ) : (

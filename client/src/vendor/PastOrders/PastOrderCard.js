@@ -12,10 +12,18 @@ import {
   Grid,
   Snackbar,
 } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+
 import { API_URL } from '../../constants'
-import { makeStyles } from '@material-ui/core/styles'
+import {dictify,
+  formatTime,
+  checkDiscount,
+  formatDateTime
+} from '../../HelperFunctions'
+
 
 const columns = ['Item', 'Qty', 'Subtotal']
 const checkmark = '\uD83D\uDDF9'
@@ -44,49 +52,7 @@ const useStyles = makeStyles({
 })
 
 
-const time_limit = 15
-
-function formatTime(time){
-  var hours = new Date(time).getHours()
-  var minutes = new Date(time).getMinutes()
-
-  // Format with a 0 in front for single numbers
-  if (hours < 10){
-    var temp = hours
-    hours = "0" + temp
-  }
-
-  if (minutes < 10){
-    var temp = minutes
-    minutes = "0" + temp
-  }
-
-  return (hours + ":" + minutes)
-}
-
-
-function checkDiscount(order){
-  const fulfilled_time = new Date(order.fulfilled_time)
-  const modified_time = new Date(order.modified)
-
-  if ((fulfilled_time-modified_time) > time_limit * 60000 ){
-    console.log("Checking Discount")
-    console.log((fulfilled_time-modified_time).toString())
-    return true // Apply discount
-  }else{
-    return false // No discount
-  }
-}
-
-
-function dictify(list) {
-  var out = {}
-  if (list) {
-    list.forEach((x) => (out[x._id] = x))
-  }
-  return out
-}
-
+// Fulfilled and Picked Up Orders for Vendor
 const PastOrderCard = (props) => {
   const { order , auth, setAuth } = props
   const [customer, setCustomer] = useState('')
@@ -167,7 +133,7 @@ const PastOrderCard = (props) => {
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
               Ordered by {customer_name}{' '}
-              {order.modified ? `on ${(new Date(order.modified).toString())}` : null}
+              {order.modified ? `on ${formatDateTime(order.modified)}` : null}
             </Typography>
 
             <Typography variant="body2" color="textSecondary" component="p">

@@ -15,99 +15,22 @@ import {
   AccordionDetails,
   AccordionSummary,
   Card,
-  Button
+  Button,
+  Snackbar
 } from "@material-ui/core";
 
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+
 import { API_URL } from '../../constants'
-
-const time_limit = 15 // dummy time limit in minutes
-
-function dictify(list) {
-  var out = {}
-  if (list) {
-    list.forEach((x) => (out[x._id] = x))
-  }
-  return out
-}
-
-function formatTime(time){
-  var hours = new Date(time).getHours()
-  var minutes = new Date(time).getMinutes()
-
-  if (hours < 10){
-    var temp = hours
-    hours = "0" + temp
-  }
-
-  if (minutes < 10){
-    var temp = minutes
-    minutes = "0" + temp
-  }
-
-  return (hours + ":" + minutes)
-}
-
-
-function stringifyItems(order, itemDict){
-  var string = ""
-  var item_name = ""
-  var quantity = 0
-  var i;
-
-  if (order && Object.keys(itemDict).length !== 0){
-
-    for (i = 0; i < order.items.length; i++) {
-      item_name = itemDict[order.items[i]['item']]['item_name']
-      quantity = order.items[i].quantity
-      string += item_name + " " + "x" + quantity + " "
-    }
-  }
-
-  return string
-}
-
-
-function checkDiscount(order){
-  const fulfilled_time = new Date(order.fulfilled_time)
-  const modified_time = new Date(order.modified)
-
-  if ((fulfilled_time-modified_time) > time_limit * 60000 ){
-    return true // Apply discount
-  }else{
-    return false // No discount
-  }
-}
-
-
-function getDeadline(order){
-  var new_time = new Date(order.modified)
-  new_time.setMinutes(new_time.getMinutes() + time_limit );
-
-  return (new_time.getHours() + ":" + new_time.getMinutes())
-}
-
-function getTimeRemaining(order){
-  const limit = time_limit *60000// dummy time_limit to be replaced in milliseconds
-
-  const current_time = new Date()
-  const modified_time = new Date(order.modified)
-
-  var countdown = limit - (current_time - modified_time)
-
-  const minutes = Math.trunc((countdown / 1000) / 60) // convert milliseconds to minutes
-  const seconds = Math.trunc((countdown / 1000) % 60) // convert milliseconds to seconds
-
-  if (countdown > 0){
-    return (minutes.toString() + ":" + seconds.toString())
-  }else{
-    return("0:00")
-  }
-
-}
+import {dictify,
+  formatTime,
+  checkDiscount,
+  getDeadline,
+  getTimeRemaining,
+  stringifyItems} from '../../HelperFunctions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -129,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+// Orders which are fulfilled and waiting to be picked up
 const FulfilledOrderCard = (props) => {
   const classes = useStyles();
   const [menu, setMenu] = useState(null)
@@ -140,6 +64,17 @@ const FulfilledOrderCard = (props) => {
   const { order , auth, setAuth } = props
   var itemDict = {}
   var customer_name = ""
+
+  const [open, setOpen] = useState(false)
+
+  // Handle Pop Up
+  const changeOpen = () => {
+    setOpen((open) => !open)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -161,6 +96,8 @@ const FulfilledOrderCard = (props) => {
     const data = {
       picked_up: true
     }
+
+    changeOpen()
 
     axios({
       url: `${API_URL}/vendors/${order.vendor}/orders/${order._id}`,
@@ -201,7 +138,7 @@ const FulfilledOrderCard = (props) => {
       setMenu(res.data)
     })
   }, [])
-  
+
 
   itemDict = dictify(menu)
 
@@ -242,6 +179,14 @@ const FulfilledOrderCard = (props) => {
                     Picked Up
                   </Typography>
                 </Button>
+
+                <Snackbar
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  open={open}
+                  onClose={handleClose}
+                  message="Order marked as picked up!"
+                />
+
               </Grid>
         </Container>
       </div>

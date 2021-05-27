@@ -4,21 +4,38 @@ import {
   Grid,
   TextField,
   Typography,
+  Snackbar,
 } from '@material-ui/core'
-
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import { useHistory } from 'react-router'
 import { API_URL } from '../../constants'
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import Link from '@material-ui/core/Link';
 
 
 const Login = (props) => {
   const { auth, setAuth } = props
-
+  const [open, setOpen] = useState(false)
+  const [invalid, setInvalid] = useState(false)
   const history = useHistory()
+
+
+  // To handle pop up
+  const changeOpen = () => {
+    setOpen((open) => !open)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    setInvalid(false)
+  }
+
+  const changeOpenInvalid = () => {
+    setInvalid((invalid) => !invalid)
+  }
+
 
   const handle_log_out = (event) => {
     event.preventDefault()
@@ -79,31 +96,39 @@ const Login = (props) => {
      'Authorization': `Bearer ${auth}`,
    }
 
-    const data = {
-      given_name: event.target.given_name.value,
-      family_name: event.target.family_name.value,
-      email: event.target.email.value,
-      password: event.target.password.value,
-    }
+   if (event.target.password.value != ""){
+     const data = {
+       given_name: event.target.given_name.value,
+       family_name: event.target.family_name.value,
+       email: event.target.email.value,
+       password: event.target.password.value,
+     }
 
-    // PATCH modified customer details
-    axios({
-      url: `${API_URL}/customers/${jwt.decode(auth)._id}`,
-      method: 'PATCH',
-      data: data,
-      headers: headers,
-    })
+     // PATCH modified customer details
+     axios({
+       url: `${API_URL}/customers/${jwt.decode(auth)._id}`,
+       method: 'PATCH',
+       data: data,
+       headers: headers,
+     })
 
-    .then((res) => {
-      if (res.data){
-        console.log("Change details for customer %s", jwt.decode(auth)._id)
-        console.log(data)
-      }
-    })
+     .then((res) => {
+       if (res.data){
+         console.log("Change details for customer %s", jwt.decode(auth)._id)
+         console.log(data)
 
-    .catch((err) => {
-      console.error(err)
-    })
+         changeOpen() // Pop up notification
+       }
+     })
+
+     .catch((err) => {
+       console.error(err)
+     })
+   }else{
+     console.log("Requires password!")
+     changeOpenInvalid() // Pop up asks for password
+   }
+
 
   }
 
@@ -182,6 +207,14 @@ const Login = (props) => {
                 >
                   Change Profile Details
                 </Button>
+
+                <Snackbar
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  open={open}
+                  onClose={handleClose}
+                  message="Changed Profile Details!"
+                />
+
               </form>
             </>
       ) : (
@@ -232,6 +265,14 @@ const Login = (props) => {
           </Link>
         </>
       )}
+
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={invalid}
+        onClose={handleClose}
+        message="Please input a password! (You can input a new password)."
+      />
+
     </Container>
   )
 }
