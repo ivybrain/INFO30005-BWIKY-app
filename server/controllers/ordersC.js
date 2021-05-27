@@ -105,6 +105,21 @@ exports.order_update = async (req, res) => {
       req.body.modified = new Date();
     }
 
+    if (req.body.rating) {
+        const rt_obj = req.vendor.rating;
+        const new_rating = req.body.rating;
+      if (req.order.rated) {
+        req.body.rating = {}
+        req.body.rating.rating = (rt_obj.rating * rt_obj.count - req.order.rating + new_rating) / rating.count
+      } else {
+        req.body.rated = true;
+        req.body.rating = {};
+        req.body.rating.rating = (rt_obj.rating * rt_ibj.count + new_rating) / (rating.count + 1);
+        req.body.rating.count = rt_obj.count + 1;
+
+      }
+    }
+
     const updated = await Order.findByIdAndUpdate(
       req.order,
       { $set: req.body },

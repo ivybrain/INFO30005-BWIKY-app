@@ -12,6 +12,7 @@ const order = new Schema({
   picked_up: {type: Boolean, default: false},
   picked_up_time: Date,
   rating: Number,
+  rated: {type: Boolean, default: false},
   items: [
     {
       item: ObjectId,
