@@ -16,7 +16,7 @@ exports.find_vendor = async (req, res, next) => {
     return;
   }
 
-  req.vendor = vendor.toObject();
+  req.vendor = req.method=="PATCH" && req.body.rating ? vendor.toObject() : vendor;
   return next();
 }
 
@@ -172,7 +172,6 @@ exports.update_rating = async(req) => {
     const new_rating = req.body.rating;
     var new_obj = { rating: {} };
     if (req.order.rated) {
-      console.log(rt_obj.rating,  rt_obj.count, req.order.rating, new_rating)
       new_obj.rating.rating = (rt_obj.rating * rt_obj.count - req.order.rating + new_rating) / (rt_obj.count?rt_obj.count:1);
       new_obj.rating.count = rt_obj.count;
     } else {
