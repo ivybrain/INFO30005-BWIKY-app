@@ -158,6 +158,7 @@ const OrderCard = (props) => {
   const handleFulfillOrder = (event) => {
     event.preventDefault()
     console.log('Fulfilling order')
+
     history.push('/vendor/orders')
 
     const headers = {

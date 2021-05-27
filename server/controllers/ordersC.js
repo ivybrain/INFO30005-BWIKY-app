@@ -67,7 +67,7 @@ exports.order_details = async (req, res) => {
 exports.order_create = async (req, res) => {
   req.body.modified = new Date();
 
-  if (!req.user.given_name)
+  if (!req.auth_user.given_name)
     return res.sendStatus(401);
 
   if (req.auth_user) {

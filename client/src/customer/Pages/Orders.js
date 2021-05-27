@@ -22,7 +22,7 @@ const MyOrder = (props) => {
     console.log('getting order history')
     const headers = {
       'Access-Control-Allow-Origin': '*',
-      'Authorization': `Bearer ${auth}`,
+      Authorization: `Bearer ${auth}`,
     }
 
     if (auth) {
