@@ -89,7 +89,11 @@ exports.order_create = async (req, res) => {
 // Can be used to mark as fulfilled, add more items, etc
 exports.order_update = async (req, res) => {
   try {
-    req.body.modified = new Date();
+    if (req.body.items)
+      req.body.modified = new Date();
+    else
+      delete req.body.modified
+
     if (req.body.fulfilled) {
       req.body.fulfilled_time = new Date();
     }
