@@ -88,7 +88,7 @@ function dictify(list) {
 }
 
 const PastOrderCard = (props) => {
-  const { order, removeOrder } = props
+  const { order , auth, setAuth } = props
   const [customer, setCustomer] = useState('')
   const [menu, setMenu] = useState(null)
   const [open, setOpen] = useState(false)
@@ -106,10 +106,14 @@ const PastOrderCard = (props) => {
 
   const classes = useStyles()
 
-  const headers = { 'Access-Control-Allow-Origin': '*' }
-
   useEffect(() => {
     console.log('Getting Customer')
+
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': `Bearer ${auth}`,
+    }
+
     axios(`${API_URL}/customers/${order.customer}`, {
         headers,
     }).then((res) => {

@@ -140,26 +140,29 @@ const OrderCard = (props) => {
   const [menu, setMenu] = useState(null)
   const [customer, setCustomer] = useState(null)
   const [expanded, setExpanded] = React.useState(false);
-  const { order } = props
-  var itemDict = {}
-  var customer_name = ""
   const columns = ["Item", "Qty", "Status"];
   const history = useHistory()
 
+  const { order , auth, setAuth } = props
+
+  var itemDict = {}
+  var customer_name = ""
+
+  // Accordian Handler
   const handleChange = (panel) => (event, isExpanded) => {
+    // Expands panel when clicked
     setExpanded(isExpanded ? panel : false);
   }
 
+
   const handleFulfillOrder = (event) => {
     event.preventDefault()
-
     console.log('Fulfilling order')
-
     history.push('/vendor/orders')
 
     const headers = {
       'Access-Control-Allow-Origin': '*',
-      'Authorization': `Bearer totessecure`, // override for testing
+      'Authorization': `Bearer ${auth}`,
     }
 
     const data = {
@@ -178,15 +181,21 @@ const OrderCard = (props) => {
 
   }
 
-  const headers = { 'Access-Control-Allow-Origin': '*' }
 
   useEffect(() => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${auth}`,
+    }
+
     console.log('Getting Customer Name')
+
     axios(`${API_URL}/customers/${order.customer}`, {
         headers,
     }).then((res) => {
         setCustomer(res.data)
     })
+
     // Invalid Customer
     .catch((err) => {
         console.error(err)
@@ -194,7 +203,10 @@ const OrderCard = (props) => {
     })
   }, [])
 
+
   useEffect(() => {
+    const headers = { 'Access-Control-Allow-Origin': '*' }
+
     console.log('getting items')
 
     axios(`${API_URL}/items`).then((res) => {

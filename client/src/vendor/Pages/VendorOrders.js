@@ -3,35 +3,22 @@ import OrderCard from "../Orders/VendorOrderCard";
 import FulfilledOrderCard from '../Orders/FulfilledOrderCard'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
 import { API_URL } from '../../constants'
 
 
 
 const VendorOrders = (props) => {
   const [orders, setOrders] = useState(null)
-
-  const vendor_id = '607710190959c969a0325848' // Dummy customer data (to be replaced with proper auth)
+  const { auth, setAuth } = props
 
   useEffect(() => {
     console.log('Getting vendor orders')
-    const headers = { 'Access-Control-Allow-Origin': '*' }
 
-    // Get all current and previous orders of specific vendor (using vendor id)
-    axios(`${API_URL}/vendors/${vendor_id}/orders`, {
-      headers,
-    }).then((res) => {
-      setOrders(res.data)
-    })
-  })
-
-  // Get jwt token
-  //const { auth } = props
-
-  /*
-  useEffect(() => {
-    console.log('Getting vendor orders')
-    const headers = { 'Access-Control-Allow-Origin': '*' }
-
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${auth}`,
+    }
 
     if (auth) {
       // Get vendor id from jwt token
@@ -60,7 +47,6 @@ const VendorOrders = (props) => {
       </Container>
     )
   }
-  */
 
 
   return (
@@ -89,7 +75,7 @@ const VendorOrders = (props) => {
                   .map((order) => (
                     <Grid container direction="column" spacing={2}>
                       <Grid item>
-                        <OrderCard order={order} />
+                        <OrderCard order={order} auth={auth} setAuth={setAuth} />
                       </Grid>
                     </Grid>
 
@@ -114,7 +100,7 @@ const VendorOrders = (props) => {
                 .map((order) => (
                   <Grid container direction="column" spacing={2}>
                     <Grid item>
-                      <FulfilledOrderCard order={order} />
+                      <FulfilledOrderCard order={order} auth={auth} setAuth={setAuth} />
                     </Grid>
                   </Grid>
 
