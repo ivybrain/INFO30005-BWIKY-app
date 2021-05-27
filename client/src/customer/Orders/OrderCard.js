@@ -120,9 +120,6 @@ const OrderCard = (props) => {
   itemDict = dictify(menu)
   console.log(itemDict)
   console.log(Object.keys(itemDict).length)
-  if (Object.keys(itemDict).length!=0){
-    console.log(itemDict[order.items[0]['item']])
-  }
 
 
   return (

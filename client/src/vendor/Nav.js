@@ -11,6 +11,11 @@ import {
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import jwt from 'jsonwebtoken'
+import { API_URL } from '../constants'
+import axios from 'axios'
+import { useHistory } from 'react-router'
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,18 +32,53 @@ const useStyles = makeStyles((theme) => ({
 
 
 const NavBar = (props) => {
-  //const { auth, setAuth } = props
-  const auth = 'something'
+  const { auth, setAuth } = props
   const classes = useStyles()
 
   const xsMatch = useMediaQuery('(min-width:410px)')
   const smMatch = useMediaQuery('(min-width:600px)')
   const sevenFiftyMatch = useMediaQuery('(min-width:750px)')
 
+  const history = useHistory()
+
+
   const handle_check_out = (event) => {
     event.preventDefault()
-    //setAuth(null)
     console.log('Checked Out')
+    event.preventDefault()
+
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${auth}`,
+    }
+
+    const data = {
+      ready: false,
+    }
+
+    axios({
+      url: `${API_URL}/vendors/${jwt.decode(auth)._id}`,
+      method: 'PATCH',
+      data: data,
+      headers: headers,
+    })
+
+    .then((res) => {
+      if (res.data){
+        console.log("Checking Out of Location for vendor %s", jwt.decode(auth)._id)
+        console.log(data)
+        // Redirect to orders
+        history.push('/vendor')
+      }
+    })
+
+    .catch((err) => {
+      console.error(err)
+    })
+
+    setAuth(null)
+
   }
 
   return (
@@ -152,16 +192,10 @@ const NavBar = (props) => {
                       variant="outlined"
                       className={classes.text}
                       size={!smMatch ? 'small' : 'medium'}
-                      style={{ width: !xsMatch ? '100%' : '' }}
+                      style={{ width: !xsMatch ? '100%' : '' , textDecoration: 'none'}}
                       onClick={handle_check_out}
                     >
-                      <Button
-                        component={Link}
-                        to="/vendor/checkin"
-                        style={{ textDecoration: 'none' }}
-                      >
-                        Check Out
-                      </Button>
+                      Check Out
                     </Button>
                   </Grid>
 
