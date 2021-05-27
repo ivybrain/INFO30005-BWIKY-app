@@ -16,7 +16,7 @@ exports.find_vendor = async (req, res, next) => {
     return;
   }
 
-  req.vendor = vendor;
+  req.vendor = vendor.toObject();
   return next();
 }
 
@@ -164,4 +164,29 @@ exports.vendor_delete = async (req, res) => {
 
   res.status(200)
   res.json(deletedVendor)
+}
+
+exports.update_rating = async(req) => {
+  if (req.body.rating) {
+    const rt_obj = req.vendor.rating.count ? req.vendor.rating : {rating: 0, count: 0};
+    const new_rating = req.body.rating;
+    var new_obj = { rating: {} };
+    if (req.order.rated) {
+      console.log(rt_obj.rating,  rt_obj.count, req.order.rating, new_rating)
+      new_obj.rating.rating = (rt_obj.rating * rt_obj.count - req.order.rating + new_rating) / (rt_obj.count?rt_obj.count:1);
+      new_obj.rating.count = rt_obj.count;
+    } else {
+      new_obj.rating.rating = (rt_obj.rating * rt_obj.count + new_rating) / (rt_obj.count + 1);
+      new_obj.rating.count = rt_obj.count + 1;
+    }
+    console.log(new_obj);
+    try {
+      const updated = await Vendor.findByIdAndUpdate(
+        req.vendor._id,
+        { $set: new_obj},
+        { new: true },
+      )
+    } catch(err) {}
+
+  }
 }

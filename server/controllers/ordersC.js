@@ -1,6 +1,8 @@
 require('../models/Vendor')
 require('../models/Order')
+
 const mongoose = require('mongoose')
+const vendorsC = require('../controllers/vendorsC');
 
 const Vendor = mongoose.model('Vendor')
 const Order = mongoose.model('Order')
@@ -105,19 +107,11 @@ exports.order_update = async (req, res) => {
       req.body.modified = new Date();
     }
 
-    if (req.body.rating) {
-        const rt_obj = req.vendor.rating;
-        const new_rating = req.body.rating;
-      if (req.order.rated) {
-        req.body.rating = {}
-        req.body.rating.rating = (rt_obj.rating * rt_obj.count - req.order.rating + new_rating) / rating.count
-      } else {
+    if (req.body.rating && req.body.rating >= 1 && req.body.rating <= 5) {
+        vendorsC.update_rating(req);
         req.body.rated = true;
-        req.body.rating = {};
-        req.body.rating.rating = (rt_obj.rating * rt_ibj.count + new_rating) / (rating.count + 1);
-        req.body.rating.count = rt_obj.count + 1;
-
-      }
+    } else {
+      if (req.body.rating) delete req.body.rating
     }
 
     const updated = await Order.findByIdAndUpdate(

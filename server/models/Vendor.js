@@ -17,12 +17,12 @@ const vendor = new Schema({
   // NOTE: Do secure auth stuff
   password: {type: String, required: true},
   rating: {
-    type: { rating: Number, count: Number }//,
-    //get: (x) => x ? x['rating'] : undefined
+    type: { rating: Number, count: Number },
+    get: (x) => x ? x['rating'] : undefined
   },
 })
 
-vendor.set('toObject', { getters: true });
+vendor.set('toObject', { getters: false });
 vendor.set('toJSON', { getters: true });
 
 vendor.plugin(beautify_unique)
