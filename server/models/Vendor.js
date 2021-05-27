@@ -15,7 +15,7 @@ const vendor = new Schema({
   ready: { type: Boolean, required: false },
 
   // NOTE: Do secure auth stuff
-  password: String,
+  password: {type: String, required: true},
   rating: {
     type: { rating: Number, count: Number },
     get: (x) => x['rating'],

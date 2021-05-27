@@ -95,7 +95,10 @@ const OrderCard = (props) => {
 
   useEffect(() => {
     console.log('getting vendor')
-    const headers = { 'Access-Control-Allow-Origin': '*' }
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': `Bearer ${auth}`,
+    }
 
     axios(`${API_URL}/vendors/${order.vendor}`, {
       headers,
@@ -105,6 +108,7 @@ const OrderCard = (props) => {
     })
   }, [])
 
+
   useEffect(() => {
     console.log('getting items')
     axios(`${API_URL}/items`).then((res) => {
@@ -112,9 +116,11 @@ const OrderCard = (props) => {
     })
   }, [])
 
+
   itemDict = dictify(menu)
   console.log(itemDict)
   console.log(Object.keys(itemDict).length)
+
 
   return (
     <>
@@ -123,7 +129,7 @@ const OrderCard = (props) => {
         variant="outlined"
         style={{ marginTop: '20px' }}
       >
-        {itemDict.length !== 0 && (
+        {Object.keys(itemDict).length !== 0 && (
           <CardContent>
             <Typography
               gutterBottom
@@ -150,6 +156,7 @@ const OrderCard = (props) => {
             {Object.keys(itemDict).length !== 0 &&
               order.items &&
               Object.keys(order.items).length !== 0 && (
+
                 <>
                   <TableContainer>
                     <Table>

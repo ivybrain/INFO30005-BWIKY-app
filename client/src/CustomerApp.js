@@ -29,7 +29,7 @@ const CustomerApp = () => {
       <CssBaseline />
 
       <Nav3 order={order} auth={auth}></Nav3>
-      
+
       <Switch>
         <Route
           exact
@@ -49,11 +49,13 @@ const CustomerApp = () => {
           path="/customer/login"
           render={() => <Login auth={auth} setAuth={setAuth} />}
         />
+
         <Route
           exact
           path="/customer/registration"
           render={() => <Registration auth={auth} />}
         />
+
         <Route
           exact
           path="/customer/myorder"
@@ -61,11 +63,13 @@ const CustomerApp = () => {
             <MyOrder auth={auth} order={order} setOrder={setOrder} />
           )}
         />
+
         <Route
           exact
           path="/customer/orders"
           render={() => <Orders auth={auth} />}
         />
+
         <Route
           exact
           path="/customer/modify/:vendor_id/:order_id"
@@ -73,6 +77,7 @@ const CustomerApp = () => {
             <ModifyOrder {...props} auth={auth} menu={menu} setMenu={setMenu} />
           )}
         />
+        
         <Route
           exact
           path="/customer/van/:id"

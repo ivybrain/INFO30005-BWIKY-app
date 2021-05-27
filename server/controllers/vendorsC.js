@@ -3,16 +3,28 @@ const mongoose = require('mongoose')
 
 const Vendor = mongoose.model('Vendor')
 
+const auth = require('../auth');
+
 // Middleware to set req.vendor for any request at /vendor/:vendor_id/*
 exports.find_vendor = async (req, res, next) => {
 
+  console.log("Finding vendor");
   const vendor = await Vendor.findById(req.params['vendor_id']);
   if (!vendor) {
     res.status(404);
     res.send("Vendor not found");
     return;
   }
+
   req.vendor = vendor;
+  return next();
+}
+
+exports.authenticate_vendor = async(req, res, next) => {
+
+  if (req.auth_user && req.auth_user._id != req.vendor._id) {
+    return res.sendStatus(401);
+  }
   return next();
 }
 
@@ -72,6 +84,7 @@ exports.vendor_list = async (req, res) => {
     res.json(vendors.slice(0, req.query.limit));
     return;
   }
+  //vendors.forEach(x => x.password = undefined);
   res.json(vendors);
 }
 
@@ -84,8 +97,13 @@ exports.vendor_details = async (req, res) => {
 // POST /vendors
 // Creates one or more vendors
 exports.vendor_create = async (req, res) => {
+  if (!req.body.password)
+    return sendStatus(400);
+  req.body.password = await auth.create_digest(req.body.password);
   try {
     const outputs = await Vendor.create(req.body)
+    Array.isArray(outputs) ? outputs = outputs.map(x => x.password = undefined)
+                          : outputs.password = undefined;
     res.status(201)
     res.json(outputs)
   } catch (err) {
@@ -98,18 +116,45 @@ exports.vendor_create = async (req, res) => {
 // PATCH /vendors/:vendor_id
 // Update vendor's status
 exports.vendor_update = async (req, res) => {
+
+  if (req.body.hasOwnProperty("password")) {
+    if (req.body.password)
+      req.body.password = await auth.create_digest(req.body.password);
+    else
+      delete req.body.password;
+  }
+
   try {
-    const updatedVendor = await Vendor.findByIdAndUpdate(
+    const updated = await Vendor.findByIdAndUpdate(
       req.vendor,
       { $set: req.body },
       { new: true },
     )
+    updated.password = undefined;
     res.status(200);
-    res.json(updatedVendor);
+    res.json(updated);
 
   } catch (err) {
     res.status(500)
   }
+}
+
+exports.vendor_login = async(req, res) => {
+  if (!(req.body.van_name && req.body.password)) {
+    res.sendStatus(400);
+    return;
+  }
+  var vendor = await Vendor.findOne({"van_name":req.body.van_name});
+  if (!vendor) return res.sendStatus(403);
+
+  if (await auth.compare_digest(req.body.password, vendor.password)) {
+    vendor.password = undefined
+    const token = auth.generate_token(vendor.toObject());
+    res.json(token);
+  } else {
+    res.sendStatus(403);
+  }
+
 }
 
 // DELETE /vendors/:vendor_id
@@ -119,10 +164,4 @@ exports.vendor_delete = async (req, res) => {
 
   res.status(200)
   res.json(deletedVendor)
-}
-
-// DELETE /vendors
-exports.vendor_delete_all = async (req, res) => {
-  await Vendor.deleteMany({})
-  res.status(200).send()
 }

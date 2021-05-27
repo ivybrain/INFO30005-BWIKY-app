@@ -3,36 +3,23 @@ import PastOrderCard from "../PastOrders/PastOrderCard";
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
+import jwt from 'jsonwebtoken'
 
 
 
+// Vendor's Order History Page (Fulfilled and Picked Up)
 const VendorPastOrders = (props) => {
   const [orders, setOrders] = useState(null)
+  const { auth , setAuth} = props
 
-  // Get jwt token
-  //const { auth } = props
-  const vendor_id = '607710190959c969a0325848' // Dummy customer data (to be replaced with proper auth)
 
   useEffect(() => {
     console.log('Getting vendor orders')
-    const headers = { 'Access-Control-Allow-Origin': '*' }
 
-    // Get all current and previous orders of specific vendor (using vendor id)
-    axios(`${API_URL}/vendors/${vendor_id}/orders`, {
-      headers,
-    }).then((res) => {
-      setOrders(res.data)
-    })
-  })
-
-  // Get jwt token
-  //const { auth } = props
-
-  /*
-  useEffect(() => {
-    console.log('Getting vendor orders')
-    const headers = { 'Access-Control-Allow-Origin': '*' }
-
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${auth}`,
+    }
 
     if (auth) {
       // Get vendor id from jwt token
@@ -61,7 +48,6 @@ const VendorPastOrders = (props) => {
       </Container>
     )
   }
-  */
 
   return (
     <Container>
@@ -74,7 +60,7 @@ const VendorPastOrders = (props) => {
             .sort((a, b) => -(new Date(a.modified) - new Date(b.modified)))
             .filter(order => order.fulfilled && order.picked_up)
             .map((order) => (
-              <PastOrderCard order={order} />
+              <PastOrderCard order={order} auth={auth} setAuth={setAuth}/>
             ))}
     </Container>
   )

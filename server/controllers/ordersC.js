@@ -8,20 +8,26 @@ const Order = mongoose.model('Order')
 
 // Middleware to set req.order for any request at */order/:order_id/*
 exports.find_order = async (req, res, next) => {
-  const order = await Order.findById(req.params['order_id']);
+  console.log("finding order");
 
-  if (!order || req.vendor.id != order.vendor) {
-    res.status(404);
-    res.send("Order not found");
-    return;
 
+  if (req.params.order_id) {
+    const order = await Order.findById(req.params.order_id);
+
+    if (!order || !(String(req.vendor._id) == String(order.vendor)) || order.deleted) {
+      res.status(404);
+      res.send("Order not found");
+      return;
+
+    }
+    req.order = order;
   }
 
-  if (req.auth_user && order.customer != req.auth_user._id) {
+  if (req.auth_user &&
+      !(req.order.customer == req.auth_user._id || req.order.vendor == req.auth_user._id)) {
     return res.sendStatus(401);
   }
 
-  req.order = order;
   return next();
 }
 
@@ -37,13 +43,12 @@ exports.order_list = async (req, res) => {
 
     console.log(fulfilledBool)
 
-    orders = await Order.find({
-      vendor: req.vendor,
-      fulfilled: fulfilledBool,
-    })
+    orders = await Order.find(
+      {vendor: req.vendor, fulfilled: true, deleted: {$ne: true}}
+    )
   } else {
     // Otherwise, return all orders
-    orders = await Order.find({ vendor: req.vendor })
+    orders = await Order.find({ vendor: req.vendor, deleted: {$ne: true}})
 
   }
 
@@ -59,6 +64,9 @@ exports.order_details = async (req, res) => {
 // POST /vendors/:vendor_id/orders/
 exports.order_create = async (req, res) => {
   req.body.modified = new Date();
+
+  if (!req.user.given_name)
+    return res.sendStatus(401);
 
   if (req.auth_user) {
     req.body.customer = req.auth_user._id
@@ -110,77 +118,7 @@ exports.order_update = async (req, res) => {
   }
 }
 
-// old order_update function
-exports.order_update_old = async (req, res) => {
-  const query = { _id: req.params['order_id'] }
-
-  if (req.body.hasOwnProperty('fulfilled')) {
-    console.log('Fulfil order')
-    try {
-      const updatedOrder = await Order.findOneAndUpdate(
-        query,
-        { $set: req.body['fulfilled'] },
-        { new: true },
-      )
-      res.status(200)
-      res.json(updatedOrder)
-    } catch (err) {
-      res.status(500)
-    }
-  } else if (req.body.hasOwnProperty('items')) {
-    console.log('edit items')
-    // We should approach it like this I think:
-
-    /*
-    // get Alice to favourite a food
-    app.get('/AliceFavourite/:food', async (req, res) => {
-      // find Alice
-      let thisUser = await User.findOne( {nameGiven: 'Alice'})
-
-      // find food
-      let favouriteFood = await Food.findOne( {name: req.params.food})
-
-      // add food to Alice's Favourites list
-      favouriteRecord = new Favourite({foodId: favouriteFood._id})
-      thisUser.favourites.push(favouriteRecord)
-
-      // save Alice's updated record to database
-      await thisUser.save()
-
-      // show the new Alice record
-      result = await User.findOne( {nameGiven: 'Alice'})
-      res.send(result)
-    }) */
-  } else {
-    res.status(400)
-  }
-}
-
-// exports.vendor_update = async (req, res) => {
-//   const query = { _id: req.params['vendor_id'] }
-//   try {
-//     const updatedVendor = await Vendor.findOneAndUpdate(
-//       query,
-//       { $set: req.body },
-//       { new: true },
-//     )
-//     res.status(200)
-//     res.json(updatedVendor)
-//   } catch (err) {
-//     res.status(500)
-//   }
-// }
-
-// DELETE /vendors/:vendor_id/orders/:order_id
-// NOTE: Implement as soft delete
 exports.order_delete = async (req, res) => {
-  await Order.findByIdAndDelete(req.order);
-  res.sendStatus(200);
-}
-
-// DELETE /vendors/:vendor_id/orders
-// NOTE: Implement as soft delete
-exports.order_delete_all = async (req, res) => {
-  await Order.deleteMany({ vendor: req.vendor})
-  res.status(200).send();
+  const deleted = await Order.findByIdAndUpdate(req.order, {"deleted": true});
+  res.json(deleted);
 }
