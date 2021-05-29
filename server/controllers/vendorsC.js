@@ -72,7 +72,7 @@ exports.vendor_list = async (req, res) => {
   }
 
   if (has_location) {
-    vendors = vendors.map(x => x.toObject())
+    vendors = vendors.map(x => x.toJSON())
         .filter(x => x.hasOwnProperty('location'));
 
     vendors.forEach(x => x["distance"] = distance(x));
