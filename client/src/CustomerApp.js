@@ -77,13 +77,14 @@ const CustomerApp = () => {
             <ModifyOrder {...props} auth={auth} menu={menu} setMenu={setMenu} />
           )}
         />
-        
+
         <Route
           exact
           path="/customer/van/:id"
           render={(props) => (
             <VanDetails
               {...props}
+              auth={auth}
               vans={vans}
               menu={menu}
               setMenu={setMenu}

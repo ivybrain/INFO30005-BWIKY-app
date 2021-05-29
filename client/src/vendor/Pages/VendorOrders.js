@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 import { API_URL } from '../../constants'
 
 
-
+// Vendor's page which displays all orders which are ongoing and awaiting pick up 
 const VendorOrders = (props) => {
   const [orders, setOrders] = useState(null)
   const { auth, setAuth } = props
@@ -20,21 +20,27 @@ const VendorOrders = (props) => {
       'Authorization': `Bearer ${auth}`,
     }
 
-    if (auth) {
-      // Get vendor id from jwt token
-      const vendor_id = auth ? jwt.decode(auth)._id : null
-      console.log(auth)
-      console.log('Vendor id is %s', vendor_id)
+    // Update orders every 800 ms
+    const interval = setInterval(() => {
 
-      // Get all orders of specific customer (using customer id)
-      axios(`${API_URL}/vendors/${vendor_id}/orders`, {
-        headers,
-      }).then((res) => {
-        setOrders(res.data)
-      })
-    } else {
-      console.log("no auth yet, so let's wait until they're logged in")
-    }
+      if (auth) {
+        // Get vendor id from jwt token
+        const vendor_id = auth ? jwt.decode(auth)._id : null
+        console.log(auth)
+        console.log('Vendor id is %s', vendor_id)
+
+        // Get all orders of specific customer (using customer id)
+        axios(`${API_URL}/vendors/${vendor_id}/orders`, {
+          headers,
+        }).then((res) => {
+          setOrders(res.data)
+        })
+      } else {
+        console.log("no auth yet, so let's wait until they're logged in")
+      }
+    }, 800);
+    return () => clearInterval(interval);
+
   }, [auth])
 
   if (!auth) {
