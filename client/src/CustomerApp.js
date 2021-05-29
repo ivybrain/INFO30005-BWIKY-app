@@ -20,8 +20,8 @@ const CustomerApp = () => {
   const [order, setOrder] = useState({
     items: {},
     confirmed: false,
-    // modified: new Date(),
   })
+  
   const [auth, setAuth] = useState(null)
 
   return (

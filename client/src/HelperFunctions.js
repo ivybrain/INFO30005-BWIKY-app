@@ -51,7 +51,6 @@ export function checkModifyWindow(time){
 
 // Format date and time, return as string
 export function formatDateTime(datetime){
-  console.log("Format Datetime")
   // Split via spaces
   var strings = new Date(datetime).toString().split(" ")
 

@@ -11,7 +11,13 @@ import {
   Button,
   Grid,
   Snackbar,
+  Box,
+  TextField,
+  ThemeProvider
 } from '@material-ui/core'
+import Rating from '@material-ui/lab/Rating'
+import theme from '../../theme';
+import { withStyles } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/core/styles'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -25,6 +31,7 @@ import { dictify ,
 const columns = ['Item', 'Qty', 'Subtotal']
 const checkmark = '\uD83D\uDDF9'
 const emptyBox = '\u2610'
+
 
 const audFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',
@@ -48,14 +55,103 @@ const useStyles = makeStyles({
   },
 })
 
+const StyledRating = withStyles({
+  iconFilled: {
+    color: '#ff6d75',
+  },
+  iconHover: {
+    color: '#ff3d47',
+  },
+})(Rating);
+
+
 
 // Individual Order for Customer
 const OrderCard = (props) => {
   const { order, auth, removeOrder } = props
-  const [vendor, setVendor] = useState('')
+  const [rating, setRating] = useState(null)
+  const [comment, setComment] = useState("")
+  const [vendor, setVendor] = useState("")
   const [menu, setMenu] = useState(null)
   const [open, setOpen] = useState(false)
+  const [rating_open, setRatingOpen] = useState(false)
+  var itemDict = {} // Initialise menu dictionary
+  const classes = useStyles()
 
+
+
+  // If a customer changes their rating, PATCH to database
+  const postRating = (newRating) =>{
+
+    console.log("Ratings changed to:")
+    console.log(newRating)
+
+    const headers = {
+     'Access-Control-Allow-Origin': '*',
+     'Authorization': `Bearer ${auth}`,
+    }
+
+    const data = {
+      rating : newRating // set new rating
+    }
+
+     // PATCH customer's rating
+     axios({
+       url: `${API_URL}/vendors/${order.vendor}/orders/${order._id}`,
+       method: 'PATCH',
+       data: data,
+       headers: headers,
+     })
+
+     .then((res) => {
+       if (res.data){
+         console.log("Changed rating for %s to", order.vendor)
+         console.log(res.data)
+       }
+     })
+
+     .catch((err) => {
+       console.error(err)
+     })
+  }
+
+  // If customer submits a comment with their rating
+  const handle_comment_submit = (event) => {
+    event.preventDefault()
+
+    ratingSubmitted()
+
+    const headers = {
+     'Access-Control-Allow-Origin': '*',
+     'Authorization': `Bearer ${auth}`,
+   }
+
+   const data = {
+     comment : event.target.comment.value // set customer comment
+   }
+
+    // PATCH customer's rating
+    axios({
+      url: `${API_URL}/vendors/${order.vendor}/orders/${order._id}`,
+      method: 'PATCH',
+      data: data,
+      headers: headers,
+    })
+
+    .then((res) => {
+      if (res.data){
+        console.log("Submitted comment:")
+        console.log(res.data)
+      }
+    })
+
+    .catch((err) => {
+      console.error(err)
+    })
+
+  }
+
+  // Handle pop up notifications for cancel order
   const changeOpen = () => {
     setOpen((open) => !open)
   }
@@ -64,10 +160,16 @@ const OrderCard = (props) => {
     setOpen(false)
   }
 
-  var itemDict = {}
+  // Handle pop up notifications for ratings
+  const ratingSubmitted = () => {
+    setRatingOpen((rating_open) => !rating_open)
+  }
 
-  const classes = useStyles()
+  const handleRatingClose = () => {
+    setRatingOpen(false)
+  }
 
+  // If a customer cancels an order
   const handleCancelOrder = (e) => {
     e.preventDefault()
     console.log('cancelling order')
@@ -91,8 +193,31 @@ const OrderCard = (props) => {
       })
   }
 
+  // Get initial rating and comment
   useEffect(() => {
-    console.log('getting vendor')
+    console.log('getting rating')
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': `Bearer ${auth}`,
+    }
+
+    axios(`${API_URL}/vendors/${order.vendor}/orders/${order._id}`, {
+      headers,
+
+    }).then((res) => {
+      console.log(res.data.rating)
+      setRating(res.data.rating)
+      setComment(res.data.comment)
+      if (res.data.comment){
+        console.log(res.data.comment)
+      }
+
+    })
+  }, [])
+
+
+  // Get vendor's name
+  useEffect(() => {
     const headers = {
       'Access-Control-Allow-Origin': '*',
       'Authorization': `Bearer ${auth}`,
@@ -106,7 +231,7 @@ const OrderCard = (props) => {
     })
   }, [])
 
-
+  // Get menu
   useEffect(() => {
     console.log('getting items')
     axios(`${API_URL}/items`).then((res) => {
@@ -115,13 +240,12 @@ const OrderCard = (props) => {
   }, [])
 
 
-  itemDict = dictify(menu)
-  console.log(itemDict)
-  console.log(Object.keys(itemDict).length)
+  itemDict = dictify(menu) // make menu of snacks into a dictionary with ids as keys
 
 
   return (
     <>
+    <ThemeProvider theme={theme}>
       <Card
         className={classes.root}
         variant="outlined"
@@ -298,6 +422,49 @@ const OrderCard = (props) => {
             </Grid>
           </CardContent>
         )}
+
+        {/*UI for customers to rate experience*/}
+        <Box component="fieldset" mb={3} borderColor="transparent">
+          <Typography component="legend">Please take a moment to rate your experience!</Typography>
+          <Rating
+            name={"customer-rating" + order._id}
+            precision={0.5}
+            size="large"
+            value={rating}
+            onChange={(event, newRating) => {
+              setRating(newRating);
+              console.log(newRating)
+              postRating(newRating);
+            }}
+          />
+
+          {/*UI for customers to submit a comment*/}
+          <form noValidate autoComplete="off" onSubmit={handle_comment_submit}>
+
+            <Grid item style={{ marginTop: "1em" }}>
+              <TextField
+                name="comment"
+                label="Comment"
+                color="orange"
+                defaultValue = {comment}
+                variant= {comment ? "filled" : "outlined"}
+                style ={{width: "70%"}}
+              />
+              </Grid>
+
+              {/*Button to submit*/}
+              <Button variant="contained"
+              color="orange"
+              style={{ marginTop: '1em' , marginBottom: '1em'}}
+              disableElevation>
+                Submit
+              </Button>
+
+          </form>
+
+        </Box>
+
+
       </Card>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -305,6 +472,15 @@ const OrderCard = (props) => {
         onClose={handleClose}
         message="Order cancelled!"
       />
+
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={rating_open}
+        onClose={handleRatingClose}
+        message="Thanks for reviewing!"
+      />
+
+      </ThemeProvider>
     </>
   )
 }

@@ -11,15 +11,14 @@ import { Link, Redirect, useHistory } from 'react-router-dom'
 const VanDetails = (props) => {
   const { auth, vans, menu, setMenu, order, setOrder } = props
   const id = props.match.params.id
-
   const [vanData, setVanData] = useState(null)
   const history = useHistory()
-
   const [rating, setRating] = useState(
     parseFloat(4 + Math.floor(Math.random() * 3 - 1)),
   )
 
 
+  // Customer cancels order
   const handleCancelOrder = (e) => {
     e.preventDefault()
     setOrder({ items: {}, confirmed: false })
