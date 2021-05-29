@@ -7,13 +7,8 @@ import VanCard from './VanCard'
 const NearestVans = (props) => {
   let { vans } = props
 
-  vans = vans
-    .filter((van) => van.hasOwnProperty('location'))
-    .map((van) => ({
-      ...van,
-      rating: 4 + Math.floor(Math.random() * 3 - 1),
-    }))
-    
+  vans = vans.filter((van) => van.hasOwnProperty('location'))
+
   return (
     <Grid container direction="column" justify="space-between" spacing={3}>
       <Grid item>
