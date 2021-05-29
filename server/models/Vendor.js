@@ -18,7 +18,7 @@ const vendor = new Schema({
   password: {type: String, required: true},
   rating: {
     type: { rating: Number, count: Number },
-    get: (x) => x ? x['rating'] : undefined
+    get: (x) => x ? x['rating'] : 5
   },
 })
 
