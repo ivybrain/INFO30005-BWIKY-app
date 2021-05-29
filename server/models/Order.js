@@ -11,7 +11,7 @@ const order = new Schema({
   fulfilled_time: Date,
   picked_up: {type: Boolean, default: false},
   picked_up_time: Date,
-  rating: Number,
+  rating: {type: Number, default: 0},
   comment: String,
   rated: {type: Boolean, default: false},
 
