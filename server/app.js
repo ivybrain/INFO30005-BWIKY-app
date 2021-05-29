@@ -21,6 +21,7 @@ app.use(cors(/*cors_options*/))
 const vendorsR = require('./routes/vendorsR.js')
 const itemsR = require('./routes/itemsR.js')
 const customersR = require('./routes/customersR.js')
+const configR = require('./routes/configR.js')
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use('/vendors', vendorsR)
 app.use('/items', itemsR)
 app.use('/customers', customersR)
+app.use('/config', configR)
 app.use(express.static('public'))
 
 app.listen(process.env.PORT, function () {
