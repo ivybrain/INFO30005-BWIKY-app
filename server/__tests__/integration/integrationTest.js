@@ -1,5 +1,4 @@
 const request = require('supertest')
-const mongoose = require('mongoose')
 
 var app;
 
@@ -11,7 +10,7 @@ beforeAll( async () => {
 })
 
 afterAll( async () => {
-  //await mongoose.connection.close();
+  app.mongoose.connection.close();
 });
 
 describe('Integration Test: Using the vendor app, the van operator sets the status of their van.', () => {

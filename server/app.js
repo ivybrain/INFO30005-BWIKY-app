@@ -1,5 +1,4 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const cors = require('cors')
 
 const dotenv = require('dotenv')
@@ -8,6 +7,8 @@ var env = dotenv.config()
 dotenv_expand(env)
 
 const app = express()
+
+app.mongoose = require('mongoose')
 
 // const cors_options = {
 //   origin: [/localhost\:3000$/, /.*/],
@@ -32,7 +33,7 @@ app.use(express.static('public'))
 
 app.connect = async () => {
 
-  await mongoose.connect(
+  await app.mongoose.connect(
     process.env.DB_URL,
     {
       useNewUrlParser: true,
