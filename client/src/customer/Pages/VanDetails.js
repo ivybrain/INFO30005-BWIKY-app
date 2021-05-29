@@ -11,15 +11,11 @@ import { Link, Redirect, useHistory } from 'react-router-dom'
 const VanDetails = (props) => {
   const { auth, vans, menu, setMenu, order, setOrder } = props
   const id = props.match.params.id
-
   const [vanData, setVanData] = useState(null)
   const history = useHistory()
 
-  const [rating, setRating] = useState(
-    parseFloat(4 + Math.floor(Math.random() * 3 - 1)),
-  )
 
-
+  // Customer cancels order
   const handleCancelOrder = (e) => {
     e.preventDefault()
     setOrder({ items: {}, confirmed: false })
@@ -88,7 +84,7 @@ const VanDetails = (props) => {
               ? `This van is ${Math.round(vanData.distance * 10) / 10}km away!`
               : null}
           </Typography>
-          <Ratings rating={rating} widgetDimensions="30px" widgetSpacings="8px">
+          <Ratings rating={vanData.rating} widgetDimensions="30px" widgetSpacings="8px">
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>

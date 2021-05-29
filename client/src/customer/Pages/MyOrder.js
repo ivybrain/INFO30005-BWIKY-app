@@ -8,8 +8,7 @@ import {
   TableHead,
   TableRow,
   Button,
-  Grid,
-  Snackbar
+  Grid
 } from '@material-ui/core'
 import axios from 'axios'
 import { API_URL } from '../../constants'
@@ -24,62 +23,45 @@ const audFormatter = new Intl.NumberFormat('en-AU', {
 })
 
 
-
+// Shopping Cart Page where customer reviews and confirms current order
 const MyOrder = (props) => {
   const { order, setOrder, auth } = props
   const history = useHistory()
   const [confirmed, setConfirmed] = useState(false)
   const [cancelled, setCancelled] = useState(false)
 
-  // To handle pop up
-  const openConfirmed = () => {
-    console.log(confirmed)
-    setConfirmed((confirmed) => !confirmed)
-    console.log("Confirm order pop up")
-    console.log(confirmed)
-  }
 
-  const openCancelled = () => {
-    setCancelled((cancelled) => !cancelled)
-    console.log("Cancel order pop up")
-  }
-
-  const handleConfirmClose = () => {
-    setConfirmed(false)
-  }
-
-  const handleCancelClose = () => {
-    setCancelled(false)
-  }
-
-
+  // If customer cancels order
   const handleCancelOrder = (e) => {
     e.preventDefault()
+
+    // Clear order (items are empty)
     setOrder({ items: {}, confirmed: false })
     console.log('cleared order')
 
-    openCancelled() // Pop up
   }
 
 
+  // If customer confirms order
   const handleConfirmOrder = (e) => {
     e.preventDefault()
 
+    // If customer has not logged in
     if (!auth) {
       console.log('please log in')
-      // window.location.href = '/customer/login'
-      history.push('/customer/login')
+      history.push('/customer/login') // direct to login page
       return
     }
 
+    // Store order
     setOrder({ ...order, confirmed: true })
-    openConfirmed() // Pop up
 
     const headers = {
       'Access-Control-Allow-Origin': '*',
       Authorization: `Bearer ${auth}`,
     }
 
+    // POST order to database so it appears on vendor's end
     const newItems = Object.keys(order.items).map((key) => ({
       ...order.items[key],
       item: key,
@@ -105,12 +87,14 @@ const MyOrder = (props) => {
   return (
     <Container>
 
+    {/*If order exists, display table with item names, quantity and price*/}
       <Typography variant="h2">My Order</Typography>
       {order && order.items && Object.keys(order.items).length !== 0 ? (
         <>
           <TableContainer>
             <Table>
               <TableHead>
+              {/*Render columns*/}
                 <TableRow>
                   {columns.map((column) => (
                     <TableCell key={column}>{column}</TableCell>
@@ -118,6 +102,7 @@ const MyOrder = (props) => {
                 </TableRow>
               </TableHead>
 
+              {/*Render item names and quantities*/}
               <TableBody>
                 {Object.keys(order.items).map((id, idx) => (
                   <TableRow key={idx}>
@@ -133,7 +118,9 @@ const MyOrder = (props) => {
                 <TableRow>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
+
                   <TableCell>
+                  {/*Format price*/}
                     <Typography variant="subtitle2" gutterBottom>
                       Total:{' '}
                       {audFormatter.format(
@@ -152,7 +139,10 @@ const MyOrder = (props) => {
             </Table>
           </TableContainer>
           <br />
+
           <Grid container style={{ justifyContent: 'space-around' }}>
+
+          {/*Cancel Button*/}
             <Grid item>
               <Button variant="outlined" onClick={handleCancelOrder}>
                 <Typography variant="button" display="block" gutterBottom>
@@ -161,13 +151,7 @@ const MyOrder = (props) => {
               </Button>
             </Grid>
 
-            <Snackbar
-              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-              open={cancelled}
-              onClose={handleCancelClose}
-              message="Order cancelled!"
-            />
-
+            {/*Edit Order Button, redirects customer back to van's menu*/}
             <Grid item>
               <Button variant="outlined">
                 <Button
@@ -180,6 +164,7 @@ const MyOrder = (props) => {
               </Button>
             </Grid>
 
+            {/*Confirm Order Button*/}
             <Grid item>
               <Button variant="outlined" onClick={handleConfirmOrder}>
                 <Typography variant="button" display="block" gutterBottom>
@@ -188,18 +173,13 @@ const MyOrder = (props) => {
               </Button>
               {order.confirmed ? <Redirect to="/customer/orders" /> : null}
             </Grid>
-
-            <Snackbar
-              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-              open={confirmed}
-              onClose={handleConfirmClose}
-              message="Order confirmed!"
-            />
-
           </Grid>
         </>
       ) : (
         <>
+
+        {/*If there is no order yet*/}
+
           <Typography
             variant="subtitle"
             display="block"
@@ -208,13 +188,14 @@ const MyOrder = (props) => {
             Your order is empty! Try finding a van to start ordering snacks.
           </Typography>
 
+          {/*Order History Button, redirects to page with all previous orders*/}
           <Button variant="outlined">
             <Button
               component={Link}
               to="/customer/orders"
               style={{ textDecoration: 'none' }}
             >
-              <Typography variant="button" display="block" gutterBottom>
+              <Typography variant="button" display="block">
                 Order History
               </Typography>
             </Button>

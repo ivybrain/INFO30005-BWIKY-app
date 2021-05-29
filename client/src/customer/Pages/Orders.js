@@ -7,17 +7,20 @@ import jwt from 'jsonwebtoken'
 
 
 
-const MyOrder = (props) => {
+// Order History Page which displays customer's all previous orders
+// Allows customer to modify or cancel most recent orders within time limit
+const Orders = (props) => {
   const [orders, setOrders] = useState(null)
+  const { auth } = props // Get authentification token
 
-  // Get jwt token
-  const { auth } = props
-
+  // Function to be passed into OrderCard to handle cancelled orders
   const removeOrder = (id) => {
     let newOrders = JSON.parse(JSON.stringify(orders))
     setOrders(newOrders.filter((order) => order._id !== id))
   }
 
+
+  // Get list of orders for customer
   useEffect(() => {
     const headers = {
       'Access-Control-Allow-Origin': '*',
@@ -26,8 +29,6 @@ const MyOrder = (props) => {
 
     // Update orders every second
     const interval = setInterval(() => {
-
-      console.log('getting order history')
 
       if (auth) {
         // Get customer id from jwt token
@@ -45,10 +46,13 @@ const MyOrder = (props) => {
     }, 1000);
 
     return () => clearInterval(interval);
+
   }, [auth])
 
 
+  // If customer is not logged in
   if (!auth) {
+    // Render :
     return (
       <Container>
         <Typography variant="h2">My Orders</Typography>
@@ -59,9 +63,13 @@ const MyOrder = (props) => {
     )
   }
 
+
+  // If customer is logged in
   return (
     <Container>
       <Typography variant="h2">My Orders</Typography>
+      {/* Show all previous orders*/}
+
       {orders == null
         ? null
         : orders.length === 0
@@ -75,4 +83,4 @@ const MyOrder = (props) => {
   )
 }
 
-export default MyOrder
+export default Orders

@@ -128,8 +128,6 @@ const Login = (props) => {
      console.log("Requires password!")
      changeOpenInvalid() // Pop up asks for password
    }
-
-
   }
 
   return (

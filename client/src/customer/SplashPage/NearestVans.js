@@ -2,15 +2,13 @@ import React from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import VanCard from './VanCard'
 
+
+// Five nearest vans
 const NearestVans = (props) => {
   let { vans } = props
-  // console.log(vans)
-  vans = vans
-    .filter((van) => van.hasOwnProperty('location'))
-    .map((van) => ({
-      ...van,
-      rating: 4 + Math.floor(Math.random() * 3 - 1),
-    }))
+
+  vans = vans.filter((van) => van.hasOwnProperty('location'))
+
   return (
     <Grid container direction="column" justify="space-between" spacing={3}>
       <Grid item>
