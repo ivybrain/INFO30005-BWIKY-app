@@ -30,8 +30,9 @@ app.use('/items', itemsR)
 app.use('/customers', customersR)
 app.use(express.static('public'))
 
-app.listen(process.env.PORT, function () {
-  mongoose.connect(
+app.connect = async () => {
+
+  await mongoose.connect(
     process.env.DB_URL,
     {
       useNewUrlParser: true,
@@ -39,11 +40,10 @@ app.listen(process.env.PORT, function () {
       useFindAndModify: false,
       useCreateIndex: true,
     },
-    function (err) {
+     async (err) => {
       console.log(err)
-      console.log(`Ready, server running on ${process.env.PORT}`)
     },
-  )
-})
+  );
+};
 
 module.exports = app;

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node app.js",
+    "start": "node server.js",
     "test": "jest",
     "clear_jest": "jest --clearCache --testTimeout=10000"
   },
