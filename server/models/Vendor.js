@@ -12,7 +12,7 @@ const vendor = new Schema({
     long: { type: Number, required: false },
     simple: { type: String, required: false },
   },
-  ready: { type: Boolean, required: false },
+  ready: { type: Boolean, required: false, default: false },
 
   // NOTE: Do secure auth stuff
   password: {type: String, required: true},

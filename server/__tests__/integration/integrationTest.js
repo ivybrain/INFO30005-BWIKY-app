@@ -12,37 +12,36 @@ describe('Integration Test: Using the vendor app, the van operator sets the stat
   const vendor_password = 'password'
   const incorrect_vendor_passowrd = 'incorrect_password'
 
-  // test(`Test 1 (set van status to ready): Van Damme ${vendor_id}`, () => {
-  //   return (
-  //     request(app)
-  //       // Log in to the vendor
-  //       .post(`/vendors/login`)
-  //       .send({
-  //         van_name: vendor_name,
-  //         password: vendor_password,
-  //       })
-  //       .then((loginRes) => {
-  //         request(app)
-  //           // Update the van's status
-  //           .patch(`/vendors/${vendor_id}`)
-  //           .send({ ready: true })
-  //           // .set({ Authorization: loginRes.body })
-  //           .set({ Authorization: 'totessecure' })
-  //           .then((res) => {
-  //             // HTTP Response Code should be 200 OK
-  //             expect(res.statusCode).toBe(200)
-  //             // It should return a JSON Web Token
-  //             expect(res.type).toBe('application/json')
-  //             // Ready should be set to true
-  //             expect(res.body.ready).toBe(true)
-  //             // The van name should be Van Damme
-  //             expect(res.body.van_name).toBe(vendor_name)
-  //             // The van ID should be 607710190959c969a0325846
-  //             expect(res.body._id).toBe(vendor_id)
-  //           })
-  //       })
-  //   )
-  // })
+  test(`Test 1 (set van status to ready): Van Damme ${vendor_id}`, () => {
+    return (
+      request(app)
+        // Log in to the vendor
+        .post(`/vendors/login`)
+        .send({
+          van_name: vendor_name,
+          password: vendor_password,
+        })
+        .then((loginRes) => {
+          request(app)
+            // Update the van's status
+            .patch(`/vendors/${vendor_id}`)
+            .send({ ready: true })
+            .set({ Authorization: 'Bearer ' + loginRes.body })
+            .then((res) => {
+              // HTTP Response Code should be 200 OK
+              expect(res.statusCode).toBe(200)
+              // It should return a JSON Web Token
+              expect(res.type).toBe('application/json')
+              // Ready should be set to true
+              expect(res.body.ready).toBe(true)
+              // The van name should be Van Damme
+              expect(res.body.van_name).toBe(vendor_name)
+              // The van ID should be 607710190959c969a0325846
+              expect(res.body._id).toBe(vendor_id)
+            })
+        })
+    )
+  })
 
   test(`Test 1 (set van status to ready): Van Damme ${vendor_id}`, () => {
     return (
@@ -51,7 +50,7 @@ describe('Integration Test: Using the vendor app, the van operator sets the stat
         .patch(`/vendors/${vendor_id}`)
         .send({ ready: true })
         // .set({ Authorization: loginRes.body })
-        .set({ Authorization: 'totessecure' })
+        .set({ Authorization: 'Bearer totessecure' })
         .then((res) => {
           // HTTP Response Code should be 200 OK
           expect(res.statusCode).toBe(200)
@@ -101,37 +100,37 @@ describe('Integration Test: Using the vendor app, the van operator sets the stat
   //   )
   // })
 
-  // test(`Test 2 (set van status to not ready): Van Damme ${vendor_id}`, () => {
-  //   return (
-  //     request(app)
-  //       // Log in to the vendor
-  //       .post(`/vendors/login`)
-  //       .send({
-  //         van_name: vendor_name,
-  //         password: vendor_password,
-  //       })
-  //       .then((loginRes) => {
-  //         // Update the van's status
-  //         request(app)
-  //           .patch(`/vendors/${vendor_id}`)
-  //           .send({ ready: false })
-  //           .set({ Authorization: loginRes.body })
-  //           .then((res) => {
-  //             // HTTP Response Code should be 200 OK
-  //             expect(res.statusCode).toBe(200)
-  //             // It should return a JSON Web Token
-  //             expect(res.type).toBe('application/json')
-  //             // Ready should be set to true
-  //             expect(res.body.ready).toBe(false)
-  //             // The van name should be Van Damme
-  //             expect(res.body.van_name).toBe(vendor_name)
-  //             // The van ID should be 607710190959c969a0325846
-  //             expect(res.body._id).toBe(vendor_id)
-  //           })
-  //       })
-  //   )
-  // })
-})
+//   test(`Test 2 (set van status to not ready): Van Damme ${vendor_id}`, () => {
+//     return (
+//       request(app)
+//         // Log in to the vendor
+//         .post(`/vendors/login`)
+//         .send({
+//           van_name: vendor_name,
+//           password: vendor_password,
+//         })
+//         .then((loginRes) => {
+//           // Update the van's status
+//           request(app)
+//             .patch(`/vendors/${vendor_id}`)
+//             .send({ ready: false })
+//             .set({ Authorization: 'Bearer ' + loginRes.body })
+//             .then((res) => {
+//               // HTTP Response Code should be 200 OK
+//               expect(res.statusCode).toBe(200)
+//               // It should return a JSON Web Token
+//               expect(res.type).toBe('application/json')
+//               // Ready should be set to true
+//               expect(res.body.ready).toBe(false)
+//               // The van name should be Van Damme
+//               expect(res.body.van_name).toBe(vendor_name)
+//               // The van ID should be 607710190959c969a0325846
+//               expect(res.body._id).toBe(vendor_id)
+//             })
+//         })
+//     )
+//   })
+// })
 
 // test(`Test 3 (set van status to ready with incorrect credentials): Van Damme ${vendor_id}`, () => {
 //   return (
@@ -146,4 +145,4 @@ describe('Integration Test: Using the vendor app, the van operator sets the stat
 //         expect(res.type).toBe('text/plain')
 //       })
 //   )
-// })
+})
