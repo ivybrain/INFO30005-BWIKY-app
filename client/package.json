@@ -41,6 +41,9 @@
     "production": [
       ">0.2%",
       "not dead",
+      "not ie 11",
+      "not chrome < 51",
+      "not safari < 10",
       "not op_mini all"
     ],
     "development": [
@@ -50,6 +53,11 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.13.13",
     "prettier": "2.2.1"
-  }
+  },
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ]
 }
