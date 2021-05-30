@@ -4,9 +4,11 @@ import {
   Grid,
   Button,
   Typography,
+  Snackbar
 } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../../theme';
+import { useState } from 'react'
 import { API_URL } from '../../constants'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
@@ -18,7 +20,18 @@ import { Link } from 'react-router-dom';
 // Login Page for Vendor
 const LoginScreen = (props) => {
   const { auth, setAuth } = props
+  const [invalid, setInvalid] = useState(false)
   const history = useHistory()
+
+
+  // Flash message that login details are incorrect
+  const openInvalid = () => {
+    setInvalid((invalid) => !invalid)
+  }
+  // Close message
+  const handleClose = () => {
+    setInvalid(false)
+  }
 
 
   // Vendor submits details to log in
@@ -55,12 +68,14 @@ const LoginScreen = (props) => {
         history.push('/vendor/checkin')
       }else{
         console.err('Invalid token')
-      })
-
+      }
+    })
       // Invalid login
       .catch((err) => {
         console.error(err)
         console.log("Invalid login")
+
+        openInvalid() // flash invalid login message
         history.push('/vendor')
       })
   }
@@ -122,6 +137,14 @@ const LoginScreen = (props) => {
 
             </Grid>
           </form>
+
+          {/*Message flash for if login details provided are incorrect*/}
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            open={invalid}
+            onClose={handleClose}
+            message="Invalid login details! Please try again."
+          />
         </Container>
       </Grid>
      </ThemeProvider>
