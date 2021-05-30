@@ -2,10 +2,7 @@ const express = require('express');
 
 const router = express.Router()
 
-require('../models/Config')
-
-const mongoose = require('mongoose')
-const Config = mongoose.model('Config')
+const Config = require('../models/Config')
 
 router.route('/').get(async(req, res) => {
 
