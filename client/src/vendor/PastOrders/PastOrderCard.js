@@ -7,17 +7,17 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { API_URL , DISCOUNT } from '../../constants'
-import { formatTime,
+import { API_URL, useConfig } from '../../constants'
+import {
+  formatTime,
   checkDiscount,
-  formatDateTime
+  formatDateTime,
 } from '../../HelperFunctions'
-
 
 const columns = ['Item', 'Qty', 'Subtotal']
 const checkmark = '\uD83D\uDDF9'
@@ -47,15 +47,13 @@ const useStyles = makeStyles({
   },
 })
 
-
-
-// A Fulfilled and Picked Up Order for Vendor
+// Fulfilled and Picked Up Orders for Vendor
 const PastOrderCard = (props) => {
-  const { order , auth , setAuth , itemDict } = props
+  const { order, auth, setAuth, itemDict } = props
   const [customer, setCustomer] = useState('')
   const classes = useStyles()
-  var customer_name = ""
-
+  var customer_name = ''
+  const { loading, config } = useConfig()
 
   // Get customer's name for the order
   useEffect(() => {
@@ -63,26 +61,26 @@ const PastOrderCard = (props) => {
 
     const headers = {
       'Access-Control-Allow-Origin': '*',
-      'Authorization': `Bearer ${auth}`,
+      Authorization: `Bearer ${auth}`,
     }
 
     axios(`${API_URL}/customers/${order.customer}`, {
-        headers,
-    }).then((res) => {
+      headers,
+    })
+      .then((res) => {
         setCustomer(res.data)
-    })
-    // Invalid Customer
-    .catch((err) => {
+      })
+      // Invalid Customer
+      .catch((err) => {
         console.error(err)
-        console.log("Invalid customer")
-    })
+        console.log('Invalid customer')
+      })
   }, [])
 
   // Format customer name
-  if (customer){
-    customer_name = customer.given_name + " " + customer.family_name
+  if (customer) {
+    customer_name = customer.given_name + ' ' + customer.family_name
   }
-
 
   return (
     <>
@@ -94,8 +92,7 @@ const PastOrderCard = (props) => {
         {/* If item dictionary is defined*/}
         {itemDict.length !== 0 && (
           <CardContent>
-
-          {/*Display order number*/}
+            {/*Display order number*/}
             <Typography
               gutterBottom
               variant="h5"
@@ -120,15 +117,19 @@ const PastOrderCard = (props) => {
               {order.modified ? `on ${formatDateTime(order.modified)}` : null}
             </Typography>
 
-            {/*Display status of discount*/}
-            <Typography variant="body2" color="textSecondary" component="p">
-              Discount {' '}
-              {checkDiscount(order) ? DISCOUNT : 0 }% applied
-            </Typography>
+            {!loading ? (
+              <Typography variant="body2" color="textSecondary" component="p">
+                Discount{' '}
+                {checkDiscount(order, config.discount_time)
+                  ? config.discount_value
+                  : 0}
+                % applied
+              </Typography>
+            ) : null}
 
             {/*Display date and time order was fulfilled*/}
             <Typography variant="body2" color="textSecondary" component="p">
-              Fulfilled at {' '}
+              Fulfilled at{' '}
               {order.fulfilled ? `${formatTime(order.fulfilled_time)}` : null}
             </Typography>
 
@@ -144,7 +145,6 @@ const PastOrderCard = (props) => {
                 <>
                   <TableContainer>
                     <Table>
-
                       {/*Mapping column names*/}
                       <TableHead>
                         <TableRow>
@@ -158,7 +158,7 @@ const PastOrderCard = (props) => {
                       <TableBody>
                         {Object.keys(order.items).map((id, idx) => (
                           <TableRow key={idx}>
-                          {/*Mapping item names by referring to dictionary*/}
+                            {/*Mapping item names by referring to dictionary*/}
                             <TableCell>
                               {itemDict[order.items[id]['item']]['item_name']}
                             </TableCell>
@@ -178,7 +178,6 @@ const PastOrderCard = (props) => {
                           </TableRow>
                         ))}
                         <TableRow>
-
                           <TableCell></TableCell>
                           <TableCell></TableCell>
 

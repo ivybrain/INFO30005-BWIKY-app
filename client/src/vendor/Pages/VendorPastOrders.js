@@ -1,20 +1,17 @@
 import { Container, Grid, Typography } from '@material-ui/core'
-import PastOrderCard from "../PastOrders/PastOrderCard";
+import PastOrderCard from '../PastOrders/PastOrderCard'
 import { dictify } from '../../HelperFunctions'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import jwt from 'jsonwebtoken'
 
-
-
 // Vendor's Order History Page (Fulfilled and Picked Up)
 const VendorPastOrders = (props) => {
   const [orders, setOrders] = useState(null)
   const [menu, setMenu] = useState(null)
-  const { auth , setAuth} = props
+  const { auth, setAuth } = props
   var itemDict = {}
-
 
   // Get menu (list of items with names and prices)
   useEffect(() => {
@@ -25,11 +22,10 @@ const VendorPastOrders = (props) => {
     })
   }, [])
 
-  if (menu){
-    // covert menu of snacks into a dictionary with ids as keys
+  if (menu) {
+    // make menu of snacks into a dictionary with ids as keys
     itemDict = dictify(menu)
   }
-
 
   // Get all vendor's orders
   useEffect(() => {
@@ -37,7 +33,7 @@ const VendorPastOrders = (props) => {
 
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${auth}`,
+      Authorization: `Bearer ${auth}`,
     }
 
     // If vendor is logged in
@@ -57,7 +53,6 @@ const VendorPastOrders = (props) => {
       console.log("no auth yet, so let's wait until they're logged in")
     }
   }, [auth])
-
 
   // If vendor is not logged in
   if (!auth) {
@@ -82,11 +77,15 @@ const VendorPastOrders = (props) => {
         : orders
             // Sort by newest orders first
             .sort((a, b) => -(new Date(a.modified) - new Date(b.modified)))
-            // Only show fulfilled and picked up orders
-            .filter(order => order.fulfilled && order.picked_up)
-            // Map orders to PastOrderCards 
-            .map((order) => (
-              <PastOrderCard itemDict={itemDict} order={order} auth={auth} setAuth={setAuth}/>
+            .filter((order) => order.fulfilled && order.picked_up)
+            .map((order, idx) => (
+              <PastOrderCard
+                key={idx}
+                itemDict={itemDict}
+                order={order}
+                auth={auth}
+                setAuth={setAuth}
+              />
             ))}
     </Container>
   )
