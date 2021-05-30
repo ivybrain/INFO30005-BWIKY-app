@@ -8,6 +8,7 @@ import {
   CardActions,
 } from '@material-ui/core'
 
+// Menu items for the modify order page
 const MMenuItem = (props) => {
   const { menuItem, modifiedOrder, setModifiedOrder } = props
 

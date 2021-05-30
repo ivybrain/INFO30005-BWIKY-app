@@ -1,19 +1,15 @@
-import { Container, Typography, Grid , Button } from '@material-ui/core'
+import { Container, Typography, Grid, Button } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import Ratings from 'react-ratings-declarative'
 import MenuItem from '../VanDetails/MenuItem'
-import { Link, Redirect, useHistory } from 'react-router-dom'
-
-
+import { Link, Redirect } from 'react-router-dom'
 
 const VanDetails = (props) => {
-  const { auth, vans, menu, setMenu, order, setOrder } = props
+  const { vans, menu, setMenu, order, setOrder } = props
   const id = props.match.params.id
   const [vanData, setVanData] = useState(null)
-  const history = useHistory()
-
 
   // Customer cancels order
   const handleCancelOrder = (e) => {
@@ -21,7 +17,6 @@ const VanDetails = (props) => {
     setOrder({ items: {}, confirmed: false })
     console.log('cleared order')
   }
-
 
   useEffect(() => {
     if (!vanData) {
@@ -84,7 +79,11 @@ const VanDetails = (props) => {
               ? `This van is ${Math.round(vanData.distance * 10) / 10}km away!`
               : null}
           </Typography>
-          <Ratings rating={vanData.rating} widgetDimensions="30px" widgetSpacings="8px">
+          <Ratings
+            rating={vanData.rating}
+            widgetDimensions="30px"
+            widgetSpacings="8px"
+          >
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
             <Ratings.Widget widgetRatedColor="orange"></Ratings.Widget>
@@ -102,7 +101,7 @@ const VanDetails = (props) => {
                 spacing={2}
                 style={{ marginTop: '2rem' }}
               >
-              {/* Display all items on vendor's menu*/}
+                {/* Display all items on vendor's menu*/}
 
                 {menu.map((menuItem, idx) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={idx}>
@@ -124,30 +123,40 @@ const VanDetails = (props) => {
       <br />
 
       <Grid container style={{ justifyContent: 'space-around' }}>
-
         <Grid item>
           <Button variant="outlined" color="orange" onClick={handleCancelOrder}>
-            <Typography variant="button" color="orange" display="block" gutterBottom>
+            <Typography
+              variant="button"
+              color="orange"
+              display="block"
+              gutterBottom
+            >
               Cancel Order
             </Typography>
           </Button>
         </Grid>
 
         <Grid item>
-          <Button variant="outlined"
+          <Button
+            variant="outlined"
             color="orange"
             component={Link}
             to="/customer/myorder"
-            style={{ textDecoration: 'none' }}>
-            <Typography variant="button" color="orange" display="block" gutterBottom>
+            style={{ textDecoration: 'none' }}
+          >
+            <Typography
+              variant="button"
+              color="orange"
+              display="block"
+              gutterBottom
+            >
               Review Order
             </Typography>
           </Button>
           {order.confirmed ? <Redirect to="/customer/orders" /> : null}
         </Grid>
-
       </Grid>
-      <br/ >
+      <br />
     </Container>
   )
 }
