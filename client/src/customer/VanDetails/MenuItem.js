@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 
 
-// Snacks on Menu to be Ordered 
+// Snacks on Menu to be Ordered
 const MenuItem = (props) => {
   const { menuItem, order, setOrder, vendor } = props
 
@@ -36,7 +36,6 @@ const MenuItem = (props) => {
       }
       setOrder(newOrder)
     }
-
     console.log(order)
   }
 
@@ -49,7 +48,7 @@ const MenuItem = (props) => {
     const _id = menuItem._id
     if (newOrder.items.hasOwnProperty(menuItem._id)) {
       if (newOrder.items[menuItem._id].quantity > 0) {
-        // Decrement it's quantity
+        // Decrement its quantity
         newOrder.items[_id].quantity--
       }
 
@@ -88,7 +87,7 @@ const MenuItem = (props) => {
             style={
               order.items[menuItem._id]
                 ? order.items[menuItem._id].quantity > 0
-                  ? { color: '#e69705' }
+                  ? { color: '#77DDAB' }
                   : {}
                 : {}
             }
@@ -98,15 +97,15 @@ const MenuItem = (props) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button style={{ margin: 'auto' }} onClick={handleAddToOrder}>
-            <Typography variant="button" display="block" gutterBottom>
+          <Button color="orange" style={{ margin: 'auto' }} onClick={handleAddToOrder}>
+            <Typography variant="button" color="orange" display="block" gutterBottom>
               Add to Order
             </Typography>
           </Button>
         </CardActions>
         <CardActions>
-          <Button style={{ margin: 'auto' }} onClick={handleRemoveFromOrder}>
-            <Typography variant="button" display="block" gutterBottom>
+          <Button color="orange" style={{ margin: 'auto' }} onClick={handleRemoveFromOrder}>
+            <Typography variant="button" color="orange" display="block" gutterBottom>
               Remove from Order
             </Typography>
           </Button>

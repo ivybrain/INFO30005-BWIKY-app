@@ -4,9 +4,6 @@ import { CssBaseline } from '@material-ui/core'
 import LoginScreen from './vendor/Pages/LoginScreen'
 import Checkin from './vendor/Pages/Checkin'
 import VendorOrders from './vendor/Pages/VendorOrders'
-import OrderCard from './vendor/Orders/VendorOrderCard'
-import FulfilledOrderCard from './vendor/Orders/FulfilledOrderCard'
-import PastOrderCard from "./vendor/PastOrders/PastOrderCard"
 import VendorPastOrders from "./vendor/Pages/VendorPastOrders"
 import NavBar from "./vendor/Nav"
 

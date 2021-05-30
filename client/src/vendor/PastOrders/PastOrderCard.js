@@ -7,19 +7,13 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  Button,
-  Grid,
-  Snackbar,
+  TableRow
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-
-import { API_URL } from '../../constants'
-import {dictify,
-  formatTime,
+import { API_URL , DISCOUNT } from '../../constants'
+import { formatTime,
   checkDiscount,
   formatDateTime
 } from '../../HelperFunctions'
@@ -54,24 +48,13 @@ const useStyles = makeStyles({
 
 // Fulfilled and Picked Up Orders for Vendor
 const PastOrderCard = (props) => {
-  const { order , auth, setAuth } = props
+  const { order , auth , setAuth , itemDict } = props
   const [customer, setCustomer] = useState('')
-  const [menu, setMenu] = useState(null)
-  const [open, setOpen] = useState(false)
+  const classes = useStyles()
   var customer_name = ""
 
-  const changeOpen = () => {
-    setOpen((open) => !open)
-  }
 
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  var itemDict = {}
-
-  const classes = useStyles()
-
+  // Get customer's name
   useEffect(() => {
     console.log('Getting Customer')
 
@@ -92,15 +75,7 @@ const PastOrderCard = (props) => {
     })
   }, [])
 
-  useEffect(() => {
-    console.log('getting items')
-    axios(`${API_URL}/items`).then((res) => {
-      setMenu(res.data)
-    })
-  }, [])
-
-  itemDict = dictify(menu)
-
+  // Format customer name
   if (customer){
     customer_name = customer.given_name + " " + customer.family_name
   }
@@ -138,7 +113,7 @@ const PastOrderCard = (props) => {
 
             <Typography variant="body2" color="textSecondary" component="p">
               Discount {' '}
-              {checkDiscount(order) ? "20" : "0"}% applied
+              {checkDiscount(order) ? DISCOUNT : 0 }% applied
             </Typography>
 
             <Typography variant="body2" color="textSecondary" component="p">

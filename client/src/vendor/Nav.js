@@ -31,28 +31,28 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
+// Navigation Bar for Vendor Client at top of all pages
 const NavBar = (props) => {
   const { auth, setAuth } = props
   const classes = useStyles()
-
   const xsMatch = useMediaQuery('(min-width:410px)')
   const smMatch = useMediaQuery('(min-width:600px)')
   const sevenFiftyMatch = useMediaQuery('(min-width:750px)')
-
   const history = useHistory()
 
 
+  // Handle Vendor check out
   const handle_check_out = (event) => {
     event.preventDefault()
     console.log('Checked Out')
     event.preventDefault()
-
 
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${auth}`,
     }
 
+    // Vendor check out of location
     const data = {
       ready: false,
     }
@@ -77,8 +77,8 @@ const NavBar = (props) => {
       console.error(err)
     })
 
+    // Log out vendor
     setAuth(null)
-
   }
 
   return (
@@ -146,16 +146,15 @@ const NavBar = (props) => {
                     spacing={!xsMatch ? 1 : 0}
                     style={{
                       justifyContent: !sevenFiftyMatch ? 'center' : 'flex-end',
-                      // alignItems: !xsMatch ? 'stretch' : 'center',
                       alignItems: 'stretch',
                     }}
                     justify="flex-end"
-                    // alignItems={!xsMatch ? 'stretch' : 'center'}
                     alignItems="stretch"
                   >
                   <Grid item>
                     <Button
                       variant="outlined"
+                      color="orange"
                       className={classes.text}
                       size={!smMatch ? 'small' : 'medium'}
                       style={{ width: !xsMatch ? '100%' : '' }}
@@ -163,6 +162,7 @@ const NavBar = (props) => {
                       <Button
                         component={Link}
                         to="/vendor/orders"
+                        color="orange"
                         style={{ textDecoration: 'none' }}
                       >
                         Current Orders
@@ -173,12 +173,14 @@ const NavBar = (props) => {
                   <Grid item style={{ marginLeft: !xsMatch ? '0px' : '0.5em' }}>
                     <Button
                       variant="outlined"
+                      color="orange"
                       className={classes.text}
                       size={!smMatch ? 'small' : 'medium'}
                       style={{ width: !xsMatch ? '100%' : '' }}
                     >
                       <Button
                         component={Link}
+                        color="orange"
                         to="/vendor/history"
                         style={{ textDecoration: 'none' }}
                       >
@@ -190,12 +192,14 @@ const NavBar = (props) => {
                   <Grid item style={{ marginLeft: !xsMatch ? '0px' : '0.5em' }}>
                     <Button
                       variant="outlined"
+                      color="orange"
                       className={classes.text}
                       size={!smMatch ? 'small' : 'medium'}
                       style={{ width: !xsMatch ? '100%' : '' , textDecoration: 'none'}}
                       onClick={handle_check_out}
                     >
                       <Button
+                        color="orange"
                         style={{ textDecoration: 'none' }}
                       >
                       Check Out

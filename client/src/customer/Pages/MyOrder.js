@@ -27,8 +27,6 @@ const audFormatter = new Intl.NumberFormat('en-AU', {
 const MyOrder = (props) => {
   const { order, setOrder, auth } = props
   const history = useHistory()
-  const [confirmed, setConfirmed] = useState(false)
-  const [cancelled, setCancelled] = useState(false)
 
 
   // If customer cancels order
@@ -144,8 +142,8 @@ const MyOrder = (props) => {
 
           {/*Cancel Button*/}
             <Grid item>
-              <Button variant="outlined" onClick={handleCancelOrder}>
-                <Typography variant="button" display="block" gutterBottom>
+              <Button variant="outlined" color="orange" onClick={handleCancelOrder}>
+                <Typography color="orange" variant="button" display="block" gutterBottom>
                   Cancel Order
                 </Typography>
               </Button>
@@ -153,8 +151,9 @@ const MyOrder = (props) => {
 
             {/*Edit Order Button, redirects customer back to van's menu*/}
             <Grid item>
-              <Button variant="outlined">
+              <Button variant="outlined" color="orange">
                 <Button
+                  color="orange"
                   component={Link}
                   to={`/customer/van/${order.vendor}`}
                   style={{ textDecoration: 'none' }}
@@ -166,8 +165,8 @@ const MyOrder = (props) => {
 
             {/*Confirm Order Button*/}
             <Grid item>
-              <Button variant="outlined" onClick={handleConfirmOrder}>
-                <Typography variant="button" display="block" gutterBottom>
+              <Button color="orange" variant="outlined" onClick={handleConfirmOrder}>
+                <Typography color="orange" variant="button" display="block" gutterBottom>
                   Confirm Order
                 </Typography>
               </Button>
@@ -177,7 +176,6 @@ const MyOrder = (props) => {
         </>
       ) : (
         <>
-
         {/*If there is no order yet*/}
 
           <Typography
@@ -189,8 +187,9 @@ const MyOrder = (props) => {
           </Typography>
 
           {/*Order History Button, redirects to page with all previous orders*/}
-          <Button variant="outlined">
+          <Button variant="outlined" color = "orange">
             <Button
+              color = "orange"
               component={Link}
               to="/customer/orders"
               style={{ textDecoration: 'none' }}

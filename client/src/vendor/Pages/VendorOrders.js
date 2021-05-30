@@ -5,13 +5,30 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import { API_URL } from '../../constants'
+import { dictify } from '../../HelperFunctions'
 
-
-// Vendor's page which displays all orders which are ongoing and awaiting pick up 
+// Vendor's page which displays all orders which are ongoing and awaiting pick up
 const VendorOrders = (props) => {
   const [orders, setOrders] = useState(null)
+  const [menu, setMenu] = useState(null)
   const { auth, setAuth } = props
+  var itemDict = {}
 
+  // Get menu (list of items with names and prices)
+  useEffect(() => {
+    console.log('getting items')
+
+    axios(`${API_URL}/items`).then((res) => {
+      setMenu(res.data)
+    })
+  }, [])
+
+  if (menu){
+    // make menu of snacks into a dictionary with ids as keys
+    itemDict = dictify(menu)
+  }
+
+  // Get orders
   useEffect(() => {
     console.log('Getting vendor orders')
 
@@ -70,6 +87,7 @@ const VendorOrders = (props) => {
             <Typography variant="h6" style={{ marginTop: "1em",marginBottom: "1em", marginLeft: "1em" }}>
               Outstanding Orders
             </Typography>
+
             {/*Only display unfulfilled (ongoing) orders. Sort by older orders first*/}
             {orders == null
               ? null
@@ -81,7 +99,7 @@ const VendorOrders = (props) => {
                   .map((order) => (
                     <Grid container direction="column" spacing={2}>
                       <Grid item>
-                        <OrderCard order={order} auth={auth} setAuth={setAuth} />
+                        <OrderCard itemDict={itemDict} order={order} auth={auth} setAuth={setAuth} />
                       </Grid>
                     </Grid>
 
@@ -90,7 +108,6 @@ const VendorOrders = (props) => {
           </Grid>
 
           <Grid item xs={4}>
-
           <Typography variant="h6" style={{ marginTop: "1em", marginBottom: "1em", arginLeft: "1em" }}>
             Orders Awaiting Pick Up
           </Typography>
@@ -106,7 +123,7 @@ const VendorOrders = (props) => {
                 .map((order) => (
                   <Grid container direction="column" spacing={2}>
                     <Grid item>
-                      <FulfilledOrderCard order={order} auth={auth} setAuth={setAuth} />
+                      <FulfilledOrderCard itemDict={itemDict} order={order} auth={auth} setAuth={setAuth} />
                     </Grid>
                   </Grid>
 

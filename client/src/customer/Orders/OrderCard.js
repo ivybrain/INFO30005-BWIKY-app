@@ -24,8 +24,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 
 import { API_URL } from '../../constants'
-import { dictify ,
-  formatDateTime ,
+import { formatDateTime ,
   checkModifyWindow} from '../../HelperFunctions'
 
 const columns = ['Item', 'Qty', 'Subtotal']
@@ -68,16 +67,31 @@ const StyledRating = withStyles({
 
 // Individual Order for Customer
 const OrderCard = (props) => {
-  const { order, auth, removeOrder } = props
+  const { order, auth, removeOrder, itemDict } = props
   const [rating, setRating] = useState(null)
   const [comment, setComment] = useState("")
   const [vendor, setVendor] = useState("")
-  const [menu, setMenu] = useState(null)
   const [open, setOpen] = useState(false)
   const [rating_open, setRatingOpen] = useState(false)
-  var itemDict = {} // Initialise menu dictionary
   const classes = useStyles()
 
+  // Handle pop up notifications for cancel order
+  const changeOpen = () => {
+    setOpen((open) => !open)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  // Handle pop up notifications for ratings
+  const ratingSubmitted = () => {
+    setRatingOpen((rating_open) => !rating_open)
+  }
+
+  const handleRatingClose = () => {
+    setRatingOpen(false)
+  }
 
 
   // If a customer changes their rating, PATCH to database
@@ -151,23 +165,6 @@ const OrderCard = (props) => {
 
   }
 
-  // Handle pop up notifications for cancel order
-  const changeOpen = () => {
-    setOpen((open) => !open)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  // Handle pop up notifications for ratings
-  const ratingSubmitted = () => {
-    setRatingOpen((rating_open) => !rating_open)
-  }
-
-  const handleRatingClose = () => {
-    setRatingOpen(false)
-  }
 
   // If a customer cancels an order
   const handleCancelOrder = (e) => {
@@ -230,17 +227,6 @@ const OrderCard = (props) => {
       setVendor(res.data.van_name)
     })
   }, [])
-
-  // Get menu
-  useEffect(() => {
-    console.log('getting items')
-    axios(`${API_URL}/items`).then((res) => {
-      setMenu(res.data)
-    })
-  }, [])
-
-
-  itemDict = dictify(menu) // make menu of snacks into a dictionary with ids as keys
 
 
   return (
@@ -390,17 +376,18 @@ const OrderCard = (props) => {
             {/*Customer can only change or cancel order if order is unfulfilled AND it is within the time limit*/}
               {!order.fulfilled && checkModifyWindow(order.modified) ? (
                 <Grid item>
-                  <Button variant="outlined">
+                  <Button variant="outlined" color="orange">
                     <Typography
                       variant="button"
                       display="block"
                       gutterBottom
                       component={Link}
+                      color = "inherit"
                       to={{
                         pathname: `/customer/modify/${order.vendor}/${order._id}`,
                         order: order,
                       }}
-                      style={{ textDecoration: 'none' }}
+                      style={{ textDecoration: "none" }}
                     >
                       Modify Order
                     </Typography>
@@ -410,8 +397,8 @@ const OrderCard = (props) => {
 
               {!order.fulfilled && checkModifyWindow(order.modified) ? (
                 <Grid item>
-                  <Button variant="outlined" onClick={handleCancelOrder}>
-                    <Typography variant="button" display="block" gutterBottom>
+                  <Button variant="outlined" color="orange" onClick={handleCancelOrder}>
+                    <Typography variant="button" color="orange" display="block" gutterBottom>
                       Cancel Order
                     </Typography>
                   </Button>

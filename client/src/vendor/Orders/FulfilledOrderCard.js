@@ -1,15 +1,7 @@
 import React from 'react';
 import {
-  Paper,
   Container,
   Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableContainer,
-  TableHead,
-  Checkbox,
   Grid,
   Accordion,
   AccordionDetails,
@@ -24,12 +16,9 @@ import { useHistory } from 'react-router'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-import { API_URL } from '../../constants'
-import {dictify,
-  formatTime,
+import { API_URL , DISCOUNT } from '../../constants'
+import {formatTime,
   checkDiscount,
-  getDeadline,
-  getTimeRemaining,
   stringifyItems} from '../../HelperFunctions'
 
 const useStyles = makeStyles((theme) => ({
@@ -55,37 +44,31 @@ const useStyles = makeStyles((theme) => ({
 // Orders which are fulfilled and waiting to be picked up
 const FulfilledOrderCard = (props) => {
   const classes = useStyles();
-  const [menu, setMenu] = useState(null)
   const [customer, setCustomer] = useState(null)
-  const [expanded, setExpanded] = React.useState(false);
-  const columns = ["Item", "Qty", "Status"];
+  const [open, setOpen] = useState(false)
+  const [expanded, setExpanded] = React.useState(false)
   const history = useHistory()
-
-  const { order , auth, setAuth } = props
-  var itemDict = {}
+  const { itemDict, order , auth, setAuth } = props
   var customer_name = ""
 
-  const [open, setOpen] = useState(false)
-
-  // Handle Pop Up
+  // Handle Picked Up Pop Up
   const changeOpen = () => {
     setOpen((open) => !open)
   }
-
   const handleClose = () => {
     setOpen(false)
   }
 
-
+  // Handle expanding window
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   }
 
-
+  // If Picked Up button was pressed
   const handlePickUpOrder = (event) => {
     event.preventDefault()
-    history.push('/vendor/orders')
 
+    history.push('/vendor/orders')
     console.log('Picking up order')
 
     const headers = {
@@ -93,11 +76,12 @@ const FulfilledOrderCard = (props) => {
       'Authorization': `Bearer ${auth}`,
     }
 
+    // Mark order as picked up
     const data = {
       picked_up: true
     }
 
-    changeOpen()
+    changeOpen() // Flash Picked Up message
 
     axios({
       url: `${API_URL}/vendors/${order.vendor}/orders/${order._id}`,
@@ -110,6 +94,7 @@ const FulfilledOrderCard = (props) => {
       })
   }
 
+  // Get name of customer
   useEffect(() => {
     console.log('Getting Customer Name')
 
@@ -129,18 +114,6 @@ const FulfilledOrderCard = (props) => {
         console.log("Invalid customer")
     })
   }, [])
-
-
-  useEffect(() => {
-    console.log('getting items')
-
-    axios(`${API_URL}/items`).then((res) => {
-      setMenu(res.data)
-    })
-  }, [])
-
-
-  itemDict = dictify(menu)
 
   if (customer){
     customer_name = customer.given_name + " " + customer.family_name
@@ -171,11 +144,14 @@ const FulfilledOrderCard = (props) => {
                 <Typography variant="subtitle2" style={{ marginBottom: "1em" }}>{stringifyItems(order, itemDict)}</Typography>
                 <Typography variant="body2" style={{ marginBottom: "1em" }}>Order Placed : {formatTime(order.modified)}</Typography>
                 <Typography variant="body2" style={{ marginBottom: "1em" }}>Order Fulfilled : {formatTime(order.fulfilled_time)}</Typography>
-                <Typography variant="body2" style={{ marginBottom: "1em" }}>Discount : {checkDiscount(order) ? "20" : "0"}%</Typography>
+                <Typography variant="body2" style={{ marginBottom: "1em" }}>Discount : {checkDiscount(order) ? DISCOUNT : 0 }%</Typography>
 
                 {/*Button to mark order as fulfilled*/}
-                <Button variant="outlined" style={{marginTop: "1em"}} onClick={handlePickUpOrder}>
-                  <Typography variant="button" display="block">
+                <Button variant="outlined"
+                  color="green"
+                  style={{marginTop: "1em"}}
+                  onClick={handlePickUpOrder}>
+                  <Typography variant="button" color="orange" display="block">
                     Picked Up
                   </Typography>
                 </Button>

@@ -8,9 +8,7 @@ import {
 } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from '../../theme'
-
 import { useState, useEffect } from 'react'
-
 import jwt from 'jsonwebtoken'
 import { API_URL } from '../../constants'
 import axios from 'axios'
@@ -19,15 +17,13 @@ import { Link } from 'react-router-dom';
 
 
 
-// Location Check In Page
+// Vendor Location Check In Page
 const Checkin = (props) => {
   const { auth, setAuth } = props
   const [ location, setLocation ] = useState(null)
-
   const history = useHistory()
 
-
-  // Get Geolocation
+  // Get Geolocation of Vendor
   useEffect(() => {
     if (!location) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -44,7 +40,7 @@ const Checkin = (props) => {
   }, [])
 
 
-
+  // Vendor submits a location as a text string
   const handle_form_submit = (event) => {
     event.preventDefault()
 
@@ -106,6 +102,7 @@ const Checkin = (props) => {
               Please enter your location to check in.
             </Typography>
           </Grid>
+          <br/>
 
           {/*Text field to get location string*/}
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>

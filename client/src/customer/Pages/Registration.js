@@ -12,11 +12,13 @@ import { useHistory } from 'react-router'
 import { API_URL } from '../../constants'
 
 
+// Customer Registration Page
 const Registration = (props) => {
   const { auth } = props
 
   const history = useHistory()
 
+  // Submit registration form to create a new account
   const handle_form_submit = (event) => {
     event.preventDefault()
 
@@ -68,11 +70,13 @@ const Registration = (props) => {
           <Typography variant="subtitle">
             Please register to start ordering.
           </Typography>
+
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
             <Grid container direction="row">
             <Grid item style={{ marginTop: '1em' }}>
               <TextField
                 required
+                color="orange"
                 name="given_name"
                 label="Given Name"
                 variant="outlined"
@@ -81,6 +85,7 @@ const Registration = (props) => {
             <Grid item style={{ marginTop: '1em' , marginLeft:'0.5em'}}>
               <TextField
                 required
+                color="orange"
                 name="family_name"
                 label="Family Name"
                 variant="outlined"
@@ -92,6 +97,7 @@ const Registration = (props) => {
               <Grid item style={{ marginTop: '0.5em' }}>
                 <TextField
                   required
+                  color="orange"
                   name="email"
                   label="Email Address"
                   variant="outlined"
@@ -100,6 +106,7 @@ const Registration = (props) => {
               <Grid item style={{ marginTop: '0.5em' , marginLeft:'0.5em'}}>
                 <TextField
                   required
+                  color="orange"
                   name="password"
                   type="password"
                   label="Password"
@@ -109,7 +116,7 @@ const Registration = (props) => {
             </Grid>
             <Button
               variant="contained"
-              color="primary"
+              color="orange"
               disableElevation
               style={{ marginTop: '1em' }}
             >

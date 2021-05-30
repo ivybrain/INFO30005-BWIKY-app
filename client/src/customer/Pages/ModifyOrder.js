@@ -4,12 +4,15 @@ import {
   Grid,
   Snackbar,
   Typography,
+  ThemeProvider
 } from '@material-ui/core'
+import theme from '../../theme';
 import { useEffect, useState } from 'react'
 import MMenuItem from '../ModifyOrder/MMenuItem'
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import { Link, Redirect } from 'react-router-dom'
+
 
 const ModifyOrder = (props) => {
   const { auth, menu, setMenu, order } = props
@@ -108,6 +111,7 @@ const ModifyOrder = (props) => {
   }
 
   return (
+    <ThemeProvider theme={theme}>
     <Container>
       <Typography gutterBottom variant="h5" component="h2" display="inline">
         Updating Order{' '}
@@ -153,8 +157,9 @@ const ModifyOrder = (props) => {
             }}
           >
             <Grid item>
-              <Button variant="outlined">
+              <Button color="orange" variant="outlined">
                 <Button
+                  color="orange"
                   component={Link}
                   to={`/customer/orders`}
                   style={{ textDecoration: 'none' }}
@@ -164,16 +169,16 @@ const ModifyOrder = (props) => {
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="outlined" onClick={handleUpdateOrder}>
-                <Typography variant="button" display="block" gutterBottom>
+              <Button variant="outlined" color="orange" onClick={handleUpdateOrder}>
+                <Typography variant="button" color="orange" display="block" gutterBottom>
                   Update Order
                 </Typography>
               </Button>
-              {/* {order.confirmed ? <Redirect to="/customer/orders" /> : null} */}
             </Grid>
           </Grid>
         </>
       )}
+
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={open}
@@ -181,6 +186,7 @@ const ModifyOrder = (props) => {
         message="Order Modified!"
       />
     </Container>
+    </ThemeProvider>
   )
 }
 

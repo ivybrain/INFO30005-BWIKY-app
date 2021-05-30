@@ -126,8 +126,8 @@ const VanDetails = (props) => {
       <Grid container style={{ justifyContent: 'space-around' }}>
 
         <Grid item>
-          <Button variant="outlined" onClick={handleCancelOrder}>
-            <Typography variant="button" display="block" gutterBottom>
+          <Button variant="outlined" color="orange" onClick={handleCancelOrder}>
+            <Typography variant="button" color="orange" display="block" gutterBottom>
               Cancel Order
             </Typography>
           </Button>
@@ -135,10 +135,11 @@ const VanDetails = (props) => {
 
         <Grid item>
           <Button variant="outlined"
+            color="orange"
             component={Link}
             to="/customer/myorder"
             style={{ textDecoration: 'none' }}>
-            <Typography variant="button" display="block" gutterBottom>
+            <Typography variant="button" color="orange" display="block" gutterBottom>
               Review Order
             </Typography>
           </Button>

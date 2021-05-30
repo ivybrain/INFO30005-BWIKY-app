@@ -1,14 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
+// Material UI theme 
 const theme = createMuiTheme({
-  // palette: {
-  //   primary: {
-  //     main: purple[50],
-  //   },
-  //   secondary: {
-  //     main: green[500],
-  //   },
-  // },
   palette: {
     orange: {
       main: '#F27D52',

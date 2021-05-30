@@ -1,5 +1,6 @@
 import { Container, Grid, Typography } from '@material-ui/core'
 import PastOrderCard from "../PastOrders/PastOrderCard";
+import { dictify } from '../../HelperFunctions'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { API_URL } from '../../constants'
@@ -10,9 +11,26 @@ import jwt from 'jsonwebtoken'
 // Vendor's Order History Page (Fulfilled and Picked Up)
 const VendorPastOrders = (props) => {
   const [orders, setOrders] = useState(null)
+  const [menu, setMenu] = useState(null)
   const { auth , setAuth} = props
+  var itemDict = {}
 
 
+  // Get menu (list of items with names and prices)
+  useEffect(() => {
+    console.log('getting items')
+
+    axios(`${API_URL}/items`).then((res) => {
+      setMenu(res.data)
+    })
+  }, [])
+
+  if (menu){
+    // make menu of snacks into a dictionary with ids as keys
+    itemDict = dictify(menu)
+  }
+
+  // Get all orders
   useEffect(() => {
     console.log('Getting vendor orders')
 
@@ -38,6 +56,7 @@ const VendorPastOrders = (props) => {
     }
   }, [auth])
 
+  // If vendor is not logged in
   if (!auth) {
     return (
       <Container>
@@ -49,6 +68,7 @@ const VendorPastOrders = (props) => {
     )
   }
 
+  // Show orders only if vendor is logged in
   return (
     <Container>
       <Typography variant="h2">Order History</Typography>
@@ -60,7 +80,7 @@ const VendorPastOrders = (props) => {
             .sort((a, b) => -(new Date(a.modified) - new Date(b.modified)))
             .filter(order => order.fulfilled && order.picked_up)
             .map((order) => (
-              <PastOrderCard order={order} auth={auth} setAuth={setAuth}/>
+              <PastOrderCard itemDict={itemDict} order={order} auth={auth} setAuth={setAuth}/>
             ))}
     </Container>
   )

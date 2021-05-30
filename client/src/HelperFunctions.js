@@ -38,9 +38,7 @@ export function checkModifyWindow(time){
   const modified_time = new Date(time)
   const current_time = new Date()
 
-
   if ((current_time-modified_time) <= modify_limit * 60000 ){
-    console.log("Checking modify window")
     return true // Customer can modify/cancel within window
 
   }else{

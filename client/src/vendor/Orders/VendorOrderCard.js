@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Paper,
   Container,
   Typography,
   Table,
@@ -24,15 +23,12 @@ import { useHistory } from 'react-router'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-import { API_URL } from '../../constants'
-import {dictify,
-  formatTime,
+import { API_URL , DISCOUNT } from '../../constants'
+import {formatTime,
   checkDiscount,
   getDeadline,
   getTimeRemaining,
   stringifyItems} from '../../HelperFunctions'
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,16 +53,12 @@ const useStyles = makeStyles((theme) => ({
 // Individual Outstanding Order for Vendor
 const OrderCard = (props) => {
   const classes = useStyles();
-  const [menu, setMenu] = useState(null)
   const [customer, setCustomer] = useState(null)
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = React.useState(false);
   const columns = ["Item", "Qty", "Status"];
   const history = useHistory()
-
-  const { order , auth, setAuth } = props
-
-  var itemDict = {}
+  const { itemDict, order , auth, setAuth } = props
   var customer_name = ""
 
   // Handle Pop Up
@@ -84,11 +76,10 @@ const OrderCard = (props) => {
     setExpanded(isExpanded ? panel : false);
   }
 
-
+  // If Fulfill button was pressed
   const handleFulfillOrder = (event) => {
     event.preventDefault()
     console.log('Fulfilling order')
-
     history.push('/vendor/orders')
 
     const headers = {
@@ -100,7 +91,7 @@ const OrderCard = (props) => {
       fulfilled: true
     }
 
-    changeOpen() // trigger pop up
+    changeOpen() // trigger fulfilled order pop up
 
     axios({
       url: `${API_URL}/vendors/${order.vendor}/orders/${order._id}`,
@@ -114,7 +105,7 @@ const OrderCard = (props) => {
 
   }
 
-
+  // Get customer's name
   useEffect(() => {
     const headers = {
       'Content-Type': 'application/json',
@@ -136,23 +127,10 @@ const OrderCard = (props) => {
     })
   }, [])
 
-
-  useEffect(() => {
-    const headers = { 'Access-Control-Allow-Origin': '*' }
-
-    console.log('getting items')
-
-    axios(`${API_URL}/items`).then((res) => {
-      setMenu(res.data)
-    })
-  }, [])
-
-  itemDict = dictify(menu)
-
+  // Format customer name
   if (customer){
     customer_name = customer.given_name + " " + customer.family_name
   }
-
 
   return (
     <Card
@@ -166,7 +144,9 @@ const OrderCard = (props) => {
         id= {order._id}
       >
         <Typography className={classes.heading}>{getTimeRemaining(order)} mins</Typography>
-        <Typography className={classes.secondaryHeading}>Order #{parseInt(order._id.slice(-4), 16).toString().slice(-4)} : {stringifyItems(order, itemDict)}</Typography>
+        <Typography className={classes.secondaryHeading}>
+          Order #{parseInt(order._id.slice(-4), 16).toString().slice(-4)} : {stringifyItems(order, itemDict)}
+        </Typography>
       </AccordionSummary>
 
       {/*Individual Order Cards to be expanded*/}
@@ -215,7 +195,7 @@ const OrderCard = (props) => {
 
                             <TableCell>
                               <Checkbox
-                                color="primary"
+                                color="green"
                               ></Checkbox>
                             </TableCell>
 
@@ -234,28 +214,31 @@ const OrderCard = (props) => {
                 <Typography variant="subtitle2" style={{ marginTop: "1em", marginLeft: "1em" }}>
                   Customer Details
                 </Typography>
-                <br />
 
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>
-                Name : {customer_name}
+                <Typography variant="body2" style={{ marginTop: "0.5em", marginLeft: "1em" }}>
+                  Name : {customer_name}
                 </Typography>
-                <br />
 
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>
-                Order Placed : {formatTime(order.modified)}
+                <Typography variant="body2" style={{ marginTop: "0.5em", marginLeft: "1em" }}>
+                  Order Placed : {formatTime(order.modified)}
                 </Typography>
-                <br />
 
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>
-                Order Deadline : {getDeadline(order)}</Typography>
-                <br />
+                <Typography variant="body2" style={{ marginTop: "0.5em", marginLeft: "1em" }}>
+                  Order Deadline : {getDeadline(order)}
+                </Typography>
 
-                <Typography variant="body2" style={{ marginLeft: "1em" }}>
-                Discount : {checkDiscount(order) ? "20" : "0"}%</Typography>
+                <Typography variant="body2" style={{ marginTop: "0.5em", marginLeft: "1em" }}>
+                  Discount : {checkDiscount(order) ? DISCOUNT : 0}%
+                </Typography>
 
                 {/*Button to mark order as fulfilled*/}
-                <Button variant="outlined" style={{ marginLeft: "1em", marginTop: "1em"}} onClick={handleFulfillOrder}>
-                  <Typography variant="button" display="block">
+                <Button variant="outlined"
+                  color="orange"
+                  style={{ marginLeft: "1em", marginTop: "1em"}}
+                  onClick={handleFulfillOrder}>
+                  <Typography variant="button"
+                    color="orange"
+                    display="block">
                     Complete
                   </Typography>
                 </Button>
