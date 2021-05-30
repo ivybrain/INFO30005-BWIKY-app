@@ -10,17 +10,16 @@ import {
   Button,
   Snackbar
 } from "@material-ui/core";
-
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-
 import { API_URL , DISCOUNT } from '../../constants'
 import {formatTime,
   checkDiscount,
   stringifyItems} from '../../HelperFunctions'
 
+// Style sheet
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -41,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-// Orders which are fulfilled and waiting to be picked up
+
+// An individual order which is fulfilled and waiting to be picked up
 const FulfilledOrderCard = (props) => {
   const classes = useStyles();
   const [customer, setCustomer] = useState(null)
@@ -51,6 +51,7 @@ const FulfilledOrderCard = (props) => {
   const { itemDict, order , auth, setAuth } = props
   var customer_name = ""
 
+
   // Handle Picked Up Pop Up
   const changeOpen = () => {
     setOpen((open) => !open)
@@ -59,10 +60,12 @@ const FulfilledOrderCard = (props) => {
     setOpen(false)
   }
 
-  // Handle expanding window
+  // Handle expanding panel
+  // Panel expands into full card when clicked on
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   }
+
 
   // If Picked Up button was pressed
   const handlePickUpOrder = (event) => {
@@ -94,6 +97,7 @@ const FulfilledOrderCard = (props) => {
       })
   }
 
+
   // Get name of customer
   useEffect(() => {
     console.log('Getting Customer Name')
@@ -115,6 +119,7 @@ const FulfilledOrderCard = (props) => {
     })
   }, [])
 
+  // Format customer's name
   if (customer){
     customer_name = customer.given_name + " " + customer.family_name
   }
@@ -127,7 +132,7 @@ const FulfilledOrderCard = (props) => {
     >
 
     <Accordion expanded={expanded === order._id} onChange={handleChange(order._id)}>
-    {/*Summary of Order Card*/}
+    {/*Summary of Order Card (panel)*/}
       <AccordionSummary
         id= {order._id}
       >
@@ -135,7 +140,7 @@ const FulfilledOrderCard = (props) => {
         <Typography className={classes.secondaryHeading}>{customer_name}</Typography>
       </AccordionSummary>
 
-      {/*Individual Order Cards to be expanded*/}
+      {/*Full Order Card when expanded*/}
       <AccordionDetails>
       <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
         <Container>
@@ -156,6 +161,7 @@ const FulfilledOrderCard = (props) => {
                   </Typography>
                 </Button>
 
+                {/*Message to be flashed on pick up*/}
                 <Snackbar
                   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                   open={open}

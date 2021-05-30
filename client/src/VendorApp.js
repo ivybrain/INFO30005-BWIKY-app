@@ -7,6 +7,8 @@ import VendorOrders from './vendor/Pages/VendorOrders'
 import VendorPastOrders from "./vendor/Pages/VendorPastOrders"
 import NavBar from "./vendor/Nav"
 
+
+// Main Vendor Client function
 function VendorApp() {
   const [auth, setAuth] = useState(null)
 
@@ -14,19 +16,23 @@ function VendorApp() {
     <div>
       <CssBaseline />
 
+      {/* Navigation bar */}
       <NavBar auth={auth} setAuth = {setAuth}></NavBar>
 
       <Switch>
+        {/* Vendor login page */}
         <Route
           exact path="/vendor/"
           render={(props) => <LoginScreen auth={auth} setAuth = {setAuth}></LoginScreen>}
         />
 
+        {/* Location check in page */}
         <Route
           exact path="/vendor/checkin"
           render={(props) => <Checkin auth={auth} setAuth = {setAuth}></Checkin>}
         />
 
+        {/* Current orders page */}
         <Route
           exact path="/vendor/orders"
           render={(props) => (
@@ -34,6 +40,7 @@ function VendorApp() {
           )}
         />
 
+        {/* Past orders page */}
         <Route
           exact path="/vendor/history"
           render={(props) => <VendorPastOrders auth={auth} setAuth = {setAuth}></VendorPastOrders>

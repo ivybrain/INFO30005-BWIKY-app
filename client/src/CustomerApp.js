@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { CssBaseline } from '@material-ui/core'
-// import Nav from './customer/Nav'
-// import Nav2 from './customer/Nav2'
 import Nav3 from './customer/Nav3'
 import { Switch, Route } from 'react-router-dom'
 import SplashPage from './customer/Pages/SplashPage'
@@ -17,12 +15,11 @@ const CustomerApp = () => {
   const [location, setLocation] = useState(null)
   const [vans, setVans] = useState(null)
   const [menu, setMenu] = useState(null)
+  const [auth, setAuth] = useState(null)
   const [order, setOrder] = useState({
     items: {},
     confirmed: false,
   })
-  
-  const [auth, setAuth] = useState(null)
 
   return (
     <div className="App">

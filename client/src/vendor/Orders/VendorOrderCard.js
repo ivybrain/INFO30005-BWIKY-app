@@ -17,12 +17,10 @@ import {
   Button,
   Snackbar
 } from "@material-ui/core";
-
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-
 import { API_URL , DISCOUNT } from '../../constants'
 import {formatTime,
   checkDiscount,
@@ -30,6 +28,7 @@ import {formatTime,
   getTimeRemaining,
   stringifyItems} from '../../HelperFunctions'
 
+// Style sheet
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -50,7 +49,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-// Individual Outstanding Order for Vendor
+
+// An individual Outstanding Order for Vendor
 const OrderCard = (props) => {
   const classes = useStyles();
   const [customer, setCustomer] = useState(null)
@@ -61,7 +61,7 @@ const OrderCard = (props) => {
   const { itemDict, order , auth, setAuth } = props
   var customer_name = ""
 
-  // Handle Pop Up
+  // Handle order fulfilled pop up
   const changeOpen = () => {
     setOpen((open) => !open)
   }
@@ -70,7 +70,8 @@ const OrderCard = (props) => {
     setOpen(false)
   }
 
-  // Accordian Handler
+
+  //  Handle expanding panel
   const handleChange = (panel) => (event, isExpanded) => {
     // Expands panel when clicked
     setExpanded(isExpanded ? panel : false);
@@ -87,6 +88,7 @@ const OrderCard = (props) => {
       'Authorization': `Bearer ${auth}`,
     }
 
+    // Mark order as fulfilled
     const data = {
       fulfilled: true
     }
@@ -102,8 +104,8 @@ const OrderCard = (props) => {
       .catch((err) => {
         console.error(err)
       })
-
   }
+
 
   // Get customer's name
   useEffect(() => {
@@ -139,7 +141,7 @@ const OrderCard = (props) => {
     >
 
     <Accordion expanded={expanded === order._id} onChange={handleChange(order._id)}>
-    {/*Summary of Order Card*/}
+    {/*Summary of Order Card (panel)*/}
       <AccordionSummary
         id= {order._id}
       >
@@ -149,7 +151,7 @@ const OrderCard = (props) => {
         </Typography>
       </AccordionSummary>
 
-      {/*Individual Order Cards to be expanded*/}
+      {/*Full Order Card when expanded*/}
       <AccordionDetails>
       <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
         <Container>
@@ -169,10 +171,13 @@ const OrderCard = (props) => {
                   style={{ height: "100%" }}
                 >
 
+                {/*If dictionary of items is defined*/}
                 {Object.keys(itemDict).length !== 0 && (
                   <Grid item xs={8}>
                     <TableContainer>
                       <Table>
+
+                      {/*Mapping table column names*/}
                         <TableHead>
                           <TableRow>
                             {columns.map((column) => (
@@ -181,18 +186,23 @@ const OrderCard = (props) => {
                           </TableRow>
                         </TableHead>
 
-                        {/*Mapping Items*/}
+                        {/*Mapping item names and quantities to the table*/}
                         <TableBody>
                         {Object.keys(order.items).map((id, idx) => (
                           <TableRow key={idx}>
+
+                          {/*Mapping item names using dictionary*/}
                             <TableCell>
                               {itemDict[order.items[id]['item']]['item_name']}
                             </TableCell>
 
+                          {/*Mapping item quantities in order*/}
                             <TableCell>
                             {order.items[id].quantity}
                             </TableCell>
 
+                            {/*Status checkboxes for each item for vendors
+                              to check their progres on the order*/}
                             <TableCell>
                               <Checkbox
                                 color="green"
@@ -209,7 +219,7 @@ const OrderCard = (props) => {
                 </Grid>
               </Grid>
 
-              {/*Customer Details*/}
+              {/*Display ustomer Details*/}
               <Grid item xs={4}>
                 <Typography variant="subtitle2" style={{ marginTop: "1em", marginLeft: "1em" }}>
                   Customer Details
@@ -243,6 +253,7 @@ const OrderCard = (props) => {
                   </Typography>
                 </Button>
 
+                {/*Message to be flashed when order is fulfilled*/}
                 <Snackbar
                   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                   open={open}

@@ -34,7 +34,7 @@ const Checkin = (props) => {
       })
     }
     if (!location) {
-      // Default Location
+      // Default Location if geolocation cannot be retrieved
       setLocation({ coords: { latitude: -37.80435, longitude: 144.96296 } })
     }
   }, [])
@@ -51,10 +51,13 @@ const Checkin = (props) => {
       'Authorization': `Bearer ${auth}`,
     }
 
+    // Send both the simple text location and the geolocation
     const data = {
       location: {
+        // coordinates
         lat: location.coords.latitude,
         long: location.coords.longitude,
+        // simple location as text
         simple:  event.target.location_string.value,
       },
       ready: true,
@@ -69,9 +72,8 @@ const Checkin = (props) => {
 
     .then((res) => {
       if (res.data){
-        console.log("Checking in Location for vendor %s", jwt.decode(auth)._id)
         console.log(data)
-        // Redirect to orders
+        // Redirect vendor to orders page after check in
         history.push('/vendor/orders')
       }
     })
@@ -91,8 +93,8 @@ const Checkin = (props) => {
           }}
         >
 
+          {/*Header and descriptive text*/}
           <Grid container direction="column" justify="center" spacing={3}>
-
           <Grid item style={{ margin: 'auto' }}>
             <Typography variant="h4">Welcome Back {auth ? jwt.decode(auth).van_name : null}!</Typography>
           </Grid>
@@ -104,9 +106,10 @@ const Checkin = (props) => {
           </Grid>
           <br/>
 
-          {/*Text field to get location string*/}
+          {/*Text field to get location string for check in*/}
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
           <Grid container direction="column" justify="center" spacing={3}>
+
             <Grid item style={{ margin: 'auto'}}>
               <TextField
               required
@@ -117,6 +120,7 @@ const Checkin = (props) => {
               color='orange'></TextField>
             </Grid>
 
+            {/* Check in button*/}
             <Grid item style={{ margin: 'auto' }}>
               <Button variant="contained" color='orange' disableElevation>
                 Check In
@@ -124,9 +128,9 @@ const Checkin = (props) => {
             </Grid>
 
           </Grid>
-
           </form>
-          </Grid>
+        </Grid>
+
         </Container>
       </Grid>
      </ThemeProvider>

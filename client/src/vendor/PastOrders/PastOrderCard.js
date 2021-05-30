@@ -23,11 +23,13 @@ const columns = ['Item', 'Qty', 'Subtotal']
 const checkmark = '\uD83D\uDDF9'
 const emptyBox = '\u2610'
 
+// Formatter to display prices as AUD
 const audFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',
   currency: 'AUD',
 })
 
+// Style sheet
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -46,7 +48,8 @@ const useStyles = makeStyles({
 })
 
 
-// Fulfilled and Picked Up Orders for Vendor
+
+// A Fulfilled and Picked Up Order for Vendor
 const PastOrderCard = (props) => {
   const { order , auth , setAuth , itemDict } = props
   const [customer, setCustomer] = useState('')
@@ -54,7 +57,7 @@ const PastOrderCard = (props) => {
   var customer_name = ""
 
 
-  // Get customer's name
+  // Get customer's name for the order
   useEffect(() => {
     console.log('Getting Customer')
 
@@ -80,6 +83,7 @@ const PastOrderCard = (props) => {
     customer_name = customer.given_name + " " + customer.family_name
   }
 
+
   return (
     <>
       <Card
@@ -87,8 +91,11 @@ const PastOrderCard = (props) => {
         variant="outlined"
         style={{ marginTop: '20px' }}
       >
+        {/* If item dictionary is defined*/}
         {itemDict.length !== 0 && (
           <CardContent>
+
+          {/*Display order number*/}
             <Typography
               gutterBottom
               variant="h5"
@@ -106,31 +113,39 @@ const PastOrderCard = (props) => {
             >
               #{parseInt(order._id.slice(-4), 16).toString().slice(-4)}
             </Typography>
+
+            {/*Display customer name, date and time order was placed*/}
             <Typography variant="body2" color="textSecondary" component="p">
               Ordered by {customer_name}{' '}
               {order.modified ? `on ${formatDateTime(order.modified)}` : null}
             </Typography>
 
+            {/*Display status of discount*/}
             <Typography variant="body2" color="textSecondary" component="p">
               Discount {' '}
               {checkDiscount(order) ? DISCOUNT : 0 }% applied
             </Typography>
 
+            {/*Display date and time order was fulfilled*/}
             <Typography variant="body2" color="textSecondary" component="p">
               Fulfilled at {' '}
               {order.fulfilled ? `${formatTime(order.fulfilled_time)}` : null}
             </Typography>
 
+            {/*Display picked up status*/}
             <Typography variant="body2" color="textSecondary" component="p">
               Picked Up {checkmark}
             </Typography>
 
+            {/*If item dictionary is defined and order has items*/}
             {Object.keys(itemDict).length !== 0 &&
               order.items &&
               Object.keys(order.items).length !== 0 && (
                 <>
                   <TableContainer>
                     <Table>
+
+                      {/*Mapping column names*/}
                       <TableHead>
                         <TableRow>
                           {columns.map((column) => (
@@ -139,14 +154,19 @@ const PastOrderCard = (props) => {
                         </TableRow>
                       </TableHead>
 
-                      {/*Mapping Items*/}
+                      {/*Mapping item names, quantities and prices to table*/}
                       <TableBody>
                         {Object.keys(order.items).map((id, idx) => (
                           <TableRow key={idx}>
+                          {/*Mapping item names by referring to dictionary*/}
                             <TableCell>
                               {itemDict[order.items[id]['item']]['item_name']}
                             </TableCell>
+
+                            {/*Mapping item quantities in order*/}
                             <TableCell>{order.items[id].quantity}</TableCell>
+
+                            {/*Calculate and map item prices*/}
                             <TableCell>
                               {audFormatter.format(
                                 order.items[id].quantity *
@@ -158,8 +178,11 @@ const PastOrderCard = (props) => {
                           </TableRow>
                         ))}
                         <TableRow>
+
                           <TableCell></TableCell>
                           <TableCell></TableCell>
+
+                          {/*Calculate and display total price of order*/}
                           <TableCell>
                             <Typography variant="subtitle2" gutterBottom>
                               Total:{' '}

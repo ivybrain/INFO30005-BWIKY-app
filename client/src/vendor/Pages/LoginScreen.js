@@ -7,7 +7,6 @@ import {
 } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../../theme';
-
 import { API_URL } from '../../constants'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
@@ -19,10 +18,10 @@ import { Link } from 'react-router-dom';
 // Login Page for Vendor
 const LoginScreen = (props) => {
   const { auth, setAuth } = props
-
   const history = useHistory()
 
 
+  // Vendor submits details to log in
   const handle_form_submit = (event) => {
     event.preventDefault()
 
@@ -31,6 +30,7 @@ const LoginScreen = (props) => {
       'Access-Control-Allow-Origin': '*',
     }
 
+    // Submit van name and password for log in
     const data = {
       van_name: event.target.van_name.value,
       password: event.target.password.value,
@@ -43,16 +43,18 @@ const LoginScreen = (props) => {
       headers: headers,
     })
 
+    // Get response from server
     .then((res) => {
-      setAuth(res.data)
+      setAuth(res.data) // Set authentication token
+
       const cst = jwt.decode(res.data)
       if (cst) {
         console.log(res.data)
         console.log(cst)
-
         // Redirect successful login to check in page
         history.push('/vendor/checkin')
-      } else console.err('Invalid token')
+      }else{
+        console.err('Invalid token')
       })
 
       // Invalid login
@@ -88,7 +90,7 @@ const LoginScreen = (props) => {
         </Grid>
           <br />
 
-          {/*Text fields to enter registration details*/}
+          {/*Text fields to enter login details*/}
           <form noValidate autoComplete="off" onSubmit={handle_form_submit}>
             <Grid container direction="column" justify="center" spacing={3}>
               <Grid item style={{ margin: 'auto' }}>
@@ -111,11 +113,13 @@ const LoginScreen = (props) => {
                   color='orange'></TextField>
               </Grid>
 
+              {/* Log in button*/}
               <Grid item style={{ margin: 'auto' }}>
                 <Button variant="contained" color='orange' disableElevation>
                   Log In
                 </Button>
               </Grid>
+
             </Grid>
           </form>
         </Container>

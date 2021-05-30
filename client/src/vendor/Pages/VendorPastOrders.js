@@ -26,11 +26,12 @@ const VendorPastOrders = (props) => {
   }, [])
 
   if (menu){
-    // make menu of snacks into a dictionary with ids as keys
+    // covert menu of snacks into a dictionary with ids as keys
     itemDict = dictify(menu)
   }
 
-  // Get all orders
+
+  // Get all vendor's orders
   useEffect(() => {
     console.log('Getting vendor orders')
 
@@ -39,6 +40,7 @@ const VendorPastOrders = (props) => {
       'Authorization': `Bearer ${auth}`,
     }
 
+    // If vendor is logged in
     if (auth) {
       // Get vendor id from jwt token
       const vendor_id = auth ? jwt.decode(auth)._id : null
@@ -55,6 +57,7 @@ const VendorPastOrders = (props) => {
       console.log("no auth yet, so let's wait until they're logged in")
     }
   }, [auth])
+
 
   // If vendor is not logged in
   if (!auth) {
@@ -77,8 +80,11 @@ const VendorPastOrders = (props) => {
         : orders.length === 0
         ? 'You have no past orders!'
         : orders
+            // Sort by newest orders first
             .sort((a, b) => -(new Date(a.modified) - new Date(b.modified)))
+            // Only show fulfilled and picked up orders
             .filter(order => order.fulfilled && order.picked_up)
+            // Map orders to PastOrderCards 
             .map((order) => (
               <PastOrderCard itemDict={itemDict} order={order} auth={auth} setAuth={setAuth}/>
             ))}

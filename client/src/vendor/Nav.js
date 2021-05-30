@@ -16,7 +16,6 @@ import axios from 'axios'
 import { useHistory } from 'react-router'
 
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -29,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'black',
   },
 }))
+
 
 
 // Navigation Bar for Vendor Client at top of all pages
@@ -81,6 +81,7 @@ const NavBar = (props) => {
     setAuth(null)
   }
 
+
   return (
     <Container>
       <div
@@ -112,6 +113,8 @@ const NavBar = (props) => {
                 lg={4}
                 style={{ display: 'flex' }}
               >
+
+              {/*Snack in A Van Logo, redirects to orders page*/}
                 <CardMedia
                   component={Link}
                   to="/vendor/orders"
@@ -139,6 +142,7 @@ const NavBar = (props) => {
                 }}
               >
 
+              {/*Show navigation buttons only if vendor is logged in.*/}
                 {auth && (
                   <Grid
                     container
@@ -151,6 +155,8 @@ const NavBar = (props) => {
                     justify="flex-end"
                     alignItems="stretch"
                   >
+
+                  {/*Current Orders Button, redirects to ongoing orders page*/}
                   <Grid item>
                     <Button
                       variant="outlined"
@@ -170,6 +176,7 @@ const NavBar = (props) => {
                     </Button>
                   </Grid>
 
+                  {/*Past Orders Button, redirects to order history page*/}
                   <Grid item style={{ marginLeft: !xsMatch ? '0px' : '0.5em' }}>
                     <Button
                       variant="outlined"
@@ -189,6 +196,7 @@ const NavBar = (props) => {
                     </Button>
                   </Grid>
 
+                  {/*Check Out Button, marks vendor as checked out and logs out vendor*/}
                   <Grid item style={{ marginLeft: !xsMatch ? '0px' : '0.5em' }}>
                     <Button
                       variant="outlined"
