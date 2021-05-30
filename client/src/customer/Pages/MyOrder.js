@@ -142,21 +142,24 @@ const MyOrder = (props) => {
 
           {/*Cancel Button*/}
             <Grid item>
-              <Button variant="outlined" color="orange" onClick={handleCancelOrder}>
-                <Typography color="orange" variant="button" display="block" gutterBottom>
+              <Button variant="outlined" style={{ marginTop: '0.5rem' }}
+                color="orange" onClick={handleCancelOrder}>
+                <Button color="orange" variant="button" display="block" gutterBottom>
                   Cancel Order
-                </Typography>
+                </Button>
               </Button>
             </Grid>
 
             {/*Edit Order Button, redirects customer back to van's menu*/}
             <Grid item>
-              <Button variant="outlined" color="orange">
+              <Button variant="outlined" style={{ marginTop: '0.5rem' }} color="orange">
                 <Button
                   color="orange"
+                  display="block"
                   component={Link}
                   to={`/customer/van/${order.vendor}`}
                   style={{ textDecoration: 'none' }}
+                  gutterBottom
                 >
                   Edit Order Details
                 </Button>
@@ -165,10 +168,10 @@ const MyOrder = (props) => {
 
             {/*Confirm Order Button*/}
             <Grid item>
-              <Button color="orange" variant="outlined" onClick={handleConfirmOrder}>
-                <Typography color="orange" variant="button" display="block" gutterBottom>
+              <Button color="orange" style={{ marginTop: '0.5rem' }} variant="outlined" onClick={handleConfirmOrder}>
+                <Button color="orange" variant="button" display="block" gutterBottom>
                   Confirm Order
-                </Typography>
+                </Button>
               </Button>
               {order.confirmed ? <Redirect to="/customer/orders" /> : null}
             </Grid>
