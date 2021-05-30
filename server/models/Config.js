@@ -9,8 +9,10 @@ const config = new Schema({
   discount_value: {type: Number, default: 20, required: true},
 
   // Number in minutes
-  discount_time: {type: Number, default: 15, required: true}
+  discount_time: {type: Number, default: 15, required: true},
+  modify_time : {type: Number, default: 10, required: true}
 
 
 });
-mongoose.model('Config', config)
+
+module.exports = mongoose.model('Config', config)

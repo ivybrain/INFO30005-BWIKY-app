@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js",
+    "test": "jest",
+    "clear_jest": "jest --clearCache --testTimeout=10000"
   },
   "dependencies": {
     "bcrypt": "5.0.1",
@@ -13,6 +15,8 @@
     "mongoose-beautiful-unique-validation": "7.1.1"
   },
   "devDependencies": {
-    "prettier": "2.2.1"
+    "jest": "^27.0.1",
+    "prettier": "2.2.1",
+    "supertest": "^6.1.3"
   }
 }
