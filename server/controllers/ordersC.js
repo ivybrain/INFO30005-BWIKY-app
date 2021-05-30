@@ -1,6 +1,8 @@
 const Vendor = require('../models/Vendor')
 const Order = require('../models/Order')
 
+const vendorsC = require('../controllers/vendorsC')
+
 // Middleware to set req.order for any request at */order/:order_id/*
 exports.find_order = async (req, res, next) => {
   console.log("finding order");
@@ -101,6 +103,7 @@ exports.order_update = async (req, res) => {
     }
 
     if (req.body.rating && req.body.rating >= 1 && req.body.rating <= 5) {
+
         vendorsC.update_rating(req);
         req.body.rated = true;
     } else {

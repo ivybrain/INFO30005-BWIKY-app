@@ -164,7 +164,7 @@ exports.vendor_delete = async (req, res) => {
 
 exports.update_rating = async(req) => {
   if (req.body.rating) {
-    const rt_obj = req.vendor.rating.count ? req.vendor.rating : {rating: 0, count: 0};
+    const rt_obj = req.vendor.rating ? req.vendor.rating : {rating: 0, count: 0};
     const new_rating = req.body.rating;
     var new_obj = { rating: {} };
     if (req.order.rated) {
