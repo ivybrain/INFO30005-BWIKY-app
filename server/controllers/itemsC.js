@@ -1,8 +1,5 @@
 
-require('../models/Item');
-const mongoose = require('mongoose');
-
-const Item = mongoose.model('Item')
+const Item = require('../models/Item');
 
 
 // Middleware to set req.item for any request at /item/:item_id/*

@@ -8,7 +8,7 @@ const item = new Schema({
   item_price: Number,
   item_name: String,
   item_description: String,
-  
+
   });
 
 
@@ -19,4 +19,4 @@ function toBinary(item_image) {
     return image;
   }
 
-mongoose.model('Item', item);
+module.exports = mongoose.model('Item', item);

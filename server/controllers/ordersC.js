@@ -1,12 +1,5 @@
-require('../models/Vendor')
-require('../models/Order')
-
-const mongoose = require('mongoose')
-const vendorsC = require('../controllers/vendorsC');
-
-const Vendor = mongoose.model('Vendor')
-const Order = mongoose.model('Order')
-
+const Vendor = require('../models/Vendor')
+const Order = require('../models/Order')
 
 // Middleware to set req.order for any request at */order/:order_id/*
 exports.find_order = async (req, res, next) => {
