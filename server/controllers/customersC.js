@@ -1,9 +1,7 @@
-require('../models/Customer')
-const mongoose = require('mongoose')
 const auth = require('../auth')
 
-const Customer = mongoose.model('Customer');
-const Order = mongoose.model('Order');
+const Customer = require('../models/Customer');
+const Order = require('../models/Order');
 
 //Middleware to set req.customer for any request at /customer/:customer_id/*
 exports.find_customer = async (req, res, next) => {

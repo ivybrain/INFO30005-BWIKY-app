@@ -1,7 +1,4 @@
-require('../models/Vendor')
-const mongoose = require('mongoose')
-
-const Vendor = mongoose.model('Vendor')
+const Vendor = require('../models/Vendor');
 
 const auth = require('../auth');
 
@@ -116,7 +113,8 @@ exports.vendor_create = async (req, res) => {
 // PATCH /vendors/:vendor_id
 // Update vendor's status
 exports.vendor_update = async (req, res) => {
-
+  console.log(req.vendor)
+  console.log(Vendor.findById())
   if (req.body.hasOwnProperty("password")) {
     if (req.body.password)
       req.body.password = await auth.create_digest(req.body.password);
@@ -130,6 +128,7 @@ exports.vendor_update = async (req, res) => {
       { $set: req.body },
       { new: true },
     )
+    console.log("Updated successfully ", updated)
     updated.password = undefined;
     res.status(200);
     res.json(updated);

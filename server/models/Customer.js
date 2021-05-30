@@ -18,4 +18,4 @@ const customer = new Schema({
 
 customer.plugin(beautify_unique)
 
-mongoose.model('Customer', customer)
+module.exports = mongoose.model('Customer', customer)

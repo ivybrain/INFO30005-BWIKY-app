@@ -34,4 +34,6 @@ function add_rating(rating) {
 
 vendor.plugin(beautify_unique)
 
-mongoose.model('Vendor', vendor)
+
+
+module.exports = mongoose.model('Vendor', vendor)

@@ -21,4 +21,4 @@ const order = new Schema({
   deleted: {type: Boolean, default: false}
 })
 
-mongoose.model('Order', order)
+module.exports = mongoose.model('Order', order)

@@ -1,9 +1,5 @@
-require('../models/Vendor')
-require('../models/Order')
-const mongoose = require('mongoose')
-
-const Vendor = mongoose.model('Vendor')
-const Order = mongoose.model('Order')
+const Vendor = require('../models/Vendor')
+const Order = require('../models/Order')
 
 
 // Middleware to set req.order for any request at */order/:order_id/*
