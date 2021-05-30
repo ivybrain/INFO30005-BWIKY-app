@@ -54,7 +54,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.13.13",
+    "@babel/preset-react": "^7.12.13",
     "prettier": "2.2.1"
   },
   "presets": [
