@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from '@material-ui/core'
+import { Container, Typography } from '@material-ui/core'
 import PastOrderCard from '../PastOrders/PastOrderCard'
 import { dictify } from '../../HelperFunctions'
 import { useEffect, useState } from 'react'

@@ -13,7 +13,6 @@ import {
 import axios from 'axios'
 import { API_URL } from '../../constants'
 import { Link, Redirect, useHistory } from 'react-router-dom'
-import { useState } from 'react'
 
 const columns = ['Item', 'Qty', 'Subtotal']
 

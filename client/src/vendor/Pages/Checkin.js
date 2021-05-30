@@ -2,7 +2,6 @@ import {
   Button,
   Container,
   Grid,
-  Paper,
   TextField,
   Typography,
 } from '@material-ui/core'
@@ -13,7 +12,7 @@ import jwt from 'jsonwebtoken'
 import { API_URL } from '../../constants'
 import axios from 'axios'
 import { useHistory } from 'react-router'
-import { Link } from 'react-router-dom'
+
 
 // Vendor Location Check In Page
 const Checkin = (props) => {

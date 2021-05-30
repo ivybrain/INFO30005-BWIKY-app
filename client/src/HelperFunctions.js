@@ -84,16 +84,15 @@ export function checkDiscount(order, time_limit) {
   const current_time = new Date()
 
   if (order.fulfilled) {
+    // Check discount for fulfilled order
     if (fulfilled_time - modified_time > time_limit * 60000) {
-      console.log('Checking Discount')
-      console.log((fulfilled_time - modified_time).toString())
       return true // Apply discount
     } else {
       return false // No discount
     }
   } else {
+    // Check discount for ongoing order
     if (current_time - modified_time > time_limit * 60000) {
-      console.log('Checking Discount')
       return true // Apply discount
     } else {
       return false // No discount
@@ -104,6 +103,7 @@ export function checkDiscount(order, time_limit) {
 // Get time the order is due to be fulfilled without being late
 export function getDeadline(order, time_limit) {
   var new_time = new Date(order.modified)
+  // Add time limit to time order was placed/modified
   new_time.setMinutes(new_time.getMinutes() + time_limit)
 
   return formatTime(new_time)
@@ -112,16 +112,17 @@ export function getDeadline(order, time_limit) {
 // Countdown how many minutes:seconds remaining till a discount needs to be applied
 export function getTimeRemaining(order, time_limit) {
   const limit = time_limit * 60000 // time limit in milliseconds
-
   const current_time = new Date()
   const modified_time = new Date(order.modified)
 
+  // Get how much time is left before order is late
   var countdown = limit - (current_time - modified_time)
 
   const minutes = Math.trunc(countdown / 1000 / 60) // convert milliseconds to minutes
   const seconds = Math.trunc((countdown / 1000) % 60) // convert milliseconds to seconds
 
   if (countdown > 0) {
+    // Return as a string
     return minutes.toString() + ':' + seconds.toString()
   } else {
     return '0:00'

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 
 export const API_URL = 'https://bwiky-api.herokuapp.com'
 
+// Get global config values (discount, time limit, modify window)
 export const useConfig = () => {
   const [config, setConfig] = useState(null)
   const [loading, setLoading] = useState(true)

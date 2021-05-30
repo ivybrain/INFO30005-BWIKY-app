@@ -21,7 +21,6 @@ import {
 
 const columns = ['Item', 'Qty', 'Subtotal']
 const checkmark = '\uD83D\uDDF9'
-const emptyBox = '\u2610'
 
 // Formatter to display prices as AUD
 const audFormatter = new Intl.NumberFormat('en-AU', {
