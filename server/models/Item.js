@@ -12,11 +12,4 @@ const item = new Schema({
   });
 
 
-function toBinary(item_image) {
-  // Convert base64 string to binary data
-    let image = new Buffer(image_string, 'base64');
-
-    return image;
-  }
-
 module.exports = mongoose.model('Item', item);

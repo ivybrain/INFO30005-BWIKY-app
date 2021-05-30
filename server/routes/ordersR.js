@@ -7,13 +7,10 @@ const vendorsC = require('../controllers/vendorsC');
 
 const auth = require('../auth')
 
-router.use(function (req, res, next) {
-  next();
-})
-
-
 // All routes are already authenticated by vendor router
 router.route('/')
+  // Require the correct authenticated vendor (not customer) to see all orders
+  // for an endpoint
   .get(vendorsC.authenticate_vendor, ordersC.order_list)
   .post(ordersC.order_create);
 

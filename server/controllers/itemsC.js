@@ -8,11 +8,10 @@ exports.find_item = async (req, res, next) => {
 
   if (!item) {
     res.status(404);
-    res.send("Item not found");
-    return;
-
+    return res.send("Item not found");
   }
 
+  // Store the item in the request object
   req.item = item;
   return next();
 }
@@ -64,16 +63,7 @@ exports.item_create = function(req, res) {
   res.json(item_array); // return all items as an array
 }
 
-
-// Supporting functions:
-function remove_all_items(req, res){
-  // Clean database
-  Item.deleteMany({}, function(err, docs) {})
-  res.send("All deleted");
-}
-
 // Add image url to an item
-// Would be better as a custom getter for the model but that didn't work for me :(
 function add_image(req, item) {
   if (!item || !item.hasOwnProperty("item_name")) {
     return item;

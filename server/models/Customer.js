@@ -12,7 +12,6 @@ const customer = new Schema({
   family_name: {type: String, required:true},
   password: {type: String, required: true}
 
-
 });
 
 
